@@ -1,24 +1,18 @@
-import React, { Component } from 'react';
+import React, { FC, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import Container from '@material-ui/core/Container';
 import { RootState } from 'store';
 import { fetchRecentRecipes } from 'store/recipe/actions';
 import RecentRecipes from './RecentRecipes';
 
-class Home extends Component<PropsFromRedux> {
-  componentDidMount() {
-    this.props.fetchRecentRecipes();
-  }
-
-  render() {
-    const { recentRecipes } = this.props;
-    return (
-      <Container>
+const Home: FC<PropsFromRedux> = ({ fetchRecentRecipes, recentRecipes }) => {
+  useEffect(() => {
+    fetchRecentRecipes();
+  }, []);
+  return <Container>
         {recentRecipes && <RecentRecipes recentRecipes={recentRecipes} />}
-      </Container>
-    );
-  }
-}
+  </Container>;
+};
 
 const mapState = (state: RootState) => ({
   recentRecipes: state.recipe.recentRecipes
