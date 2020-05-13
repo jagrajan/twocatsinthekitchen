@@ -8,7 +8,7 @@ import RecentRecipes from './RecentRecipes';
 const Home: FC<PropsFromRedux> = ({ fetchRecentRecipes, recentRecipes }) => {
   useEffect(() => {
     fetchRecentRecipes();
-  }, []);
+  }, [fetchRecentRecipes]);
   return <Container>
         {recentRecipes && <RecentRecipes recentRecipes={recentRecipes} />}
   </Container>;
