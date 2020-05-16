@@ -47,9 +47,10 @@ const populate = async () => {
 
   console.log('Creating units...');
   for (let i = 0; i < UNITS.length; i++) {
+    const [name, plural] = UNITS[i];
     const unit = new Unit({
-      name: UNITS[i][0],
-      plural: UNITS[i][1]
+      name,
+      plural,
     });
     await unit.save();
     console.log(`${unit.dataValues.name} has been added!`);
@@ -57,9 +58,10 @@ const populate = async () => {
 
   console.log('Creating ingredients...');
   for (let i = 0; i < INGREDIENTS.length; i++) {
+    const [name, plural] = UNITS[i];
     const ing = new Ingredient({
-      name: INGREDIENTS[i][0],
-      plural: INGREDIENTS[i][1]
+      name,
+      plural,
     });
     await ing.save();
     console.log(`${ing.dataValues.name} has been added!`);
