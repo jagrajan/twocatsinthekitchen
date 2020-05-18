@@ -6,6 +6,7 @@ import {
   AUTH_DELETE_KEY,
   AUTH_STORE_KEY,
   AUTH_UPDATE_KEY_INFO,
+  AUTH_FETCH_USER_INFO,
   AUTH_UPDATE_USER_INFO,
   AUTH_VALIDATE_KEY,
   AuthActionTypes
@@ -75,6 +76,29 @@ export const validateKey = () => async (
         type: AUTH_UPDATE_KEY_INFO,
         payload: {
           key: res.data.key,
+        },
+      });
+    }
+  }
+};
+
+export const fetchProfile = () => async(
+  dispatch: Dispatch,
+  getState: () => RootState,
+  api: AxiosInstance
+) => {
+  const state = getState().auth;
+  if (state.info) {
+    dispatch({ type: AUTH_FETCH_USER_INFO });
+    const userId = state.info.user_id;
+    const res = await api.get(`/user/${userId}`);
+    if (res.data.error) {
+      // TODO something
+    } else {
+      dispatch({
+        type: AUTH_UPDATE_USER_INFO,
+        payload: {
+          user: res.data.user,
         },
       });
     }
