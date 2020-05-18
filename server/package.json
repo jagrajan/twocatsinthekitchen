@@ -20,6 +20,7 @@
     "@types/pg": "^7.14.3",
     "@types/validator": "^13.0.0",
     "array-flatten": "^3.0.0",
+    "async-redis": "^1.1.7",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "copyfiles": "^2.2.0",
@@ -33,6 +34,7 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
+    "@types/async-redis": "^1.1.0",
     "concurrently": "^5.2.0",
     "nodemon": "^2.0.3"
   }

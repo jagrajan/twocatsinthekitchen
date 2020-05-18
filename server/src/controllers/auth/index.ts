@@ -48,3 +48,13 @@ export const postLogin = async (req: Request, res: Response): Promise<void> => {
 
   res.json(response);
 };
+
+export const getInfo = async (req: Request, res: Response): Promise<void> => {
+  const response: any = {};
+  if (!req.user) {
+    response.error = 'Not logged in';
+  } else {
+    response.key = req.user;
+  }
+  res.json(response);
+};

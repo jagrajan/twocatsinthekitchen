@@ -16,5 +16,8 @@
   },
   "include": [
     "src"
+  ],
+  "files": [
+    "src/custom-types/types.d.ts"
   ]
 }

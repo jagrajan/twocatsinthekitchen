@@ -1,5 +1,5 @@
 import DataObject, { DataDefinition } from 'models/database/DatabaseObject';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import config from 'config';
 
 export type AuthKeyDefinition = DataDefinition & {
@@ -17,6 +17,12 @@ class AuthKey extends DataObject<AuthKeyDefinition> {
     return sign(this.values, config.auth.jwtKey, {
       expiresIn: '30 days'
     });
+  }
+
+  public static parse(jwt: string): AuthKey {
+    console.log(jwt);
+    const data = <AuthKeyDefinition>verify(jwt, config.auth.jwtKey);
+    return new AuthKey(data);
   }
 }
 

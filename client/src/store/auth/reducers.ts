@@ -1,6 +1,7 @@
 import{
   AUTH_DELETE_KEY,
   AUTH_STORE_KEY,
+  AUTH_UPDATE_KEY_INFO,
   AuthState,
   AuthActionTypes
 } from './types';
@@ -15,6 +16,8 @@ const reducer = (state: AuthState = INITIAL_STATE,
       return { ...state, key: action.payload.key };
     case AUTH_DELETE_KEY:
       return { ...state, key: undefined };
+    case AUTH_UPDATE_KEY_INFO:
+      return { ...state, info: action.payload.key };
     default:
       return state;
   }

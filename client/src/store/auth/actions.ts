@@ -3,8 +3,11 @@ import { startSubmit, stopSubmit } from 'redux-form';
 import { AxiosInstance } from 'axios';
 import { RootState } from 'store';
 import {
-  AUTH_STORE_KEY,
   AUTH_DELETE_KEY,
+  AUTH_STORE_KEY,
+  AUTH_UPDATE_KEY_INFO,
+  AUTH_UPDATE_USER_INFO,
+  AUTH_VALIDATE_KEY,
   AuthActionTypes
 } from './types';
 import {
@@ -51,4 +54,29 @@ export const logoutUser = () => async (
   dispatch({
     type: AUTH_DELETE_KEY
   });
+};
+
+export const validateKey = () => async (
+  dispatch: Dispatch,
+  getState: () => RootState,
+  api: AxiosInstance
+) => {
+  const key = getState().auth.key;
+  if (key && key !== undefined) {
+    dispatch({ type: AUTH_VALIDATE_KEY });
+    api.defaults.headers['Authorization'] = `Bearer ${key}`;
+    const res = await api.get('/auth/info');
+    if (res.data.error) {
+      dispatch({
+        type: AUTH_DELETE_KEY
+      });
+    } else {
+      dispatch({
+        type: AUTH_UPDATE_KEY_INFO,
+        payload: {
+          key: res.data.key,
+        },
+      });
+    }
+  }
 };
