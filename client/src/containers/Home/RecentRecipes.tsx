@@ -28,6 +28,7 @@ const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
         <RecipeInfo
           name={recipe.info.name}
           imageFile={`${IMAGE_SERVER}/${recipe.info.image_file}`}
+          slug={recipe.metadata.slug}
           updateDate={moment(recipe.info.last_update)
             .format('MMMM Do YYYY, h:mm:ss a')}
         />

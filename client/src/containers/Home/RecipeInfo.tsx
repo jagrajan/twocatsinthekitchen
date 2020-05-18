@@ -15,12 +15,13 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   name: string;
   imageFile: string;
+  slug: string;
   updateDate: string;
 };
 
-const RecipeInfo: FC<Props> = ({ imageFile, name, updateDate }) => {
+const RecipeInfo: FC<Props> = ({ imageFile, name, slug, updateDate }) => {
   const classes = useStyles();
-  return <UndecoratedLink to="/test">
+  return <UndecoratedLink to={`/recipe/${slug}`}>
     <Card>
       <CardHeader
         title={name}

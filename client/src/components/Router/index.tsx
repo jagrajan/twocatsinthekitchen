@@ -9,6 +9,7 @@ import Header from 'components/layout/Header';
 import Home from 'containers/Home';
 import LoginContainer from 'containers/Login';
 import Logout from 'containers/Logout';
+import Recipe from 'containers/Recipe';
 
 const Router: FC = ({ children }) => {
   return (
@@ -23,6 +24,9 @@ const Router: FC = ({ children }) => {
         </Route>
         <Route exact path="/logout">
           <Logout />
+        </Route>
+        <Route exact path="/recipe/:id">
+          <Recipe />
         </Route>
       </Switch>
     </BrowserRouter>

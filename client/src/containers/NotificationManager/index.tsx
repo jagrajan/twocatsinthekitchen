@@ -16,7 +16,7 @@ const NotficationManager: FC<PropsFromRedux> = ({ addMessage, children, messages
             autoHideDuration={6000}
             onClose={() => removeMessage(fm.key)}
           >
-            <Alert onClose={() => removeMessage(fm.key)}>
+            <Alert onClose={() => removeMessage(fm.key)} color={fm.color}>
               {fm.message}
             </Alert>
           </Snackbar>
