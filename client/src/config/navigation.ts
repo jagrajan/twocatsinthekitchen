@@ -16,6 +16,11 @@ export const NAVIGATION_ENTRIES: NavigationEntry[] = [
   },
   {
     view: AccessLevel.USERS,
+    text: 'Profile',
+    url: '/profile'
+  },
+  {
+    view: AccessLevel.USERS,
     text: 'Log out',
     url: '/logout'
   },

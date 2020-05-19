@@ -20,7 +20,7 @@ const reducer = (state: AuthState = INITIAL_STATE,
     case AUTH_UPDATE_KEY_INFO:
       return { ...state, info: action.payload.key };
     case AUTH_UPDATE_USER_INFO:
-      return { ...state, user: action.payload.user };
+      return { ...state, profile: action.payload.user };
     default:
       return state;
   }
