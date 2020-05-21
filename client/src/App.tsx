@@ -6,13 +6,13 @@ import { RootState } from 'store';
 import ThemeProvider from './components/ThemeProvider';
 import NotificationsManager from './containers/NotificationManager';
 
-const App: FC<PropsFromRedux> = ({ fetchProfile, keyInfo, validateKey }) => {
+const App: FC<PropsFromRedux> = ({ fetchProfile, key, validateKey }) => {
   useEffect(() => {
     validateKey();
   }, [validateKey]);
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile, keyInfo]);
+  }, [fetchProfile, key]);
 
   return (
     <ThemeProvider>
@@ -24,7 +24,7 @@ const App: FC<PropsFromRedux> = ({ fetchProfile, keyInfo, validateKey }) => {
 }
 
 const mapState = (state: RootState) => ({
-  keyInfo: state.auth.info
+  key: state.auth.key
 });
 
 const mapDispatch = {

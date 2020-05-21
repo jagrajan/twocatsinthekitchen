@@ -20,7 +20,6 @@ class AuthKey extends DataObject<AuthKeyDefinition> {
   }
 
   public static parse(jwt: string): AuthKey {
-    console.log(jwt);
     const data = <AuthKeyDefinition>verify(jwt, config.auth.jwtKey);
     return new AuthKey(data);
   }

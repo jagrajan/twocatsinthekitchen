@@ -63,7 +63,8 @@ const populate = async () => {
   console.log('Creating users...');
   const user: User = new User({
     email: 'jag@jagrajan.com',
-    password: 'password'
+    password: 'password',
+    name: 'Jag',
   });
   await user.hashPassword();
 

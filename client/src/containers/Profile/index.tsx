@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from 'store';
+import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
@@ -9,10 +10,14 @@ const Profile: FC<PropsFromRedux> = ({ profile }) => {
     return(
       <Container maxWidth="sm">
         <Typography component="h1" variant="h4">My profile</Typography>
-        <div>
-          <Typography component="span" variant="body1">Email: </Typography>
-          <Typography component="span" variant="body2">{profile.email}</Typography>
-        </div>
+        <Box mt={4}>
+          <Typography variant="body1">Name: </Typography>
+          <Typography variant="body2">{profile.name}</Typography>
+        </Box>
+        <Box mt={4}>
+          <Typography variant="body1">Email: </Typography>
+          <Typography variant="body2">{profile.email}</Typography>
+        </Box>
       </Container>
     );
   } else {
