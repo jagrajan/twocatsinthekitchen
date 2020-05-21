@@ -10,6 +10,11 @@ export type NavigationEntry = {
 
 export const NAVIGATION_ENTRIES: NavigationEntry[] = [
   {
+    view: AccessLevel.ADMINS,
+    text: 'Admin',
+    url: '/admin'
+  },
+  {
     view: AccessLevel.UNREGISTERED,
     text: 'Log in',
     url: '/login'

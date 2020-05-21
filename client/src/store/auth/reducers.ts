@@ -16,7 +16,7 @@ const reducer = (state: AuthState = INITIAL_STATE,
     case AUTH_STORE_KEY:
       return { ...state, key: action.payload.key };
     case AUTH_DELETE_KEY:
-      return { ...state, key: undefined };
+      return { ...INITIAL_STATE };
     case AUTH_UPDATE_KEY_INFO:
       return { ...state, info: action.payload.key };
     case AUTH_UPDATE_USER_INFO:

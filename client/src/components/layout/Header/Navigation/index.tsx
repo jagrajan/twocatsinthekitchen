@@ -43,7 +43,7 @@ const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => 
       case AccessLevel.UNREGISTERED:
         return authKey === undefined || authKey === null;
       case AccessLevel.ADMINS:
-        return false;
+        return authKey !== undefined && authKey !== null && authKey.admin;
       case AccessLevel.EVERYONE:
         return true;
     }
@@ -93,7 +93,7 @@ const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => 
 };
 
 const mapState = (state: RootState) => ({
-  authKey: state.auth.key,
+  authKey: state.auth.info,
   open: state.navigation.showNav
 });
 

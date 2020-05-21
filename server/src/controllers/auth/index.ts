@@ -34,7 +34,7 @@ export const postLogin = async (req: Request, res: Response): Promise<void> => {
       const key = new AuthKey({
         user_id: user.dataValues.id.toString(),
         expire_on: date,
-        admin: false
+        admin: await user.isAdmin(),
       });
       await key.save();
       response.jwt = key.createSignedJWT();
