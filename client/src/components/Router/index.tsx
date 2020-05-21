@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from 'store';
 import {
   BrowserRouter,
   Route,
   Switch
 } from 'react-router-dom';
 
+import Admin from 'containers/Admin';
 import Header from 'components/layout/Header';
 import Home from 'containers/Home';
 import LoginContainer from 'containers/Login';
@@ -12,7 +15,7 @@ import Logout from 'containers/Logout';
 import Profile from 'containers/Profile';
 import Recipe from 'containers/Recipe';
 
-const Router: FC = ({ children }) => {
+const Router: FC<PropsFromRedux> = ({ authInfo, children }) => {
   return (
     <BrowserRouter>
       <Header />
@@ -30,11 +33,22 @@ const Router: FC = ({ children }) => {
           <Recipe />
         </Route>
         <Route exact path="/profile">
-          <Profile />
+          {authInfo && <Profile />}
+        </Route>
+        <Route exact path="/admin">
+          {authInfo && authInfo.admin && <Admin />}
         </Route>
       </Switch>
     </BrowserRouter>
   );
 };
 
-export default Router;
+const mapState = (state: RootState) => ({
+  authInfo: state.auth.info
+});
+
+const connector = connect(mapState, {});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Router);
