@@ -7,8 +7,8 @@ export type DataDefinition = {
 
 class DatabaseObject<D extends DataDefinition = DataDefinition> {
   protected values: D;
+  protected client: Client | Pool;
   private tableName: string;
-  private client: Client | Pool;
 
   constructor(values: D, tableName: string) {
     this.values = values;

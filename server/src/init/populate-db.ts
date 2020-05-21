@@ -70,6 +70,7 @@ const populate = async () => {
 
   console.log('Saving users...');
   await user.save();
+  await user.saveAdmin(true);
 
   console.log('Creating units...');
   for (let i = 0; i < UNITS.length; i++) {
