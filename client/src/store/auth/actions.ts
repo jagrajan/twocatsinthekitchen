@@ -67,7 +67,6 @@ export const loginUser = (values: { [key: string]: string }) => async (
   dispatch(startSubmit('login'));
   try {
     const res = await api.post('/auth/login', values);
-    console.log(res.data);
     if (res.data.errors) {
       dispatch(stopSubmit('login', res.data.errors));
     } else {

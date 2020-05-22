@@ -1,4 +1,4 @@
-import React, { FC, FormEvent } from 'react';
+import React, { FC } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormSubmitHandler  } from 'redux-form';
 import { RootState } from 'store';

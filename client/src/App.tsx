@@ -6,12 +6,11 @@ import { RootState } from 'store';
 import ThemeProvider from './components/ThemeProvider';
 import NotificationsManager from './containers/NotificationManager';
 
-const App: FC<PropsFromRedux> = ({ fetchProfile, keyInfo, key, validateKey }) => {
+const App: FC<PropsFromRedux> = ({ fetchProfile, jwt, keyInfo, validateKey }) => {
   useEffect(() => {
     validateKey();
-  }, [validateKey, key]);
+  }, [validateKey, jwt]);
   useEffect(() => {
-    console.log('Updatihg profile');
     fetchProfile();
   }, [fetchProfile, keyInfo]);
 
@@ -25,7 +24,7 @@ const App: FC<PropsFromRedux> = ({ fetchProfile, keyInfo, key, validateKey }) =>
 }
 
 const mapState = (state: RootState) => ({
-  key: state.auth.key,
+  jwt: state.auth.key,
   keyInfo: state.auth.info,
 });
 

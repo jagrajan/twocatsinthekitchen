@@ -26,6 +26,7 @@ const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
     <div className={classes.container}>
       {recentRecipes.map(recipe =>
         <RecipeInfo
+          key={recipe.info.id}
           name={recipe.info.name}
           imageFile={`${IMAGE_SERVER}/${recipe.info.image_file}`}
           slug={recipe.metadata.slug}

@@ -37,7 +37,6 @@ export const fetchRecipeDetails = (id: string | number) => async (
     type: RECIPE_FETCH_DETAILS
   });
   const res = await api.get(`/recipe/${id}`);
-  console.log(res.data);
   if (res.data.error) {
     dispatch(addMessage({
       key: 'login',

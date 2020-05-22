@@ -9,9 +9,15 @@ const Home: FC<PropsFromRedux> = ({ fetchRecentRecipes, recentRecipes }) => {
   useEffect(() => {
     fetchRecentRecipes();
   }, [fetchRecentRecipes]);
-  return <Container>
-        {recentRecipes && <RecentRecipes recentRecipes={recentRecipes} />}
-  </Container>;
+  if (recentRecipes) {
+    return (
+      <Container>
+        <RecentRecipes recentRecipes={recentRecipes} />}
+      </Container>
+     );
+  } else {
+    return <Container>Fetching recipes...</Container>;
+  }
 };
 
 const mapState = (state: RootState) => ({

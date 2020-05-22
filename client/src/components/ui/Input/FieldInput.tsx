@@ -1,4 +1,4 @@
-import React, { FC, InputHTMLAttributes } from 'react';
+import React, { FC } from 'react';
 import { WrappedFieldProps } from 'redux-form';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 
