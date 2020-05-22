@@ -7,6 +7,9 @@ export const AUTH_UPDATE_KEY_INFO = 'AUTH_UPDATE_KEY_INFO';
 export const AUTH_FETCH_USER_INFO = 'AUTH_FETCH_USER_INFO';
 export const AUTH_UPDATE_USER_INFO = 'AUTH_UPDATE_USER_INFO';
 
+export type AuthKey = AuthKeyDefinition;
+export type User = UserDefinition;
+
 export type AuthStoreKeyAction = {
   type: typeof AUTH_STORE_KEY,
   payload: {
@@ -26,7 +29,7 @@ export type AuthValidateKey = {
 export type AuthUpdateKeyInfo = {
   type: typeof AUTH_UPDATE_KEY_INFO;
   payload: {
-    key: AuthKeyDefinition;
+    key: AuthKey;
   };
 };
 
@@ -37,7 +40,7 @@ export type AuthFetchUserInfo = {
 export type AuthUpdateUserInfo = {
   type: typeof AUTH_UPDATE_USER_INFO;
   payload: {
-    user: UserDefinition;
+    user: User;
   };
 };
 
@@ -51,6 +54,6 @@ export type AuthActionTypes =
 
 export interface AuthState {
   key?: string;
-  info?: AuthKeyDefinition;
-  profile?: UserDefinition;
+  info?: AuthKey;
+  profile?: User;
 }

@@ -3,6 +3,8 @@ import { startSubmit, stopSubmit } from 'redux-form';
 import { AxiosInstance } from 'axios';
 import { RootState } from 'store';
 import {
+  AuthKey,
+  User,
   AUTH_DELETE_KEY,
   AUTH_STORE_KEY,
   AUTH_UPDATE_KEY_INFO,
@@ -14,6 +16,48 @@ import {
 import {
   addMessage
 } from '../feedback/actions';
+
+export function setKey(key: string): AuthActionTypes {
+  return {
+    type: AUTH_STORE_KEY,
+    payload: {
+      key,
+    },
+  }
+}
+
+export function deleteKey(): AuthActionTypes {
+  return {
+    type: AUTH_DELETE_KEY,
+  }
+}
+
+export function updateUserInfo(user: User): AuthActionTypes {
+  return {
+    type: AUTH_UPDATE_USER_INFO,
+    payload: {
+      user,
+    },
+  }
+}
+
+export function updateKeyInfo(key: AuthKey): AuthActionTypes {
+  return {
+    type: AUTH_UPDATE_KEY_INFO,
+    payload: {
+      key,
+    },
+  }
+}
+
+async function fetchAndUpdateUserInfo(userId: string, api: AxiosInstance, dispatch: Dispatch): Promise<void> {
+  const res = await api.get(`/user/${userId}`);
+  if (res.data.error) {
+    // TODO something
+  } else {
+    dispatch(updateUserInfo(res.data.user));
+  }
+}
 
 export const loginUser = (values: { [key: string]: string }) => async (
   dispatch: Dispatch,
@@ -39,7 +83,6 @@ export const loginUser = (values: { [key: string]: string }) => async (
           key: res.data.jwt
         }
       });
-      api.defaults.headers['Authorization'] = `Bearer ${res.data.jwt}`;
     }
   } catch (err) {
     console.log(err);
@@ -52,9 +95,7 @@ export const logoutUser = () => async (
   api: AxiosInstance
 ) => {
   api.defaults.headers['Authorization'] = undefined;
-  dispatch({
-    type: AUTH_DELETE_KEY
-  });
+  dispatch(deleteKey());
 };
 
 export const validateKey = () => async (
@@ -68,16 +109,9 @@ export const validateKey = () => async (
     api.defaults.headers['Authorization'] = `Bearer ${key}`;
     const res = await api.get('/auth/info');
     if (res.data.error) {
-      dispatch({
-        type: AUTH_DELETE_KEY
-      });
+      dispatch(deleteKey());
     } else {
-      dispatch({
-        type: AUTH_UPDATE_KEY_INFO,
-        payload: {
-          key: res.data.key,
-        },
-      });
+      dispatch(updateKeyInfo(res.data.key))
     }
   }
 };
@@ -90,17 +124,6 @@ export const fetchProfile = () => async(
   const state = getState().auth;
   if (state.info) {
     dispatch({ type: AUTH_FETCH_USER_INFO });
-    const userId = state.info.user_id;
-    const res = await api.get(`/user/${userId}`);
-    if (res.data.error) {
-      // TODO something
-    } else {
-      dispatch({
-        type: AUTH_UPDATE_USER_INFO,
-        payload: {
-          user: res.data.user,
-        },
-      });
-    }
+    await fetchAndUpdateUserInfo(state.info.user_id, api, dispatch);
   }
 };

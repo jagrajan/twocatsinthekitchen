@@ -6,13 +6,14 @@ import { RootState } from 'store';
 import ThemeProvider from './components/ThemeProvider';
 import NotificationsManager from './containers/NotificationManager';
 
-const App: FC<PropsFromRedux> = ({ fetchProfile, key, validateKey }) => {
+const App: FC<PropsFromRedux> = ({ fetchProfile, keyInfo, key, validateKey }) => {
   useEffect(() => {
     validateKey();
-  }, [validateKey]);
+  }, [validateKey, key]);
   useEffect(() => {
+    console.log('Updatihg profile');
     fetchProfile();
-  }, [fetchProfile, key]);
+  }, [fetchProfile, keyInfo]);
 
   return (
     <ThemeProvider>
@@ -24,7 +25,8 @@ const App: FC<PropsFromRedux> = ({ fetchProfile, key, validateKey }) => {
 }
 
 const mapState = (state: RootState) => ({
-  key: state.auth.key
+  key: state.auth.key,
+  keyInfo: state.auth.info,
 });
 
 const mapDispatch = {
