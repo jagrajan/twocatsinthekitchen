@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Admin from 'containers/Admin';
+import AdminRecipes from 'containers/Admin/Recipes';
 import Header from 'components/layout/Header';
 import Home from 'containers/Home';
 import LoginContainer from 'containers/Login';
@@ -37,6 +38,9 @@ const Router: FC<PropsFromRedux> = ({ authInfo, children }) => {
         </Route>
         <Route exact path="/admin">
           {authInfo && authInfo.admin && <Admin />}
+        </Route>
+        <Route exact path="/admin/recipes">
+          {authInfo && authInfo.admin && <AdminRecipes />}
         </Route>
       </Switch>
     </BrowserRouter>

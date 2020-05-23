@@ -7,7 +7,7 @@ export const postLogin = async (req: Request, res: Response): Promise<void> => {
   const response: { [key: string]: any }  = {};
 
   // Simulate lag
-  await new Promise(r => setTimeout(r, 2000));
+  // await new Promise(r => setTimeout(r, 2000));
 
   // Form validation
   const errors: { [key: string]: string }  = {};
@@ -51,10 +51,10 @@ export const postLogin = async (req: Request, res: Response): Promise<void> => {
 
 export const getInfo = async (req: Request, res: Response): Promise<void> => {
   const response: any = {};
-  if (!req.user) {
+  if (!req.auth) {
     response.error = 'Not logged in';
   } else {
-    response.key = req.user;
+    response.key = req.auth;
   }
   res.json(response);
 };

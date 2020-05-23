@@ -97,3 +97,23 @@ export const getDetails = async(req: Request, res: Response): Promise<void> => {
   }
   res.json(response);
 };
+
+export const getDashboard = async(req: Request, res: Response): Promise<void> => {
+  const results = await client.query(`
+    SELECT
+      r.id,
+      rv.name,
+      r.latest_version,
+      r.released_version,
+      r.last_update,
+      r.create_date,
+      r.hidden
+    FROM cookbook.recipe r
+    INNER JOIN cookbook.recipe_version rv
+      ON r.id = rv.recipe_id AND r.released_version = rv.version
+  `);
+
+  res.json({
+    recipes: results.rows
+  });
+};

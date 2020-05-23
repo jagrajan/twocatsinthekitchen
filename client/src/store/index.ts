@@ -10,13 +10,15 @@ import auth from './auth/reducers';
 import feedback from './feedback/reducers';
 import navigation from './navigation/reducers';
 import recipe from './recipe/reducers';
+import recipeEditor from './recipeEditor/reducers';
 
 const rootReducer = combineReducers({
   auth: persistReducer({ key: 'auth', storage }, auth),
   feedback,
   form,
   navigation,
-  recipe
+  recipe,
+  recipeEditor,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

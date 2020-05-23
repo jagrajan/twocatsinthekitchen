@@ -9,7 +9,7 @@ export default () => async (req: Request, res: Response, next: NextFunction): Pr
     const sql = 'SELECT * FROM users.auth_key WHERE id = $1 and expire_on > NOW()';
     const result = await client.query(sql, [key.dataValues.id]);
     if (result.rowCount > 0) {
-      req.user = result.rows[0];
+      req.auth = result.rows[0];
     }
   }
   next();

@@ -1,9 +1,9 @@
-import { UserDefinition } from 'models/users/User';
+import { AuthKeyDefinition } from 'models/auth/AuthKey';
 
 declare global {
   export  namespace Express {
     export interface Request {
-      user: UserDefinition;
+      auth: AuthKeyDefinition;
     }
   }
 }
