@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RootState } from 'store';
 import { fetchDashboardRecipes } from 'store/recipeEditor/actions';
+import UndecoratedLink from 'components/UndecoratedLink';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -17,7 +18,9 @@ const AdminRecipes: FC<PropsFromRedux> = ({ authKey, fetchDashboardRecipes, reci
   return (
     <Container>
       <Box textAlign="right" my={3}>
-        <Button variant="contained" color="primary">Create a Recipe</Button>
+        <UndecoratedLink to="/admin/create-recipe">
+          <Button variant="contained" color="primary">Create a Recipe</Button>
+        </UndecoratedLink>
       </Box>
       {recipes &&
         <MaterialTable
