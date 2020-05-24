@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { reduxForm, Field, InjectedFormProps } from 'redux-form';
+import { Field  } from 'redux-form';
+import validator from 'validator'
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import FieldInput from 'components/ui/Input/FieldInput';
 
-const StyledForm = styled.form`
+const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
@@ -15,9 +16,20 @@ const StyledForm = styled.form`
   }
 `;
 
-const Form: FC<InjectedFormProps> = ({ handleSubmit, submitting }) => {
+export const validate = (values: { [key: string]: string }) => {
+  let errors: { [key: string]: string } = {};
+  if (!values.name || validator.isEmpty(values.name)) {
+    errors.name = 'Please enter a recipe name';
+  }
+  if (!values.description || validator.isEmpty(values.description)) {
+    errors.description = 'Please enter a recipe description';
+  }
+  return errors;
+};
+
+const Fields: FC = () => {
   return (
-    <StyledForm>
+    <StyledContainer>
       <Field
         component={FieldInput}
         fullWidth
@@ -29,42 +41,38 @@ const Form: FC<InjectedFormProps> = ({ handleSubmit, submitting }) => {
       <Field
         component={FieldInput}
         fullWidth
+        label="Description"
+        name="description"
+        type="text"
+        variant="outlined"
+      />
+      <Field
+        component={FieldInput}
+        fullWidth
+        label="Prep time"
+        name="prepTime"
+        type="text"
+        variant="outlined"
+      />
+      <Field
+        component={FieldInput}
+        fullWidth
+        label="Cook time"
+        name="cookTime"
+        type="text"
+        variant="outlined"
+      />
+      <Field
+        component={FieldInput}
+        fullWidth
         label="Servings"
-        name="description"
-        type="text"
+        name="servings"
+        type="number"
         variant="outlined"
       />
-      <Field
-        component={FieldInput}
-        fullWidth
-        label="Description"
-        name="description"
-        type="text"
-        variant="outlined"
-      />
-      <Field
-        component={FieldInput}
-        fullWidth
-        label="Description"
-        name="description"
-        type="text"
-        variant="outlined"
-      />
-      <Field
-        component={FieldInput}
-        fullWidth
-        label="Description"
-        name="description"
-        type="text"
-        variant="outlined"
-      />
-    </StyledForm>
+    </StyledContainer>
   );
 };
-
-const ReduxForm = reduxForm({
-  form: 'recipeCreator',
-})(Form);
 
 const InformationMetadata: FC = () => {
   return (
@@ -72,7 +80,7 @@ const InformationMetadata: FC = () => {
       <Box my={4}>
         <Typography component="h2" variant="h3">Information & Metadata</Typography>
       </Box>
-      <ReduxForm />
+      <Fields />
     </>
   )
 }

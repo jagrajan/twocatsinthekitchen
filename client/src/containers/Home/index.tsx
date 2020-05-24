@@ -12,7 +12,7 @@ const Home: FC<PropsFromRedux> = ({ fetchRecentRecipes, recentRecipes }) => {
   if (recentRecipes) {
     return (
       <Container>
-        <RecentRecipes recentRecipes={recentRecipes} />}
+        <RecentRecipes recentRecipes={recentRecipes} />
       </Container>
      );
   } else {
