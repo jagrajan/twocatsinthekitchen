@@ -11,12 +11,18 @@ import {
   RE_ADD_STEP,
   RE_REMOVE_STEP,
   RE_SWAP_STEPS,
+  RE_ADD_NOTE,
+  RE_REMOVE_NOTE,
+  RE_SWAP_NOTES,
   AddIngredientAction,
   RemoveIngredientAction,
   SwapIngredientsAction,
   AddStepAction,
   RemoveStepAction,
   SwapStepsAction,
+  AddNoteAction,
+  RemoveNoteAction,
+  SwapNotesAction,
   RecipeEditorActionTypes,
   RecipeEditorState,
 } from './types';
@@ -28,6 +34,7 @@ const INITIAL_STATE: RecipeEditorState = {
   recipe: {
     ingredients: [],
     steps: [],
+    notes: [],
   },
 };
 
@@ -127,6 +134,54 @@ const swapSteps = (
   return { ...state, recipe };
 };
 
+const addNote = (
+  state: RecipeEditorState,
+  action: AddNoteAction
+) => {
+  const notes = [ ...state.recipe.notes ];
+  const position = notes.length;
+  notes.push(action.payload.note);
+  notes[position].position = position;
+  const recipe = { ...state.recipe };
+  recipe.notes = notes;
+  return { ...state, recipe };
+};
+
+const removeNote = (
+  state: RecipeEditorState,
+  action: RemoveNoteAction
+) => {
+  const notes = state.recipe.notes
+    .filter(x => x.position !== action.payload.position)
+    .map((ing, index) => ({ ...ing, position: index }));
+  const recipe = { ...state.recipe };
+  recipe.notes = notes;
+  return { ...state, recipe };
+}
+
+const swapNotes = (
+  state: RecipeEditorState,
+  action: SwapNotesAction
+) => {
+  const notes = [ ...state.recipe.notes ];
+  let a = action.payload.a;
+  let b = action.payload.b;
+  if (a < 0) {
+    a = notes.length - 1;
+  }
+  if (b >= notes.length) {
+    b = 0;
+  }
+  const tmp = notes[a];
+  notes[a] = notes[b];
+  notes[b] = tmp;
+  notes[a].position = a;
+  notes[b].position = b;
+  const recipe = { ...state.recipe };
+  recipe.notes = notes;
+  return { ...state, recipe };
+};
+
 const reducer = (state: RecipeEditorState = INITIAL_STATE,
                  action: RecipeEditorActionTypes) => {
   switch(action.type) {
@@ -154,6 +209,12 @@ const reducer = (state: RecipeEditorState = INITIAL_STATE,
       return removeStep(state, action);
     case RE_SWAP_STEPS:
       return swapSteps(state, action);
+    case RE_ADD_NOTE:
+      return addNote(state, action);
+    case RE_REMOVE_NOTE:
+      return removeNote(state, action);
+    case RE_SWAP_NOTES:
+      return swapNotes(state, action);
     default:
       return state;
   }

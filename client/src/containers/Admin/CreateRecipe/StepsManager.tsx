@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent } from 'react';
+import React, { FC, useState } from 'react';
 import { RecipeStep } from 'store/recipeEditor/types';
 import { FeedbackMessage } from 'store/feedback/types';
 import Button from '@material-ui/core/Button';

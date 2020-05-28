@@ -13,11 +13,6 @@ import {
 } from 'store/recipeEditor/actions';
 import { addMessage } from 'store/feedback/actions';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import IngredientManager from './IngredientManager';
 import StepsManager from './StepsManager';
 

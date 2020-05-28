@@ -14,11 +14,15 @@ import {
   RE_ADD_STEP,
   RE_REMOVE_STEP,
   RE_SWAP_STEPS,
+  RE_ADD_NOTE,
+  RE_REMOVE_NOTE,
+  RE_SWAP_NOTES,
   DashboardRecipes,
   Ingredient,
   Unit,
   RecipeIngredient,
   RecipeStep,
+  RecipeNote,
   RecipeEditorActionTypes
 } from './types';
 
@@ -71,6 +75,34 @@ export function removeStep(position: number): RecipeEditorActionTypes {
 export function swapSteps(a: number, b: number): RecipeEditorActionTypes {
   return {
     type: RE_SWAP_STEPS,
+    payload: {
+      a,
+      b,
+    },
+  };
+}
+
+export function addNote(note: RecipeNote): RecipeEditorActionTypes {
+  return {
+    type: RE_ADD_NOTE,
+    payload: {
+      note,
+    },
+  };
+}
+
+export function removeNote(position: number): RecipeEditorActionTypes {
+  return {
+    type: RE_REMOVE_NOTE,
+    payload: {
+      position,
+    },
+  };
+}
+
+export function swapNotes(a: number, b: number): RecipeEditorActionTypes {
+  return {
+    type: RE_SWAP_NOTES,
     payload: {
       a,
       b,

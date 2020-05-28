@@ -10,6 +10,9 @@ export const RE_SWAP_INGREDIENTS = 'RE_SWAP_INGREDIENTS';
 export const RE_ADD_STEP = 'RE_ADD_STEP';
 export const RE_REMOVE_STEP = 'RE_REMOVE_STEP';
 export const RE_SWAP_STEPS = 'RE_SWAP_STEPS';
+export const RE_ADD_NOTE = 'RE_ADD_NOTE';
+export const RE_REMOVE_NOTE = 'RE_REMOVE_NOTE';
+export const RE_SWAP_NOTES = 'RE_SWAP_NOTES';
 
 export type FetchDashboardRecipesAction = {
   type: typeof RE_FETCH_DASHBOARD_RECIPES;
@@ -88,6 +91,28 @@ export type SwapStepsAction = {
   };
 }
 
+export type AddNoteAction = {
+  type: typeof RE_ADD_NOTE;
+  payload: {
+    note: RecipeNote;
+  };
+}
+
+export type RemoveNoteAction = {
+  type: typeof RE_REMOVE_NOTE;
+  payload: {
+    position: number;
+  };
+}
+
+export type SwapNotesAction = {
+  type: typeof RE_SWAP_NOTES;
+  payload: {
+    a: number;
+    b: number;
+  };
+}
+
 export type RecipeEditorActionTypes = FetchDashboardRecipesAction
   | FetchDashboardRecipesSuccessAction
   | FetchAllIngredientsAction
@@ -99,7 +124,10 @@ export type RecipeEditorActionTypes = FetchDashboardRecipesAction
   | SwapIngredientsAction
   | AddStepAction
   | RemoveStepAction
-  | SwapStepsAction;
+  | SwapStepsAction
+  | AddNoteAction
+  | RemoveNoteAction
+  | SwapNotesAction;
 
 export type Unit = {
   id: number;
@@ -127,6 +155,11 @@ export type RecipeStep = {
   description: string;
 }
 
+export type RecipeNote = {
+  position: number;
+  text: string;
+}
+
 export type DashboardRecipes = Array<{
   id: number;
   name: string;
@@ -144,5 +177,6 @@ export type RecipeEditorState = {
   recipe: {
     ingredients: RecipeIngredient[];
     steps: RecipeStep[];
+    notes: RecipeNote[];
   };
 }

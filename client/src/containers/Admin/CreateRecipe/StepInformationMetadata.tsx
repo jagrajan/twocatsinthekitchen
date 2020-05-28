@@ -1,10 +1,20 @@
 import React, { FC } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from 'store';
+import {
+  addNote,
+  removeNote,
+  swapNotes
+} from 'store/recipeEditor/actions';
+import { addMessage } from 'store/feedback/actions';
 import { Field  } from 'redux-form';
 import validator from 'validator'
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
 import FieldInput from 'components/ui/Input/FieldInput';
+import DropzoneCropper from 'components/ui/DropzoneCropper';
+import NotesManager from './NotesManager';
 
 const StyledContainer = styled.div`
   display: grid;
@@ -74,15 +84,47 @@ const Fields: FC = () => {
   );
 };
 
-const InformationMetadata: FC = () => {
+const InformationMetadata: FC<PropsFromRedux> = ({
+  addNote,
+  addMessage,
+  recipeNotes,
+  removeNote,
+  swapNotes,
+}) => {
   return (
     <>
-      <Box my={4}>
-        <Typography component="h2" variant="h3">Information & Metadata</Typography>
-      </Box>
+      <Typography component="h2" variant="h3">Information & Metadata</Typography>
       <Fields />
+      <Typography component="h2" variant="h3">Image</Typography>
+      <Container maxWidth="sm">
+        <DropzoneCropper />
+      </Container>
+      <Typography component="h2" variant="h3">Notes</Typography>
+      <NotesManager
+        addMessage={addMessage}
+        addNote={addNote}
+        notes={recipeNotes}
+        removeNote={removeNote}
+        swapNotes={swapNotes}
+      />
+      <Typography component="h2" variant="h3">Tags</Typography>
     </>
   )
 }
 
-export default InformationMetadata;
+const mapState = (state: RootState) => ({
+  recipeNotes: state.recipeEditor.recipe.notes,
+});
+
+const mapDispatch = {
+  addMessage,
+  addNote,
+  removeNote,
+  swapNotes,
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(InformationMetadata);
