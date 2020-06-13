@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  create_date DateTime  @default(now())
+  expire_on   DateTime?
+  last_update DateTime  @default(now())
+  master      Boolean?  @default(false)
+  user_id     String    @id
+  profile     profile   @relation(fields: [user_id], references: [id])
+}
+
+model auth_key {
+  admin       Boolean? @default(false)
+  create_date DateTime @default(now())
+  expire_on   DateTime
+  id          String   @default(dbgenerated()) @id
+  last_update DateTime @default(now())
+  user_id     String
+  profile     profile  @relation(fields: [user_id], references: [id])
+}
+
+model browse_category {
+  create_date DateTime @default(now())
+  id          Int      @default(autoincrement()) @id
+  last_update DateTime @default(now())
+  name        String?
+}
+
+model browse_category_tag {
+  browse_category_id Int?
+  create_date        DateTime @default(now())
+  id                 Int      @default(autoincrement()) @id
+  last_update        DateTime @default(now())
+  tag_id             Int?
+}
+
+model ingredient {
+  category              Int?
+  create_date           DateTime              @default(now())
+  id                    Int                   @default(autoincrement()) @id
+  last_update           DateTime              @default(now())
+  name                  String
+  plural                String?
+  unit                  Int?
+  ingredient_category   ingredient_category?  @relation(fields: [category], references: [id])
+  unit_ingredientTounit unit?                 @relation(fields: [unit], references: [id])
+  measured_ingredient   measured_ingredient[]
+}
+
+model ingredient_category {
+  create_date DateTime     @default(now())
+  id          Int          @default(autoincrement()) @id
+  last_update DateTime     @default(now())
+  name        String
+  ingredient  ingredient[]
+}
+
+model measured_ingredient {
+  create_date       DateTime        @default(now())
+  id                Int             @default(autoincrement()) @id
+  ingredient_id     Int?
+  last_update       DateTime        @default(now())
+  max_amount        String?
+  min_amount        String?
+  position          Int?
+  recipe_version_id Int?
+  unit_id           Int?
+  ingredient        ingredient?     @relation(fields: [ingredient_id], references: [id])
+  recipe_version    recipe_version? @relation(fields: [recipe_version_id], references: [id])
+  unit              unit?           @relation(fields: [unit_id], references: [id])
+}
+
+model profile {
+  avatar      String?
+  create_date DateTime   @default(now())
+  email       String     @unique
+  id          String     @default(dbgenerated()) @id
+  last_update DateTime   @default(now())
+  name        String?
+  password    String
+  admin       admin[]
+  auth_key    auth_key[]
+}
+
+model recipe {
+  create_date      DateTime         @default(now())
+  hidden           Boolean?         @default(false)
+  id               Int              @default(autoincrement()) @id
+  last_update      DateTime         @default(now())
+  latest_version   Int?             @default(0)
+  released_version Int?             @default(0)
+  slug             String?
+  recipe_version   recipe_version[]
+}
+
+model recipe_note {
+  create_date       DateTime @default(now())
+  global            Boolean?
+  id                Int      @default(autoincrement()) @id
+  last_update       DateTime @default(now())
+  position          Int?
+  recipe_id         Int?
+  recipe_version_id Int?
+  text              String?
+  user_id           String?
+}
+
+model recipe_step {
+  create_date       DateTime       @default(now())
+  description       String?
+  id                Int            @default(autoincrement()) @id
+  last_update       DateTime       @default(now())
+  position          Int
+  recipe_version_id Int
+  recipe_version    recipe_version @relation(fields: [recipe_version_id], references: [id])
+}
+
+model recipe_tag {
+  create_date DateTime @default(now())
+  last_update DateTime @default(now())
+  recipe_id   Int
+  tag_id      Int
+
+  @@id([recipe_id, tag_id])
+}
+
+model recipe_version {
+  compiled_introduction String?
+  cook_time             String?
+  create_date           DateTime              @default(now())
+  description           String?
+  // This type is currently not supported.
+  // description_tokens textSearch?
+  id                    Int                   @default(autoincrement()) @id
+  image_file            String?
+  introduction          String?
+  last_update           DateTime              @default(now())
+  name                  String?
+  // This type is currently not supported.
+  // name_tokens        textSearch?
+  prep_time             String?
+  recipe_id             Int
+  serves                Int?
+  version               Int
+  recipe                recipe                @relation(fields: [recipe_id], references: [id])
+  measured_ingredient   measured_ingredient[]
+  recipe_step           recipe_step[]
+}
+
+model tag {
+  create_date DateTime @default(now())
+  id          Int      @default(autoincrement()) @id
+  last_update DateTime @default(now())
+  text        String
+}
+
+model unit {
+  create_date         DateTime              @default(now())
+  id                  Int                   @default(autoincrement()) @id
+  last_update         DateTime              @default(now())
+  name                String?
+  plural              String?
+  ingredient          ingredient[]
+  measured_ingredient measured_ingredient[]
+}

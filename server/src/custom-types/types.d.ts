@@ -1,9 +1,9 @@
-import { AuthKeyDefinition } from 'models/auth/AuthKey';
+import { auth_key } from '@prisma/client';
 
 declare global {
   export  namespace Express {
     export interface Request {
-      auth: AuthKeyDefinition;
+      auth: auth_key;
     }
   }
 }

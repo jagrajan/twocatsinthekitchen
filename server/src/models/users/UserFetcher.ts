@@ -4,7 +4,7 @@ import User, { UserDefinition } from './User';
 class UserFetcher extends DataFetcher<UserDefinition, User> {
 
   constructor() {
-    super('users.profile');
+    super('cookbook.profile');
   }
 
   public async getById(id: string | number): Promise<User | null> {

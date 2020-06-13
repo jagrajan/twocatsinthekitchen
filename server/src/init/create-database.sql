@@ -8,6 +8,8 @@ BEGIN;
   CREATE SCHEMA IF NOT EXISTS cookbook;
   CREATE SCHEMA IF NOT EXISTS site;
 
+  DROP TABLE IF EXISTS cookbook.browse_category_tag;
+  DROP TABLE IF EXISTS cookbook.browse_category;
   DROP TABLE IF EXISTS site.browse_category_tag;
   DROP TABLE IF EXISTS site.browse_category;
 
@@ -21,6 +23,9 @@ BEGIN;
   DROP TABLE IF EXISTS cookbook.ingredient_category;
   DROP TABLE IF EXISTS cookbook.unit;
   DROP TABLE IF EXISTS cookbook.recipe;
+  DROP TABLE IF EXISTS cookbook.admin;
+  DROP TABLE IF EXISTS cookbook.auth_key;
+  DROP TABLE IF EXISTS cookbook.profile;
   DROP TABLE IF EXISTS admin.admin;
   DROP TABLE IF EXISTS users.auth_key;
   DROP TABLE IF EXISTS users.profile;
@@ -35,23 +40,23 @@ BEGIN;
   END;
   $$;
 
-  CREATE TABLE users.profile (
+  CREATE TABLE cookbook.profile (
     id          UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
-    email       TEXT                                        NOT NULL,
+    email       TEXT                                        NOT NULL UNIQUE,
     password    TEXT                                        NOT NULL,
     avatar      TEXT,
     name        TEXT
   );
 
-  CREATE TABLE users.auth_key (
+  CREATE TABLE cookbook.auth_key (
     id          UUID PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
-    user_id     UUID                                        NOT NULL REFERENCES users.profile(id),
+    user_id     UUID                                        NOT NULL REFERENCES cookbook.profile(id),
     expire_on   TIMESTAMP WITHOUT TIME ZONE                 NOT NULL,
     admin       BOOLEAN DEFAULT false
   );
 
-  CREATE TABLE admin.admin (
-    user_id     UUID PRIMARY KEY                            NOT NULL REFERENCES users.profile(id),
+  CREATE TABLE cookbook.admin (
+    user_id     UUID PRIMARY KEY                            NOT NULL REFERENCES cookbook.profile(id),
     expire_on   TIMESTAMP WITHOUT TIME ZONE,
     master      BOOLEAN DEFAULT false
   );
@@ -137,12 +142,12 @@ BEGIN;
     text              TEXT
   );
 
-  CREATE TABLE site.browse_category (
+  CREATE TABLE cookbook.browse_category (
     id    SERIAL PRIMARY KEY,
     name  TEXT
   );
 
-  CREATE TABLE site.browse_category_tag (
+  CREATE TABLE cookbook.browse_category_tag (
     id                  SERIAL PRIMARY KEY,
     browse_category_id  INTEGER,
     tag_id              INTEGER
