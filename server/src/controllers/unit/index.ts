@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import client from 'db';
+import prisma from 'db/prisma';
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
-  const results = await client.query('SELECT * FROM cookbook.unit');
-  res.json({
-    units: results.rows
-  });
+  const result = await prisma.unit.findMany({});
+  res.json(result);
 };

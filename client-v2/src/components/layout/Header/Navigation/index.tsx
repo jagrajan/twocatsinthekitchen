@@ -48,6 +48,7 @@ const Navigation: FC<PropsFromRedux> = ({ isAdmin, authKey }) => {
       case AccessLevel.EVERYONE:
         return true;
     }
+    return false;
   });
 
   const navButtonsDesktop = entries.map(i => {

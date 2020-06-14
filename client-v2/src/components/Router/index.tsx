@@ -9,6 +9,8 @@ import { RootState } from '@twocats/store';
 import { getAuthKey, getIsAdmin } from 'store/auth/selectors';
 
 import AdminDashboard from 'containers/Admin';
+import AdminRecipes from 'containers/Admin/Recipes';
+import CreateRecipe from 'containers/Admin/Recipes/CreateRecipe';
 
 import Header from 'components/layout/Header';
 import Home from 'containers/Home';
@@ -31,6 +33,12 @@ const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
         </Route>
         <Route exact path='/admin'>
           {isAdmin && <AdminDashboard />}
+        </Route>
+        <Route exact path='/admin/recipes'>
+          {isAdmin && <AdminRecipes />}
+        </Route>
+        <Route exact path='/admin/recipes/create'>
+          {isAdmin && <CreateRecipe />}
         </Route>
       </Switch>
     </BrowserRouter>

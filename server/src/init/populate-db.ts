@@ -1,12 +1,5 @@
-import User from 'models/users/User';
-import Recipe from 'models/cookbook/Recipe';
-import RecipeNote from 'models/cookbook/RecipeNote';
-import RecipeStep from 'models/cookbook/RecipeStep';
-import MeasuredIngredient from 'models/cookbook/MeasuredIngredient';
-import Unit from 'models/cookbook/Unit';
-import UnitFetcher from 'models/cookbook/UnitFetcher';
-import Ingredient from 'models/cookbook/Ingredient';
-import IngredientFetcher from 'models/cookbook/IngredientFetcher';
+import { hashPassword, makeAdmin } from 'models/users/User';
+import prisma from 'db/prisma';
 
 const UNITS: [string, string][] = [
   ['', ''],
@@ -56,121 +49,108 @@ const recipes: MockRecipe[] = [
   }
 ];
 
-const unitFetcher = new UnitFetcher();
-const ingredientFetcher = new IngredientFetcher();
-
 const populate = async () => {
   console.log('Creating users...');
-  const user: User = new User({
-    email: 'jag@jagrajan.com',
-    password: 'password',
-    name: 'Jag',
+  const jag = await prisma.profile.create({
+    data: {
+      email: 'jag@jagrajan.com',
+      password: await hashPassword('password'),
+      name: 'Jag',
+    }
   });
-  await user.hashPassword();
+  console.log('Making admins...');
+  await makeAdmin(jag, true);
 
-  console.log('Saving users...');
-  await user.save();
-  await user.saveAdmin(true);
 
   console.log('Creating units...');
   for (let i = 0; i < UNITS.length; i++) {
     const [name, plural] = UNITS[i];
-    const unit = new Unit({
-      name,
-      plural,
+    const unit = await prisma.unit.create({
+      data: { name, plural }
     });
-    await unit.save();
-    console.log(`${unit.dataValues.name} has been added!`);
+    console.log(`${unit.name} has been added!`);
   }
 
   console.log('Creating ingredients...');
   for (let i = 0; i < INGREDIENTS.length; i++) {
     const [name, plural] = INGREDIENTS[i];
-    const ing = new Ingredient({
-      name,
-      plural,
+    const ing = await prisma.ingredient.create({
+      data: { name, plural }
     });
-    await ing.save();
-    console.log(`${ing.dataValues.name} has been added!`);
+    console.log(`${ing.name} has been added!`);
   }
-
-  console.log('Creating ingredients...');
 
   for (let i = 0; i < recipes.length; i++ ) {
     const rec = recipes[i];
-    console.log(`Creating recipe ${rec.name}`);
-    const recipe: Recipe = new Recipe({
-      slug: rec.slug
-    });
-    recipe.updateValues({
-      released_version: 1
-    });
-
-    console.log('Saving recipe...');
-    await recipe.save();
-
-    console.log('Creating recipe version...');
-    const version = recipe.createNewVersion();
-    if (version != null) {
-      version.updateValues({
+    const dRecipeVersion = await prisma.recipe_version.create({
+      data: {
         name: rec.name,
         description: rec.description,
-        image_file: rec.image_file
-      });
-      await version.save();
-      await recipe.incrementVersionAndSave();
+        image_file: rec.image_file,
+        version: 1,
+        slug: rec.slug,
+      },
+    });
+    await prisma.recipe_release.create({
+      data: {
+        recipe: {
+          create: {}
+        },
+        recipe_version_recipe_release_latest_versionTorecipe_version: {
+          connect: { id: dRecipeVersion.id },
+        },
+        recipe_version_recipe_release_released_versionTorecipe_version: {
+          connect: { id: dRecipeVersion.id },
+        },
+      }
+    });
 
-      const { steps } = recipes[i];
-      const versionId = recipe.dataValues.id;
-      const recipeId = recipe.dataValues.id;
-      if (versionId !== undefined && recipeId !== undefined) {
-
-        // Add steps for recipe
-        for (let j = 0; j < steps.length; j++) {
-          const step = new RecipeStep({
-            recipe_version_id: versionId,
-            position: j+1,
-            description: steps[j],
-          });
-          await step.save();
-          console.log(`Saving step ${j+1}: ${steps[j]}`);
-        } // end for steps
-
-        // Add measured ingredients for recipe
-        const ings = rec.ingredients;
-        for (let j = 0; j < ings.length; j++) {
-          const [unit, ing, minAmount, maxAmount] = ings[j];
-          const resIng = await ingredientFetcher.getDataByFieldsEqual({ name: ing });
-          const resUnit = await unitFetcher.getDataByFieldsEqual({ name: unit });
-
-          if (resIng !== null && resUnit !== null && resIng[0].id !== null && resUnit[0].id !== null) {
-            const measuredIngredient = new MeasuredIngredient({
-              recipe_version_id: versionId,
-              ingredient_id: <number>resIng[0].id,
-              unit_id: <number>resUnit[0].id,
-              min_amount: minAmount,
-              max_amount: maxAmount,
-              position: j+1
-            });
-            await measuredIngredient.save();
-            console.log(`Saving ingredient ${j + 1}:  ${minAmount} - ${maxAmount} ${unit !== '' && `X ${unit}`} of ${ing}`);
-          }
-        } // end for ingredients
-
-        for (let j = 0; j < rec.notes.length; j++) {
-          const note = new RecipeNote({
-            recipe_id: recipeId,
-            recipe_version_id: versionId,
-            global: true,
-            position: j + 1,
-            text: rec.notes[j],
-          });
-          await note.save();
-          console.log(`Saving recipe note ${j+1}: ${note.dataValues.text}`);
+    const { steps } = recipes[i];
+    // Add steps for recipe
+    for (let j = 0; j < steps.length; j++) {
+      await prisma.recipe_step.create({
+        data: {
+          description: steps[j],
+          position: j,
+          recipe_version: { connect: { id: dRecipeVersion.id } },
         }
+      });
+      console.log(`Saving step ${j+1}: ${steps[j]}`);
+    } // end for steps
 
+    const { ingredients } = recipes[i];
+    for (let j = 0; j < ingredients.length; j++) {
+      const [u, i, minAmount, maxAmount] = ingredients[j];
+      const dUnit = await prisma.unit.findOne({ where: { name: u } });
+      const dIngredient = await prisma.ingredient.findOne({ where: { name: i } });
+      if (dUnit && dIngredient) {
+        await prisma.measured_ingredient.create({
+          data: {
+            recipe_version: { connect: { id: dRecipeVersion.id } },
+            unit: { connect: { id: dUnit.id } },
+            ingredient: { connect: { id: dIngredient.id } },
+            min_amount: minAmount,
+            max_amount: maxAmount,
+            position: j,
+          }
+        });
+        console.log(`Saving ingredient ${j + 1}:  ${minAmount} - ${maxAmount} ${dUnit.name !== '' && `X ${dUnit.name}`} of ${dIngredient.name}`);
       }
     }
+
+    const { notes } = recipes[i];
+    for (let j = 0; j < notes.length; j++) {
+      const note = await prisma.recipe_note.create({
+        data: {
+          recipe_version: { connect: { id: dRecipeVersion.id } },
+          global: true,
+          position: j,
+          text: notes[j],
+        }
+      });
+      console.log(`Saving recipe note ${j+1}: ${note.text}`);
+    }
+
   }
 
 };

@@ -5,6 +5,7 @@ import { History } from 'history';
 import auth from './auth/reducers';
 import { reducer as form } from 'redux-form';
 import recipe from './recipe/reducers';
+import recipeEditor from './recipeEditor/reducers';
 
 const rootReducer = (history: History) =>
   combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = (history: History) =>
     auth,
     form,
     recipe,
+    recipeEditor,
   });
 
 export default rootReducer;

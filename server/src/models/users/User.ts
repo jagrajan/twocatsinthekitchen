@@ -2,6 +2,7 @@ import DataObject, { DataDefinition } from 'models/database/DatabaseObject';
 import { compare, hash } from 'bcrypt';
 import config from 'config';
 import prisma from 'db/prisma';
+import { profile } from '@prisma/client';
 
 export type UserDefinition = DataDefinition & {
   email: string;
@@ -54,19 +55,39 @@ class User<D extends UserDefinition = UserDefinition> extends DataObject<D> {
   }
 }
 
-  export async function isAdmin(id: string) {
-    const admins = await prisma.admin.findMany({
-      where: {
-        expire_on: {
-          gte: new Date(),
-        },
+export async function isAdmin(id: string) {
+  const admins = await prisma.admin.findMany({
+    where: {
+      expire_on: {
+        gte: new Date(),
       },
-    });
-    return admins.length > 0;
+    },
+  });
+  return admins.length > 0;
+}
+
+export async function makeAdmin(user: profile, master: boolean) {
+  if (await isAdmin(user.id)) {
+    return true;
   }
+  const res = await prisma.admin.create({
+    data: {
+      expire_on: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+      master,
+      profile: {
+        connect: { id: user.id },
+      },
+    },
+  });
+  return true;
+}
 
 export async function comparePassword(raw: string, hashed: string) {
   return compare(raw, hashed);
+}
+
+export async function hashPassword(raw: string) {
+  return hash(raw, config.auth.bcryptSaltRounds);
 }
 
 export default User;

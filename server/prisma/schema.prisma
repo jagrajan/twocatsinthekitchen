@@ -46,7 +46,7 @@ model ingredient {
   create_date           DateTime              @default(now())
   id                    Int                   @default(autoincrement()) @id
   last_update           DateTime              @default(now())
-  name                  String
+  name                  String                @unique
   plural                String?
   unit                  Int?
   ingredient_category   ingredient_category?  @relation(fields: [category], references: [id])
@@ -63,18 +63,18 @@ model ingredient_category {
 }
 
 model measured_ingredient {
-  create_date       DateTime        @default(now())
-  id                Int             @default(autoincrement()) @id
-  ingredient_id     Int?
-  last_update       DateTime        @default(now())
-  max_amount        String?
-  min_amount        String?
-  position          Int?
-  recipe_version_id Int?
-  unit_id           Int?
-  ingredient        ingredient?     @relation(fields: [ingredient_id], references: [id])
-  recipe_version    recipe_version? @relation(fields: [recipe_version_id], references: [id])
-  unit              unit?           @relation(fields: [unit_id], references: [id])
+  create_date       DateTime       @default(now())
+  id                Int            @default(autoincrement()) @id
+  ingredient_id     Int
+  last_update       DateTime       @default(now())
+  max_amount        String
+  min_amount        String
+  position          Int
+  recipe_version_id Int
+  unit_id           Int
+  ingredient        ingredient     @relation(fields: [ingredient_id], references: [id])
+  recipe_version    recipe_version @relation(fields: [recipe_version_id], references: [id])
+  unit              unit           @relation(fields: [unit_id], references: [id])
 }
 
 model profile {
@@ -90,31 +90,41 @@ model profile {
 }
 
 model recipe {
-  create_date      DateTime         @default(now())
-  hidden           Boolean?         @default(false)
-  id               Int              @default(autoincrement()) @id
-  last_update      DateTime         @default(now())
-  latest_version   Int?             @default(0)
-  released_version Int?             @default(0)
-  slug             String?
-  recipe_version   recipe_version[]
+  create_date    DateTime         @default(now())
+  id             Int              @default(autoincrement()) @id
+  last_update    DateTime         @default(now())
+  recipe_note    recipe_note[]
+  recipe_release recipe_release[]
 }
 
 model recipe_note {
-  create_date       DateTime @default(now())
+  create_date       DateTime        @default(now())
   global            Boolean?
-  id                Int      @default(autoincrement()) @id
-  last_update       DateTime @default(now())
+  id                Int             @default(autoincrement()) @id
+  last_update       DateTime        @default(now())
   position          Int?
   recipe_id         Int?
   recipe_version_id Int?
   text              String?
   user_id           String?
+  recipe            recipe?         @relation(fields: [recipe_id], references: [id])
+  recipe_version    recipe_version? @relation(fields: [recipe_version_id], references: [id])
+}
+
+model recipe_release {
+  create_date                                                    DateTime        @default(now())
+  last_update                                                    DateTime        @default(now())
+  latest_version                                                 Int?
+  recipe_id                                                      Int             @id
+  released_version                                               Int?
+  recipe_version_recipe_release_latest_versionTorecipe_version   recipe_version? @relation("recipe_release_latest_versionTorecipe_version", fields: [latest_version], references: [id])
+  recipe                                                         recipe          @relation(fields: [recipe_id], references: [id])
+  recipe_version_recipe_release_released_versionTorecipe_version recipe_version? @relation("recipe_release_released_versionTorecipe_version", fields: [released_version], references: [id])
 }
 
 model recipe_step {
   create_date       DateTime       @default(now())
-  description       String?
+  description       String
   id                Int            @default(autoincrement()) @id
   last_update       DateTime       @default(now())
   position          Int
@@ -132,26 +142,24 @@ model recipe_tag {
 }
 
 model recipe_version {
-  compiled_introduction String?
-  cook_time             String?
-  create_date           DateTime              @default(now())
-  description           String?
-  // This type is currently not supported.
-  // description_tokens textSearch?
-  id                    Int                   @default(autoincrement()) @id
-  image_file            String?
-  introduction          String?
-  last_update           DateTime              @default(now())
-  name                  String?
-  // This type is currently not supported.
-  // name_tokens        textSearch?
-  prep_time             String?
-  recipe_id             Int
-  serves                Int?
-  version               Int
-  recipe                recipe                @relation(fields: [recipe_id], references: [id])
-  measured_ingredient   measured_ingredient[]
-  recipe_step           recipe_step[]
+  compiled_introduction                                          String?
+  cook_time                                                      String?
+  create_date                                                    DateTime              @default(now())
+  description                                                    String?
+  id                                                             Int                   @default(autoincrement()) @id
+  image_file                                                     String?
+  introduction                                                   String?
+  last_update                                                    DateTime              @default(now())
+  name                                                           String?
+  prep_time                                                      String?
+  serves                                                         Int?
+  slug                                                           String?
+  version                                                        Int
+  measured_ingredient                                            measured_ingredient[]
+  recipe_note                                                    recipe_note[]
+  recipe_release_recipe_release_latest_versionTorecipe_version   recipe_release[]      @relation("recipe_release_latest_versionTorecipe_version")
+  recipe_release_recipe_release_released_versionTorecipe_version recipe_release[]      @relation("recipe_release_released_versionTorecipe_version")
+  recipe_step                                                    recipe_step[]
 }
 
 model tag {
@@ -165,7 +173,7 @@ model unit {
   create_date         DateTime              @default(now())
   id                  Int                   @default(autoincrement()) @id
   last_update         DateTime              @default(now())
-  name                String?
+  name                String?               @unique
   plural              String?
   ingredient          ingredient[]
   measured_ingredient measured_ingredient[]

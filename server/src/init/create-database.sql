@@ -16,6 +16,7 @@ BEGIN;
   DROP TABLE IF EXISTS cookbook.measured_ingredient;
   DROP TABLE IF EXISTS cookbook.recipe_note;
   DROP TABLE IF EXISTS cookbook.recipe_step;
+  DROP TABLE IF EXISTS cookbook.recipe_release;
   DROP TABLE IF EXISTS cookbook.recipe_version;
   DROP TABLE IF EXISTS cookbook.ingredient;
   DROP TABLE IF EXISTS cookbook.recipe_tag;
@@ -63,7 +64,7 @@ BEGIN;
 
   CREATE TABLE cookbook.unit (
     id      SERIAL PRIMARY KEY  NOT NULL,
-    name    TEXT,
+    name    TEXT UNIQUE,
     plural  TEXT
   );
 
@@ -74,34 +75,34 @@ BEGIN;
 
   CREATE TABLE cookbook.ingredient (
     id        SERIAL PRIMARY KEY  NOT NULL,
-    name      TEXT                NOT NULL,
+    name      TEXT                UNIQUE NOT NULL,
     plural    TEXT,
     unit      INTEGER             REFERENCES cookbook.unit(id),
     category  INTEGER             REFERENCES cookbook.ingredient_category(id)
   );
 
   CREATE TABLE cookbook.recipe (
-    id                SERIAL PRIMARY KEY  NOT NULL,
-    released_version  INTEGER DEFAULT 0,
-    latest_version    INTEGER DEFAULT 0,
-    hidden            BOOLEAN DEFAULT false,
-    slug              TEXT
+    id  SERIAL PRIMARY KEY  NOT NULL
   );
 
   CREATE TABLE cookbook.recipe_version (
     id                    SERIAL PRIMARY KEY,
     name                  TEXT,
-    name_tokens           TSVECTOR,
     description           TEXT,
-    description_tokens    TSVECTOR,
     introduction          TEXT,
     compiled_introduction TEXT,
     image_file            TEXT,
     cook_time             TEXT,
     prep_time             TEXT,
     serves                INTEGER,
-    recipe_id             INTEGER             NOT NULL REFERENCES cookbook.recipe(id),
-    version               INTEGER             NOT NULL
+    version               INTEGER             NOT NULL,
+    slug                  TEXT
+  );
+
+  CREATE TABLE cookbook.recipe_release (
+    recipe_id         INTEGER PRIMARY KEY REFERENCES cookbook.recipe(id),
+    released_version  INTEGER REFERENCES cookbook.recipe_version(id),
+    latest_version    INTEGER REFERENCES cookbook.recipe_version(id)
   );
 
   CREATE TABLE cookbook.tag (
@@ -119,24 +120,24 @@ BEGIN;
     id                    SERIAL PRIMARY KEY,
     recipe_version_id     INTEGER             NOT NULL REFERENCES cookbook.recipe_version(id),
     position              INTEGER             NOT NULL,
-    description           TEXT
+    description           TEXT                NOT NULL
   );
 
   CREATE TABLE cookbook.measured_ingredient (
     id                  SERIAL PRIMARY KEY,
-    min_amount          TEXT,
-    max_amount          TEXT,
-    position            INTEGER,
-    ingredient_id       INTEGER               REFERENCES cookbook.ingredient(id),
-    recipe_version_id   INTEGER               REFERENCES cookbook.recipe_version(id),
-    unit_id             INTEGER               REFERENCES cookbook.unit(id)
+    min_amount          TEXT                  NOT NULL,
+    max_amount          TEXT                  NOT NULL,
+    position            INTEGER               NOT NULL,
+    ingredient_id       INTEGER               NOT NULL REFERENCES cookbook.ingredient(id),
+    recipe_version_id   INTEGER               NOT NULL REFERENCES cookbook.recipe_version(id),
+    unit_id             INTEGER               NOT NULL REFERENCES cookbook.unit(id)
   );
 
   CREATE TABLE cookbook.recipe_note (
     id                SERIAL PRIMARY KEY,
     position          INTEGER,
-    recipe_id         INTEGER,
-    recipe_version_id INTEGER,
+    recipe_id         INTEGER               REFERENCES cookbook.recipe(id),
+    recipe_version_id INTEGER               REFERENCES cookbook.recipe_version(id),
     user_id           UUID,
     global            BOOLEAN,
     text              TEXT

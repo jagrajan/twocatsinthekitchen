@@ -17,6 +17,7 @@
     "axios": "^0.19.2",
     "connected-react-router": "^6.8.0",
     "history": "^4.10.1",
+    "immutable": "^4.0.0-rc.12",
     "material-table": "^1.60.0",
     "material-ui-dropzone": "^3.2.1",
     "moment": "^2.26.0",
