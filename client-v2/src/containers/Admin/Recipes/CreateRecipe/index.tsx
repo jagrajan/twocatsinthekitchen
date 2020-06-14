@@ -1,4 +1,7 @@
 import React, { FC, useState } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { createRecipeAsync } from 'store/recipeEditor/actions';
+import { RootState } from '@twocats/store';
 import Container from '@material-ui/core/Container';
 import { FormSubmitHandler, reduxForm, InjectedFormProps } from 'redux-form';
 import styled from 'styled-components';
@@ -37,12 +40,12 @@ const ReduxForm = reduxForm({
   validate
 })(Form);
 
-const CreateRecipe: FC = () => {
+const CreateRecipe: FC<PropsFromRedux> = ({ createRecipe }) => {
 
   const [ currentStep, setCurrentStep ] = useState(0);
 
   const onSubmit: FormSubmitHandler = (values: { [key: string]: string }) => {
-    console.log(values);
+    createRecipe();
   };
 
   return (
@@ -66,4 +69,15 @@ const CreateRecipe: FC = () => {
   )
 }
 
-export default CreateRecipe;
+const mapState = (state: RootState) => ({
+});
+
+const mapDispatch = {
+  createRecipe: createRecipeAsync.request
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(CreateRecipe);

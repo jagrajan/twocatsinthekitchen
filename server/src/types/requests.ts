@@ -1,5 +1,5 @@
 export type CreateRecipeBody = {
-  recipe_id: number,
+  recipe_id?: number,
   steps: string[],
   notes: string[],
   ingredients: {

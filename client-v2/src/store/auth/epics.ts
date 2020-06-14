@@ -55,7 +55,7 @@ export const logoutEpic: RootEpic = (action$, _, { api }) =>
           }
           return of(logoutAsync.failure());
         }),
-        catchError(() => of (logoutAsync.failure()))
+        catchError(() => of(logoutAsync.failure()))
       )
     )
   );
