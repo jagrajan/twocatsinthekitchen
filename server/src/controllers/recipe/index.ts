@@ -5,6 +5,7 @@ import Recipe from 'models/cookbook/Recipe';
 import RecipeFetcher from 'models/cookbook/RecipeFetcher';
 import RecipeVersionFetcher from 'models/cookbook/RecipeVersionFetcher';
 import { CreateRecipeBody } from 'types/requests';
+import { RecipeDetails } from 'types/responses';
 
 export const getRecent = async (req: Request, res: Response): Promise<void> => {
   let limit = 10;
@@ -26,6 +27,22 @@ export const getRecent = async (req: Request, res: Response): Promise<void> => {
     },
   });
   res.json(recipes.map(x => x.recipe_version_recipe_release_released_versionTorecipe_version));
+};
+
+export const getVersionDetails = async(req: Request, res: Response): Promise<void> => {
+  const recipeVersionId = parseInt(req.params.recipeId);
+  const results = await prisma.recipe_version.findOne({
+    include: {
+      measured_ingredient: {
+        select: { min_amount: true, max_amount: true, unit: true, ingredient: true },
+        orderBy: { position: 'asc' }
+      },
+      recipe_step: { select: { description: true }, orderBy: { position: 'asc' } },
+      recipe_note: { select: { text: true }, orderBy: { position: 'asc' } },
+    },
+    where: { id: recipeVersionId }
+  });
+  res.json(results);
 };
 
 export const getDetails = async(req: Request, res: Response): Promise<void> => {
@@ -116,12 +133,25 @@ export const getDashboard = async(req: Request, res: Response): Promise<void> =>
 
 export const postIndex = async(req: Request, res: Response): Promise<void> => {
   const recipe = (req.body as CreateRecipeBody);
+  const recipeId = recipe.recipe_id || (await prisma.recipe.create({ data: {} })).id;
+  let version = 1;
+  if (recipe.recipe_id) {
+    console.log(recipeId);
+    const latest = await prisma.recipe_release.findOne({
+      include: { recipe_version_recipe_release_latest_versionTorecipe_version: true },
+      where: { recipe_id: recipeId },
+    });
+    version = (latest?.recipe_version_recipe_release_latest_versionTorecipe_version?.id || 0) + 1;
+    console.log(version);
+  }
   const recipeVersion = await prisma.recipe_version.create({
     data: {
       name: recipe.name,
       description: recipe.description,
       slug: 'something',
-      version: 1
+      version,
+      image_file: recipe.imageFile,
+      recipe: { connect: { id: recipeId } },
     }
   });
   const { ingredients, steps, notes } = recipe;
@@ -153,6 +183,23 @@ export const postIndex = async(req: Request, res: Response): Promise<void> => {
         position: j,
         text: notes[j],
         global: true
+      }
+    });
+  }
+  if (recipe.recipe_id) {
+    await prisma.recipe_release.update({
+      data: {
+        recipe_version_recipe_release_latest_versionTorecipe_version: { connect: { id: recipeVersion.id } },
+      },
+      where: {
+        recipe_id: recipe.recipe_id,
+      },
+    });
+  } else {
+    await prisma.recipe_release.create({
+      data: {
+        recipe: { connect: { id: recipeId } },
+        recipe_version_recipe_release_latest_versionTorecipe_version: { connect: { id: recipeVersion.id } },
       }
     });
   }

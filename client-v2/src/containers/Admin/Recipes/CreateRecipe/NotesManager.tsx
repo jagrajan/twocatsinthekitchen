@@ -17,7 +17,6 @@ const NotesManager: FC<Props> = ({
   notes,
   swap
 }) => {
-  console.log('render');
   const noteInput = useRef<HTMLInputElement>();
 
   const onAddNote = () => {

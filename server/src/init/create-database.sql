@@ -96,7 +96,8 @@ BEGIN;
     prep_time             TEXT,
     serves                INTEGER,
     version               INTEGER             NOT NULL,
-    slug                  TEXT
+    slug                  TEXT,
+    recipe_id             INTEGER REFERENCES cookbook.recipe(id)
   );
 
   CREATE TABLE cookbook.recipe_release (
@@ -140,7 +141,7 @@ BEGIN;
     recipe_version_id INTEGER               REFERENCES cookbook.recipe_version(id),
     user_id           UUID,
     global            BOOLEAN,
-    text              TEXT
+    text              TEXT                  NOT NULL
   );
 
   CREATE TABLE cookbook.browse_category (

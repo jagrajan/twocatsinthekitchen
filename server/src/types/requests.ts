@@ -8,6 +8,8 @@ export type CreateRecipeBody = {
     minAmount: string;
     maxAmount: string,
   }[],
+  slug: string,
   name: string,
   description: string,
+  imageFile: string,
 };

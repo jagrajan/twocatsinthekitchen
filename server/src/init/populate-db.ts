@@ -82,6 +82,7 @@ const populate = async () => {
 
   for (let i = 0; i < recipes.length; i++ ) {
     const rec = recipes[i];
+    const recipe = await prisma.recipe.create({ data: { } });
     const dRecipeVersion = await prisma.recipe_version.create({
       data: {
         name: rec.name,
@@ -89,12 +90,13 @@ const populate = async () => {
         image_file: rec.image_file,
         version: 1,
         slug: rec.slug,
+        recipe: { connect: { id: recipe.id} },
       },
     });
     await prisma.recipe_release.create({
       data: {
         recipe: {
-          create: {}
+          connect: { id: recipe.id }
         },
         recipe_version_recipe_release_latest_versionTorecipe_version: {
           connect: { id: dRecipeVersion.id },

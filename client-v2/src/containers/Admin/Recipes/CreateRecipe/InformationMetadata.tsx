@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@twocats/store';
 import {
   addNote,
   removeNote,
-  swapNotes
+  swapNotes,
 } from 'store/recipeEditor/actions';
 // import { addMessage } from 'store/feedback/actions';
 import { Field  } from 'redux-form';
@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import FieldInput from 'components/ui/Input/FieldInput';
 import DropzoneCropper from 'components/ui/DropzoneCropper';
+import Cropper from 'react-cropper';
 import NotesManager from './NotesManager';
 
 const StyledContainer = styled.div`
@@ -80,23 +81,38 @@ const Fields: FC = () => {
         type="number"
         variant="outlined"
       />
+      <Field
+        component={FieldInput}
+        fullWidth
+        label="Slug"
+        name="slug"
+        type="text"
+        variant="outlined"
+      />
     </StyledContainer>
   );
 };
 
-const InformationMetadata: FC<PropsFromRedux> = ({
+type OwnProps = {
+  cropperRef?: MutableRefObject<Cropper | null>;
+}
+
+const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
   addNote,
+  cropperRef,
+  imageData,
   recipeNotes,
   removeNote,
   swapNotes,
 }) => {
+  const cropperProps = imageData ? { originalImage: imageData } : {};
   return (
     <>
       <Typography component="h2" variant="h3">Information & Metadata</Typography>
       <Fields />
       <Typography component="h2" variant="h3">Image</Typography>
       <Container maxWidth="sm">
-        <DropzoneCropper />
+        <DropzoneCropper cropperRef={cropperRef} {...cropperProps}  />
       </Container>
       <Typography component="h2" variant="h3">Notes</Typography>
       <NotesManager
@@ -111,13 +127,14 @@ const InformationMetadata: FC<PropsFromRedux> = ({
 }
 
 const mapState = (state: RootState) => ({
+  imageData: state.recipeEditor.recipe.imageData,
   recipeNotes: state.recipeEditor.recipe.notes,
 });
 
 const mapDispatch = {
   addNote,
   removeNote,
-  swapNotes
+  swapNotes,
 };
 
 const connector = connect(mapState, mapDispatch);

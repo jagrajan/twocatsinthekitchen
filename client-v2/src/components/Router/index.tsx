@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import {
-  BrowserRouter,
   Route,
   Switch
 } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@twocats/store';
 import { getAuthKey, getIsAdmin } from 'store/auth/selectors';
+import { history } from 'store';
 
 import AdminDashboard from 'containers/Admin';
 import AdminRecipes from 'containers/Admin/Recipes';
@@ -19,7 +20,7 @@ import Logout from 'containers/Logout';
 
 const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
   return (
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Header />
       <Switch>
         <Route exact path='/'>
@@ -40,8 +41,11 @@ const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
         <Route exact path='/admin/recipes/create'>
           {isAdmin && <CreateRecipe />}
         </Route>
+        <Route path='/admin/recipes/edit/:id'>
+          {isAdmin && <CreateRecipe />}
+        </Route>
       </Switch>
-    </BrowserRouter>
+    </ConnectedRouter>
   );
 };
 

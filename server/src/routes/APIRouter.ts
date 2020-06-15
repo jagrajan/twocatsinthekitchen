@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import auth from './api/AuthRouter';
+import image from './api/ImageRouter';
 import ingredient from './api/IngredientRouter';
 import recipe from './api/RecipeRouter';
 import unit from './api/UnitRouter';
@@ -8,6 +9,7 @@ import user from './api/UserRouter';
 const router: Router = Router();
 
 router.use('/auth', auth);
+router.use('/image', image);
 router.use('/ingredient', ingredient);
 router.use('/recipe', recipe);
 router.use('/unit', unit);

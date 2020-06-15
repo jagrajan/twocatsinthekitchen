@@ -41,9 +41,9 @@ const AdminRecipes: FC<PropsFromRedux> = ({ authKey, loadDashboardRecipes, recip
               tooltip: 'Edit Recipe',
               onClick: (event, rowData) => {
                 if (Array.isArray(rowData)) {
-                  history.push(`/admin/recipe-overview/${rowData[0].latest.id}`)
+                  history.push(`/admin/recipes/edit/${rowData[0].latest.id}`)
                 } else {
-                  history.push(`/admin/recipe-overview/${rowData.latest.id}`)
+                  history.push(`/admin/recipes/edit/${rowData.latest.id}`)
                 }
               }
             }

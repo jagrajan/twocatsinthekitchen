@@ -5,8 +5,8 @@ const config: ServerConfig = {
     host: 'localhost',
     port: 5432,
     database: 'twocats',
-    user: 'jag',
-    password: 'password',
+    user: 'postgres',
+    password: 'docker',
   },
   server: {
     port: 4000,
@@ -16,7 +16,7 @@ const config: ServerConfig = {
     jwtKey: 'somethingisfishy',
   },
   storage: {
-    imageFolder: '/home/jag/projects/twocats/twocats/server/images'
+    imageFolder: '/home/jag/projects/twocats/server/images'
   }
 };
 

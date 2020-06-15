@@ -95,6 +95,7 @@ model recipe {
   last_update    DateTime         @default(now())
   recipe_note    recipe_note[]
   recipe_release recipe_release[]
+  recipe_version recipe_version[]
 }
 
 model recipe_note {
@@ -105,7 +106,7 @@ model recipe_note {
   position          Int?
   recipe_id         Int?
   recipe_version_id Int?
-  text              String?
+  text              String
   user_id           String?
   recipe            recipe?         @relation(fields: [recipe_id], references: [id])
   recipe_version    recipe_version? @relation(fields: [recipe_version_id], references: [id])
@@ -152,9 +153,11 @@ model recipe_version {
   last_update                                                    DateTime              @default(now())
   name                                                           String?
   prep_time                                                      String?
+  recipe_id                                                      Int?
   serves                                                         Int?
   slug                                                           String?
   version                                                        Int
+  recipe                                                         recipe?               @relation(fields: [recipe_id], references: [id])
   measured_ingredient                                            measured_ingredient[]
   recipe_note                                                    recipe_note[]
   recipe_release_recipe_release_latest_versionTorecipe_version   recipe_release[]      @relation("recipe_release_latest_versionTorecipe_version")
