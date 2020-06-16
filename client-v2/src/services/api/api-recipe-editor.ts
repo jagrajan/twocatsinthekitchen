@@ -35,7 +35,30 @@ export async function uploadRecipeImage(data: string): Promise<string> {
   return res.data.filename;
 }
 
+export async function uploadBlogImage(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('blogImage', file);
+  const res = await axios.post<{ filename: string }>('/image', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return res.data.filename;
+}
+
 export async function createRecipe(recipe: CreateRecipeBody): Promise<recipe_version> {
   const res = await axios.post<recipe_version>('/recipe', recipe);
+  return res.data;
+}
+
+export async function createIngredient(
+  data: { name: string, plural: string }
+): Promise<ingredient> {
+  const res = await axios.post<ingredient>('/ingredient', data);
+  return res.data;
+}
+
+export async function createUnit(
+  data: { name: string, plural: string }
+): Promise<unit> {
+  const res = await axios.post<unit>('/unit', data);
   return res.data;
 }

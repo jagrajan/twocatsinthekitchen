@@ -18,6 +18,8 @@ import StepsManager from './StepsManager';
 const IngredientsSteps: FC<PropsFromRedux> = ({
   addIngredient,
   addStep,
+  creatingIngredient,
+  creatingUnit,
   loadAllIngredients,
   loadAllUnits,
   ingredients,
@@ -38,6 +40,8 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
       <Typography component="h2" variant="h3">Ingredients</Typography>
       <IngredientManager
         addIngredient={addIngredient}
+        creatingIngredient={creatingIngredient}
+        creatingUnit={creatingUnit}
         ingredients={ingredients}
         recipeIngredients={recipeIngredients.toArray()}
         removeIngredient={removeIngredient}
@@ -56,6 +60,8 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
 };
 
 const mapState = (state: RootState) => ({
+  creatingIngredient: state.recipeEditor.creatingIngredient,
+  creatingUnit: state.recipeEditor.creatingUnit,
   ingredients: state.recipeEditor.ingredients,
   recipeIngredients: state.recipeEditor.recipe.ingredients,
   recipeSteps: state.recipeEditor.recipe.steps,

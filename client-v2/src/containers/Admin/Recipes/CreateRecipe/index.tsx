@@ -7,13 +7,17 @@ import { RootState } from '@twocats/store';
 import Container from '@material-ui/core/Container';
 import { FormSubmitHandler, reduxForm, InjectedFormProps } from 'redux-form';
 import styled from 'styled-components';
+import Box from '@material-ui/core/Box';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
+import Button from '@material-ui/core/Button';
 import LoadingButton from 'components/ui/Button/LoadingButton';
 import LoadingStatus from 'components/ui/LoadingStatus';
 import InformationMetadata, { validate } from './InformationMetadata';
 import IngredientsSteps from './IngredientsSteps';
+import BlogPostEditor from './BlogPostEditor';
+import RecipePreviewDialog from './RecipePreviewDialog';
 
 const StyledForm = styled.form`
   & > div {
@@ -54,6 +58,7 @@ const CreateRecipe: FC<PropsFromRedux> = ({
 }) => {
 
   const [ currentStep, setCurrentStep ] = useState(0);
+  const [ modal, setModal ] = useState(false);
   const id = match?.params.id;
   const cropperRef = useRef<Cropper | null>(null);
 
@@ -77,7 +82,11 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   return (
     <>
       {loading && <LoadingStatus />}
+      <RecipePreviewDialog open={modal} close={() => setModal(false)} />
       <Container>
+        <Box textAlign="right">
+          <Button variant="contained" color="secondary" onClick={() => setModal(true)}>Preview</Button>
+        </Box>
         <Stepper nonLinear activeStep={currentStep}>
           <Step>
             <StepButton onClick={() => setCurrentStep(0)}>Information & Metadata</StepButton>
@@ -92,6 +101,7 @@ const CreateRecipe: FC<PropsFromRedux> = ({
         <ReduxForm onSubmit={onSubmit}>
           <div style={{ display: currentStep === 0 ? 'grid' : 'none' }}><InformationMetadata cropperRef={cropperRef} /></div>
           <div style={{ display: currentStep === 1 ? 'grid' : 'none' }}><IngredientsSteps /></div>
+          <div style={{ display: currentStep === 2 ? 'grid' : 'none' }}><BlogPostEditor /></div>
         </ReduxForm>
       </Container>
     </>
@@ -99,7 +109,7 @@ const CreateRecipe: FC<PropsFromRedux> = ({
 }
 
 const mapState = (state: RootState) => ({
-  loading: state.recipeEditor.loading,
+  loading: state.recipeEditor.loading || state.recipeEditor.creatingIngredient || state.recipeEditor.creatingUnit,
   match: createMatchSelector<RootState, {id: string | undefined }>('/admin/recipes/edit/:id')(state),
 });
 

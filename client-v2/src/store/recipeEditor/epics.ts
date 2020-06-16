@@ -6,13 +6,17 @@ import { CreateRecipeBody } from '@twocats/server/src/types/requests';
 import { push } from 'connected-react-router';
 import { initialize } from 'redux-form';
 import { IMAGE_SERVER } from 'config';
+import { addMessage } from 'store/feedback/actions';
 import {
   loadDashboardRecipesAsync,
   loadAllIngredientsAsync,
   loadAllUnitsAsync,
   loadRecipeDetailsAsync,
   createRecipeAsync,
+  createIngredientAsync,
+  createUnitAsync,
   uploadRecipeImageAsync,
+  uploadBlogImageAsync,
   setNotes,
   setIngredients,
   setSteps,
@@ -82,6 +86,44 @@ export const createRecipeEpic: RootEpic = (action$, state$, { api }) =>
     )
   );
 
+export const createIngredientEpic: RootEpic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createIngredientAsync.request)),
+    mergeMap(action =>
+      from(api.recipeEditor.createIngredient(action.payload)).pipe(
+        mergeMap(x => of(
+          createIngredientAsync.success(x),
+          loadAllIngredientsAsync.request(),
+          addMessage({
+            key: 'add-ingredient',
+            color: 'success',
+            message: `${x.name} has been added to the database!`,
+          })
+        )),
+        catchError(error => of(createIngredientAsync.failure(error)))
+      )
+    )
+  );
+
+export const createUnitEpic: RootEpic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createUnitAsync.request)),
+    mergeMap(action =>
+      from(api.recipeEditor.createUnit(action.payload)).pipe(
+        mergeMap(x => of(
+          createUnitAsync.success(x),
+          loadAllUnitsAsync.request(),
+          addMessage({
+            key: 'add-unit',
+            color: 'success',
+            message: `${x.name} has been added to the database!`,
+          })
+        )),
+        catchError(error => of(createIngredientAsync.failure(error)))
+      )
+    )
+  );
+
 export const uploadRecipeImageEpic: RootEpic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(uploadRecipeImageAsync.request)),
@@ -89,6 +131,17 @@ export const uploadRecipeImageEpic: RootEpic = (action$, _, { api }) =>
       from(api.recipeEditor.uploadRecipeImage(action.payload)).pipe(
         map(x => uploadRecipeImageAsync.success(x)),
         catchError(() => of(uploadRecipeImageAsync.failure()))
+      )
+    )
+  );
+
+export const uploadBlogImageEpic: RootEpic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(uploadBlogImageAsync.request)),
+    exhaustMap(action =>
+      from(api.recipeEditor.uploadBlogImage(action.payload)).pipe(
+        map(x => uploadBlogImageAsync.success(x)),
+        catchError(() => of(uploadBlogImageAsync.failure()))
       )
     )
   );
@@ -103,6 +156,8 @@ export const loadRecipeDetailsEpic: RootEpic = (action$, _, { api }) =>
       )
     )
   );
+
+
 
 export const setRecipeEditorEpic: RootEpic = action$ =>
   action$.pipe(

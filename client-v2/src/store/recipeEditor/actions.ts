@@ -51,6 +51,24 @@ export const uploadRecipeImageAsync = createAsyncAction(
   '@recipeEditor/UPLOAD_RECIPE_IMAGE_FAILURE'
 )<string, string, undefined>();
 
+export const uploadBlogImageAsync = createAsyncAction(
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_REQUEST',
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_SUCCESS',
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_FAILURE'
+)<File, string, undefined>();
+
+export const createIngredientAsync = createAsyncAction(
+  '@recipeEditor/CREATE_INGREDIENT_REQUEST',
+  '@recipeEditor/CREATE_INGREDIENT_SUCCESS',
+  '@recipeEditor/CREATE_INGREDIENT_FAILURE'
+)<{ name: string, plural: string }, ingredient, any>();
+
+export const createUnitAsync = createAsyncAction(
+  '@recipeEditor/CREATE_UNIT_REQUEST',
+  '@recipeEditor/CREATE_UNIT_SUCCESS',
+  '@recipeEditor/CREATE_UNIT_FAILURE'
+)<{ name: string, plural: string }, unit, any>();
+
 export const addNote = createAction('@recipeEditor/ADD_NOTE')<string>();
 export const removeNote = createAction('@recipeEditor/REMOVE_NOTE')<number>();
 export const swapNotes = createAction('@recipeEditor/SWAP_NOTES')<[number, number]>();
@@ -68,5 +86,6 @@ export const setIngredients = createAction('@recipeEditor/SET_INGREDIENTS')<Meas
 
 export const setRecipeId = createAction('@recipeEditor/SET_RECIPE_ID')<number | null>();
 export const setImageData = createAction('@recipeEditor/SET_IMAGE_DATA')<string | null>();
+export const setIntroduction = createAction('@recipeEditor/SET_INTRODUCTION')<string>();
 export const clearRecipe = createAction('@recipeEditor/CLEAR_RECIPE')();
 

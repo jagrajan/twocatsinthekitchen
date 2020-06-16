@@ -12,6 +12,8 @@ import {
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync,
   createRecipeAsync,
+  createIngredientAsync,
+  createUnitAsync,
   uploadRecipeImageAsync,
   addNote,
   removeNote,
@@ -27,6 +29,7 @@ import {
   setIngredients,
   setRecipeId,
   setImageData,
+  setIntroduction,
   clearRecipe,
 } from './actions';
 
@@ -81,11 +84,19 @@ const reducer = combineReducers({
     imageData: createReducer<string | null, RootAction>(null)
       .handleAction(setImageData, (_, action) => action.payload)
       .handleAction(clearRecipe, () => null),
+    introduction: createReducer<string, RootAction>('')
+      .handleAction(setIntroduction, (_, action) => action.payload),
   }),
   ingredients: createReducer<ingredient[], RootAction>([])
     .handleAction(loadAllIngredientsAsync.success, (_, action) => action.payload),
   units: createReducer<unit[], RootAction>([])
     .handleAction(loadAllUnitsAsync.success, (_, action) => action.payload),
+  creatingIngredient: createReducer<boolean, RootAction>(false)
+    .handleAction(createIngredientAsync.request, () => true)
+    .handleAction(loadAllIngredientsAsync.success, () => false),
+  creatingUnit: createReducer<boolean, RootAction>(false)
+    .handleAction(createUnitAsync.request, () => true)
+    .handleAction(loadAllUnitsAsync.success, () => false),
   loading: createReducer<boolean, RootAction>(false)
     .handleAction([
       createRecipeAsync.request,

@@ -1,11 +1,11 @@
 import fs from 'fs';
-import { v4 as uuid} from 'uuid';
+import { v4 } from 'uuid';
 import imagemin from 'imagemin';
 import imageminPngquant from 'imagemin-pngquant';
 import config from 'config';
 
 export async function createImageFile (data: string) {
-  const filename = uuid() + '.png';
+  const filename = v4() + '.png';
   fs.writeFileSync(`${config.storage.imageFolder}/${filename}`, new Buffer(data.split(',')[1], 'base64'));
   try {
     await imagemin([`${config.storage.imageFolder}/${filename}`], {

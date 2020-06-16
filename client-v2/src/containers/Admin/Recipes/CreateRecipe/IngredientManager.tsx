@@ -1,33 +1,18 @@
-import React, { FC, useState, ChangeEvent } from 'react';
-import { MeasuredIngredient } from 'store/recipeEditor/actions';
-// import { unit, ingredient } from '@twocats/server/node_modules/@prisma/client';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react'; import { MeasuredIngredient } from 'store/recipeEditor/actions';
+import useNotification from 'hooks/useNotification';
 import { Unit as unit, Ingredient as ingredient } from 'store/recipeEditor/actions';
 import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
-// type unit = {
-//   id: number;
-//   name: string | null;
-//   plural: string | null;
-//   create_date: Date;
-//   last_update: Date;
-// };
-
-// type ingredient = {
-//   id: number;
-//   name: string;
-//   plural: string | null;
-//   category: number | null;
-//   unit: number | null;
-//   create_date: Date;
-//   last_update: Date;
-// };
+import CreateIngredientDialog from './CreateIngredientDialog';
+import CreateUnitDialog from './CreateUnitDialog';
 
 interface Props {
   addIngredient: (ingredient: MeasuredIngredient) => void;
+  creatingIngredient: boolean,
+  creatingUnit: boolean,
   ingredients: ingredient[];
   recipeIngredients: MeasuredIngredient[];
   removeIngredient: (position: number) => void;
@@ -37,6 +22,8 @@ interface Props {
 
 const IngredientManager: FC<Props> = ({
   addIngredient,
+  creatingIngredient,
+  creatingUnit,
   ingredients,
   recipeIngredients,
   removeIngredient,
@@ -46,10 +33,24 @@ const IngredientManager: FC<Props> = ({
   const [ amount, setAmount ] = useState('');
   const [ unit, setUnit ] = useState<unit | null>(null);
   const [ ingredient, setIngredient ] = useState<ingredient | null>(null);
+  const [ ingredientModalOpen, setIngredientModalOpen ] = useState<boolean>(false);
+  const [ unitModalOpen, setUnitModalOpen ] = useState<boolean>(false);
+  const notification = useNotification();
+  useEffect(() => {
+    setIngredientModalOpen(creatingIngredient);
+  }, [creatingIngredient]);
+  useEffect(() => {
+    setUnitModalOpen(creatingUnit);
+  }, [creatingUnit]);
 
   const onAddIngredient = () => {
     const re = /^\d+((\/\d+)|\.\d+)?(-\d+(\/\d+)?)?$/;
     if (unit === null || ingredient === null) {
+      notification({
+        key: 'add-ingredient-error',
+        color: 'error',
+        message: 'Please specify an ingredient and unit'
+      })
     } else if (re.test(amount) || amount === '') {
       let minAmount = amount;
       let maxAmount = amount;
@@ -72,8 +73,16 @@ const IngredientManager: FC<Props> = ({
 
   return (
     <>
+      <CreateIngredientDialog
+        open={ingredientModalOpen}
+        onClose={() => setIngredientModalOpen(false)}
+      />
+      <CreateUnitDialog
+        open={unitModalOpen}
+        onClose={() => setUnitModalOpen(false)}
+      />
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={9} md={4}>
           <Autocomplete
             id="combo-box-ingredient"
             options={ingredients}
@@ -83,7 +92,19 @@ const IngredientManager: FC<Props> = ({
             renderInput={(params) => <TextField {...params} label="Ingredient" variant="outlined" />}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={3} md={2}>
+          <Button
+            style={{ height: '100%' }}
+            size="large"
+            color="secondary"
+            variant="contained"
+            fullWidth
+            onClick={() => setIngredientModalOpen(true)}
+          >
+            Create
+          </Button>
+        </Grid>
+        <Grid item xs={9} md={4}>
           <Autocomplete
             id="combo-box-unit"
             options={units}
@@ -92,6 +113,18 @@ const IngredientManager: FC<Props> = ({
             value={unit}
             renderInput={(params) => <TextField {...params} label="Unit" variant="outlined" />}
           />
+        </Grid>
+        <Grid item xs={3} md={2}>
+          <Button
+            style={{ height: '100%' }}
+            size="large"
+            color="secondary"
+            variant="contained"
+            fullWidth
+            onClick={() => setUnitModalOpen(true)}
+          >
+            Create
+          </Button>
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
@@ -112,7 +145,7 @@ const IngredientManager: FC<Props> = ({
             fullWidth
             onClick={onAddIngredient}
           >
-            Add Ingredient
+            Add
           </Button>
         </Grid>
       </Grid>
