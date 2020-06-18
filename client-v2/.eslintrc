@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    "airbnb/hooks"
+  ],
+  "rules": {
+    "sort-imports": ["error", {
+      "ignoreCase": true,
+      "ignoreDeclarationSort": true,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+    }],
+    "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}],
+    "sort-vars": ["error", { "ignoreCase": true }],
+    "react/prop-types": 0,
+    "react/jsx-props-no-spreading": 0
+  }
+}

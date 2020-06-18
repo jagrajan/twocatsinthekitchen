@@ -1,11 +1,18 @@
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, {
+  FC, useEffect, useRef, useState,
+} from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadRecipeDetailsAsync, uploadRecipeImageAsync, clearRecipe } from 'store/recipeEditor/actions';
+import {
+  clearRecipe as clearRecipeAction,
+  loadRecipeDetailsAsync,
+  setPreviewImage as setPreviewImageAction,
+  uploadRecipeImageAsync,
+} from 'store/recipeEditor/actions';
 import { createMatchSelector } from 'connected-react-router';
 import Cropper from 'react-cropper';
 import { RootState } from '@twocats/store';
 import Container from '@material-ui/core/Container';
-import { FormSubmitHandler, reduxForm, InjectedFormProps } from 'redux-form';
+import { FormSubmitHandler, InjectedFormProps, reduxForm } from 'redux-form';
 import styled from 'styled-components';
 import Box from '@material-ui/core/Box';
 import Stepper from '@material-ui/core/Stepper';
@@ -27,26 +34,24 @@ const StyledForm = styled.form`
   }
 `;
 
-const Form: FC<InjectedFormProps> = ({ children, handleSubmit, submitting }) => {
-  return (
-    <StyledForm onSubmit={handleSubmit} noValidate autoComplete="off">
-      {children}
-      <LoadingButton
-        color="primary"
-        size="large"
-        loading={submitting}
-        type="submit"
-        variant="contained"
-      >
-        Create Recipe
-      </LoadingButton>
-    </StyledForm>
-  );
-}
+const Form: FC<InjectedFormProps> = ({ children, handleSubmit, submitting }) => (
+  <StyledForm onSubmit={handleSubmit} noValidate autoComplete="off">
+    {children}
+    <LoadingButton
+      color="primary"
+      size="large"
+      loading={submitting}
+      type="submit"
+      variant="contained"
+    >
+      Create Recipe
+    </LoadingButton>
+  </StyledForm>
+);
 
 const ReduxForm = reduxForm({
   form: 'recipeEditor',
-  validate
+  validate,
 })(Form);
 
 const CreateRecipe: FC<PropsFromRedux> = ({
@@ -54,29 +59,36 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   loadRecipeDetails,
   loading,
   match,
+  setPreviewImage,
   uploadRecipeImage,
 }) => {
-
-  const [ currentStep, setCurrentStep ] = useState(0);
-  const [ modal, setModal ] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [modal, setModal] = useState(false);
   const id = match?.params.id;
   const cropperRef = useRef<Cropper | null>(null);
 
   useEffect(() => {
-    console.log(id);
     if (id) {
-      loadRecipeDetails(parseInt(id));
+      loadRecipeDetails(parseInt(id, 10));
     } else {
       clearRecipe();
     }
   }, [id, loadRecipeDetails, clearRecipe]);
 
-  const onSubmit: FormSubmitHandler = (values: { [key: string]: string }) => {
+  const onSubmit: FormSubmitHandler = () => {
     const dataUrl = cropperRef.current?.getCroppedCanvas()?.toDataURL();
     if (dataUrl) {
       uploadRecipeImage(dataUrl);
     }
     // createRecipe();
+  };
+
+  const onPreview = () => {
+    const dataUrl = cropperRef.current?.getCroppedCanvas()?.toDataURL();
+    if (dataUrl) {
+      setPreviewImage(dataUrl);
+    }
+    setModal(true);
   };
 
   return (
@@ -85,7 +97,7 @@ const CreateRecipe: FC<PropsFromRedux> = ({
       <RecipePreviewDialog open={modal} close={() => setModal(false)} />
       <Container>
         <Box textAlign="right">
-          <Button variant="contained" color="secondary" onClick={() => setModal(true)}>Preview</Button>
+          <Button variant="contained" color="secondary" onClick={onPreview}>Preview</Button>
         </Box>
         <Stepper nonLinear activeStep={currentStep}>
           <Step>
@@ -106,16 +118,18 @@ const CreateRecipe: FC<PropsFromRedux> = ({
       </Container>
     </>
   );
-}
+};
 
 const mapState = (state: RootState) => ({
-  loading: state.recipeEditor.loading || state.recipeEditor.creatingIngredient || state.recipeEditor.creatingUnit,
+  loading: state.recipeEditor.loading || state.recipeEditor.creatingIngredient
+  || state.recipeEditor.creatingUnit,
   match: createMatchSelector<RootState, {id: string | undefined }>('/admin/recipes/edit/:id')(state),
 });
 
 const mapDispatch = {
-  clearRecipe,
+  clearRecipe: clearRecipeAction,
   loadRecipeDetails: loadRecipeDetailsAsync.request,
+  setPreviewImage: setPreviewImageAction,
   uploadRecipeImage: uploadRecipeImageAsync.request,
 };
 

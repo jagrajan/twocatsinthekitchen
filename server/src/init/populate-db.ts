@@ -19,6 +19,10 @@ const INGREDIENTS: [string, string][] = [
 type MockRecipe = {
   slug: string;
   name: string;
+  cookTime: string;
+  prepTime: string;
+  servings: number;
+  introduction: string;
   description: string;
   image_file: string;
   steps: string[];
@@ -31,7 +35,11 @@ const recipes: MockRecipe[] = [
     slug: 'test-recipe',
     name: 'Test Recipe',
     description: 'It is real food',
+    cookTime: '20 minutes',
+    prepTime: '30 minutes',
+    servings: 3,
     image_file: 'some-test-food.jpg',
+    introduction: '## A heading of some sort',
     steps: [
       'Cut the tomato',
       'Add the spices',
@@ -88,6 +96,10 @@ const populate = async () => {
         name: rec.name,
         description: rec.description,
         image_file: rec.image_file,
+        cook_time: rec.cookTime,
+        prep_time: rec.prepTime,
+        serves: rec.servings,
+        introduction: rec.introduction,
         version: 1,
         slug: rec.slug,
         recipe: { connect: { id: recipe.id} },

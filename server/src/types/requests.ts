@@ -11,5 +11,9 @@ export type CreateRecipeBody = {
   slug: string,
   name: string,
   description: string,
+  prepTime: string,
+  cookTime: string,
+  servings: number,
   imageFile: string,
+  introduction: string,
 };

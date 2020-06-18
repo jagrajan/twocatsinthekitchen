@@ -5,7 +5,6 @@ import Recipe from 'models/cookbook/Recipe';
 import RecipeFetcher from 'models/cookbook/RecipeFetcher';
 import RecipeVersionFetcher from 'models/cookbook/RecipeVersionFetcher';
 import { CreateRecipeBody } from 'types/requests';
-import { RecipeDetails } from 'types/responses';
 
 export const getRecent = async (req: Request, res: Response): Promise<void> => {
   let limit = 10;
@@ -149,7 +148,11 @@ export const postIndex = async(req: Request, res: Response): Promise<void> => {
       name: recipe.name,
       description: recipe.description,
       slug: 'something',
+      cook_time: recipe.cookTime,
+      prep_time: recipe.prepTime,
+      serves: recipe.servings,
       version,
+      introduction: recipe.introduction,
       image_file: recipe.imageFile,
       recipe: { connect: { id: recipeId } },
     }

@@ -43,7 +43,6 @@ const CreateIngredientDialog: FC<DialogProps> = (props) => {
         <Box my={2}>
           <TextField
             inputRef={pluralRef}
-            autoFocus
             id="ingredientPlural"
             label="Plural"
             type="text"

@@ -4,33 +4,35 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
-import StrikeableListItem from './StrikeableListItem';
 import Typography from '@material-ui/core/Typography';
+import StrikeableListItem from './StrikeableListItem';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    padding: '2rem',
-  },
-  infoContainer: {
-
-  },
-  imageContainer: {
-    textAlign: 'right',
+const useStyles = makeStyles((theme) => ({
+  divider: {
+    padding: '1.5rem',
   },
   image: {
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: '15rem',
-    }
+    },
   },
-  divider: {
-    padding: '1.5rem',
+  imageContainer: {
+    textAlign: 'right',
+  },
+  infoContainer: {},
+  root: {
+    padding: '2rem',
   },
 }));
 
 interface Props {
   imageUrl: string;
   name: string;
+  notes: {
+    position: number;
+    text: string;
+  }[];
   steps: {
     position: number;
     text: string;
@@ -45,22 +47,22 @@ const RecipeCard: FC<Props> = ({
   imageUrl,
   ingredients,
   name,
-  steps
+  notes,
+  steps,
 }) => {
   const classes = useStyles();
 
-  const stepsRender = steps.map(step => (
+  const stepsRender = steps.map((step) => (
     <StrikeableListItem
       key={step.position}
       text={`${step.position + 1}. ${step.text}`}
     />
   ));
-
-  const ingRender = ingredients.map(ing => (
-    <StrikeableListItem
-      key={ing.position}
-      text={`${ing.text}`}
-    />
+  const ingRender = ingredients.map((ing) => (
+    <StrikeableListItem key={ing.position} text={`${ing.text}`} />
+  ));
+  const notesRender = notes.map((note) => (
+    <StrikeableListItem key={note.position} text={`${note.text}`} />
   ));
 
   return (
@@ -89,6 +91,15 @@ const RecipeCard: FC<Props> = ({
           <Typography variant="h5">Steps</Typography>
           <div>
             <List>{stepsRender}</List>
+          </div>
+        </Grid>
+        <Grid item xs={12} className={classes.divider}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5">Notes</Typography>
+          <div>
+            <List>{notesRender}</List>
           </div>
         </Grid>
       </Grid>

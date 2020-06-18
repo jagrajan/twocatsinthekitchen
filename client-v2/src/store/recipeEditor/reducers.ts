@@ -1,61 +1,73 @@
-import { combineReducers } from 'redux';
-import { createReducer, ActionType } from 'typesafe-actions';
+import { ActionType, createReducer } from 'typesafe-actions';
+import { ingredient, unit } from '@twocats/server/node_modules/.prisma/client';
 import { DashboardRecipe } from 'services/api/api-recipe-editor';
-import { RootAction } from '@twocats/store';
 import { List } from 'immutable';
-import { unit, ingredient } from '@twocats/server/node_modules/.prisma/client';
-
+import { RootAction } from '@twocats/store';
+import { combineReducers } from 'redux';
 import {
-  MeasuredIngredient,
-  loadAllUnitsAsync,
+  addIngredient,
+  addNote,
+  addStep,
+  clearRecipe,
+  createIngredientAsync,
+  createRecipeAsync,
+  createUnitAsync,
   loadAllIngredientsAsync,
+  loadAllUnitsAsync,
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync,
-  createRecipeAsync,
-  createIngredientAsync,
-  createUnitAsync,
-  uploadRecipeImageAsync,
-  addNote,
-  removeNote,
-  swapNotes,
-  setNotes,
-  addStep,
-  removeStep,
-  swapSteps,
-  setSteps,
-  addIngredient,
+  MeasuredIngredient,
   removeIngredient,
-  swapIngredients,
-  setIngredients,
-  setRecipeId,
+  removeNote,
+  removeStep,
   setImageData,
+  setIngredients,
   setIntroduction,
-  clearRecipe,
+  setNotes,
+  setPreviewImage,
+  setRecipeId,
+  setSteps,
+  swapIngredients,
+  swapNotes,
+  swapSteps,
+  uploadRecipeImageAsync,
 } from './actions';
 
-function fixSwapPositions(indices: [number, number], count: number): [number, number] {
+function fixSwapPositions(
+  indices: [number, number],
+  count: number,
+): [number, number] {
   const [a, b] = indices;
   return [(a + count) % count, (b + count) % count];
 }
 
-function swap<T>(indices: [number, number], list: List<T>) {
-  indices = fixSwapPositions(indices, list.count());
+function swap<T>(indices_: [number, number], list: List<T>) {
+  const indices = fixSwapPositions(indices_, list.count());
   const a = list.get(indices[0]);
   const b = list.get(indices[1]);
+  let ret = list;
   if (a && b) {
-    list = list.set(indices[0], b);
-    list = list.set(indices[1], a);
+    ret = list.set(indices[0], b);
+    ret = list.set(indices[1], a);
   }
-  return list;
+  return ret;
 }
 
 const reducer = combineReducers({
   recipeDashboard: combineReducers({
     isLoadingDashboardRecipes: createReducer(false as boolean)
       .handleAction([loadDashboardRecipesAsync.request], () => false)
-      .handleAction([loadDashboardRecipesAsync.success, loadDashboardRecipesAsync.failure], () => false),
-    dashboardRecipes: createReducer<DashboardRecipe[], ActionType<typeof loadDashboardRecipesAsync>>([])
-      .handleAction(loadDashboardRecipesAsync.success, (_, action) => action.payload)
+      .handleAction(
+        [loadDashboardRecipesAsync.success, loadDashboardRecipesAsync.failure],
+        () => false,
+      ),
+    dashboardRecipes: createReducer<
+    DashboardRecipe[],
+    ActionType<typeof loadDashboardRecipesAsync>
+    >([]).handleAction(
+      loadDashboardRecipesAsync.success,
+      (_, action) => action.payload,
+    ),
   }),
   recipe: combineReducers({
     recipeId: createReducer<number | null, RootAction>(null)
@@ -76,21 +88,33 @@ const reducer = combineReducers({
     ingredients: createReducer<List<MeasuredIngredient>, RootAction>(List())
       .handleAction(addIngredient, (state, action) => state.push(action.payload))
       .handleAction(removeIngredient, (state, action) => state.remove(action.payload))
-      .handleAction(swapIngredients, (state, action) => swap<MeasuredIngredient>(action.payload, state))
+      .handleAction(swapIngredients, (state, action) => swap<MeasuredIngredient>(
+        action.payload, state,
+      ))
       .handleAction(setIngredients, (_, action) => List(action.payload))
       .handleAction(clearRecipe, () => List()),
-    imageFile: createReducer<string | null, RootAction>(null)
-      .handleAction(uploadRecipeImageAsync.success, (_, action) => action.payload),
+    imageFile: createReducer<string | null, RootAction>(null).handleAction(
+      uploadRecipeImageAsync.success,
+      (_, action) => action.payload,
+    ),
     imageData: createReducer<string | null, RootAction>(null)
       .handleAction(setImageData, (_, action) => action.payload)
       .handleAction(clearRecipe, () => null),
-    introduction: createReducer<string, RootAction>('')
-      .handleAction(setIntroduction, (_, action) => action.payload),
+    previewImage: createReducer<string, RootAction>('')
+      .handleAction(setPreviewImage, (_, action) => action.payload),
+    introduction: createReducer<string, RootAction>('').handleAction(
+      setIntroduction,
+      (_, action) => action.payload,
+    ),
   }),
-  ingredients: createReducer<ingredient[], RootAction>([])
-    .handleAction(loadAllIngredientsAsync.success, (_, action) => action.payload),
-  units: createReducer<unit[], RootAction>([])
-    .handleAction(loadAllUnitsAsync.success, (_, action) => action.payload),
+  ingredients: createReducer<ingredient[], RootAction>([]).handleAction(
+    loadAllIngredientsAsync.success,
+    (_, action) => action.payload,
+  ),
+  units: createReducer<unit[], RootAction>([]).handleAction(
+    loadAllUnitsAsync.success,
+    (_, action) => action.payload,
+  ),
   creatingIngredient: createReducer<boolean, RootAction>(false)
     .handleAction(createIngredientAsync.request, () => true)
     .handleAction(loadAllIngredientsAsync.success, () => false),
@@ -98,18 +122,24 @@ const reducer = combineReducers({
     .handleAction(createUnitAsync.request, () => true)
     .handleAction(loadAllUnitsAsync.success, () => false),
   loading: createReducer<boolean, RootAction>(false)
-    .handleAction([
-      createRecipeAsync.request,
-      uploadRecipeImageAsync.request,
-      loadRecipeDetailsAsync.request,
-    ], () => true)
-    .handleAction([
-      createRecipeAsync.success,
-      createRecipeAsync.failure,
-      uploadRecipeImageAsync.failure,
-      loadRecipeDetailsAsync.success,
-      loadRecipeDetailsAsync.failure,
-    ], () => false)
+    .handleAction(
+      [
+        createRecipeAsync.request,
+        uploadRecipeImageAsync.request,
+        loadRecipeDetailsAsync.request,
+      ],
+      () => true,
+    )
+    .handleAction(
+      [
+        createRecipeAsync.success,
+        createRecipeAsync.failure,
+        uploadRecipeImageAsync.failure,
+        loadRecipeDetailsAsync.failure,
+        setIntroduction,
+      ],
+      () => false,
+    ),
 });
 
 export default reducer;

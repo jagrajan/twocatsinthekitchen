@@ -13,49 +13,52 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import RecipeRenderer from 'components/RecipeRenderer';
 
-const CreateIngredientDialog: FC<DialogProps & { close: () => void } & PropsFromRedux> = ({ close, name, introduction, ingredients, imageUrl, steps, ...props }) => {
-
-  return (
-    <Dialog fullScreen {...props}>
-      <AppBar>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="close" onClick={close}>
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6">
-            Recipe Preview
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <DialogTitle>Recipe Preview</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-        </DialogContentText>
-        <Container maxWidth='md'>
-          <RecipeRenderer
-            introduction={introduction}
-            imageUrl={imageUrl || ''}
-            name={name}
-            ingredients={ingredients}
-            steps={steps}
-          />
-        </Container>
-      </DialogContent>
-    </Dialog>
-  );
-};
+const CreateIngredientDialog: FC<DialogProps & { close: () => void } & PropsFromRedux> = ({
+  close, name, introduction, ingredients, imageUrl, steps, notes, ...props
+}) => (
+  <Dialog fullScreen {...props}>
+    <AppBar>
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="close" onClick={close}>
+          <CloseIcon />
+        </IconButton>
+        <Typography variant="h6">
+          Recipe Preview
+        </Typography>
+      </Toolbar>
+    </AppBar>
+    <DialogTitle>Recipe Preview</DialogTitle>
+    <DialogContent>
+      <DialogContentText />
+      <Container maxWidth="md">
+        <RecipeRenderer
+          imageUrl={imageUrl || ''}
+          ingredients={ingredients}
+          introduction={introduction}
+          name={name}
+          notes={notes}
+          steps={steps}
+        />
+      </Container>
+    </DialogContent>
+  </Dialog>
+);
 
 const mapState = (state: RootState) => ({
-  introduction: state.recipeEditor.recipe.introduction,
-  name: state.form.recipeEditor?.values?.name || 'Missing name',
-  imageUrl: state.recipeEditor.recipe.imageData,
+  imageUrl: state.recipeEditor.recipe.previewImage,
   ingredients: state.recipeEditor.recipe.ingredients.toArray().map((x, position) => ({
     position,
     text: x.ingredient.name,
   })),
+  introduction: state.recipeEditor.recipe.introduction,
+  name: state.form.recipeEditor?.values?.name || 'Missing name',
+  notes: state.recipeEditor.recipe.notes.toArray().map((text, position) => ({
+    position,
+    text,
+  })),
   steps: state.recipeEditor.recipe.steps.toArray().map((text, position) => ({
     position,
-    text
+    text,
   })),
 });
 
