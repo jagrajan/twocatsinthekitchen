@@ -169,4 +169,4 @@ const populate = async () => {
 
 };
 
-populate().finally(() => console.log('all done'));
+export default populate;
