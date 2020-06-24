@@ -6,9 +6,14 @@ import config from 'config';
 import checkUser from 'middleware/checkUser';
 import AsyncHandler from 'express-async-handler';
 import fileUpload from 'express-fileupload';
+import cors from 'cors';
+
 
 const app: Express = App();
 
+if (process.env.NODE_ENV === undefined) {
+  app.use(cors());
+}
 app.use(Morgan(':method :url :status :res[content-length] - :response-time ms'));
 app.use(BodyParser.json({ limit: '50mb' }));
 app.use(fileUpload());
