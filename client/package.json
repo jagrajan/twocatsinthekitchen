@@ -45,6 +45,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-integration": "REACT_APP_IMAGE_SERVER='https://api.ibidandchai.rocks/image' REACT_APP_API_BASE_URL='https://api.ibidandchai.rocks/api/v1' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts,.tsx"
