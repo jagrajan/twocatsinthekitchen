@@ -1,4 +1,8 @@
-import { recipe_version, ingredient, unit } from '@twocats/server/node_modules/.prisma/client';
+import {
+  ingredient,
+  recipe_version,
+  unit,
+} from '@twocats/server/node_modules/.prisma/client';
 import { CreateRecipeBody } from '@twocats/server/src/types/requests';
 import { RecipeDetails } from '@twocats/server/src/types/responses';
 import axios from '../axios';
@@ -6,8 +10,8 @@ import axios from '../axios';
 export type DashboardRecipe = {
   released: recipe_version | null;
   latest: recipe_version;
-  create_date: Date,
-  recipe_id: number,
+  create_date: Date;
+  recipe_id: number;
 };
 
 export async function loadRecentRecipes(): Promise<DashboardRecipe[]> {
@@ -25,7 +29,9 @@ export async function loadAllIngredients(): Promise<ingredient[]> {
   return res.data;
 }
 
-export async function loadRecipeDetails(version: number): Promise<RecipeDetails> {
+export async function loadRecipeDetails(
+  version: number
+): Promise<RecipeDetails> {
   const res = await axios.get<RecipeDetails>(`/recipe/version/${version}`);
   return res.data;
 }
@@ -39,26 +45,30 @@ export async function uploadBlogImage(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('blogImage', file);
   const res = await axios.post<{ filename: string }>('/image', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
   return res.data.filename;
 }
 
-export async function createRecipe(recipe: CreateRecipeBody): Promise<recipe_version> {
+export async function createRecipe(
+  recipe: CreateRecipeBody
+): Promise<recipe_version> {
   const res = await axios.post<recipe_version>('/recipe', recipe);
   return res.data;
 }
 
-export async function createIngredient(
-  data: { name: string, plural: string }
-): Promise<ingredient> {
+export async function createIngredient(data: {
+  name: string;
+  plural: string;
+}): Promise<ingredient> {
   const res = await axios.post<ingredient>('/ingredient', data);
   return res.data;
 }
 
-export async function createUnit(
-  data: { name: string, plural: string }
-): Promise<unit> {
+export async function createUnit(data: {
+  name: string;
+  plural: string;
+}): Promise<unit> {
   const res = await axios.post<unit>('/unit', data);
   return res.data;
 }

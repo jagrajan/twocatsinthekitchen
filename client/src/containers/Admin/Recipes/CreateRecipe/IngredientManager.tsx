@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect, ChangeEvent } from 'react'; import { MeasuredIngredient } from 'store/recipeEditor/actions';
-import useNotification from 'hooks/useNotification';
-import { Unit as unit, Ingredient as ingredient } from 'store/recipeEditor/actions';
-import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import useNotification from 'hooks/useNotification';
+import MaterialTable from 'material-table';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { Ingredient as ingredient, MeasuredIngredient, Unit as unit } from 'store/recipeEditor/actions';
 import CreateIngredientDialog from './CreateIngredientDialog';
 import CreateUnitDialog from './CreateUnitDialog';
 
@@ -31,6 +31,7 @@ const IngredientManager: FC<Props> = ({
   units,
 }) => {
   const [ amount, setAmount ] = useState('');
+  const amountRef = useRef<HTMLInputElement>(null);
   const [ unit, setUnit ] = useState<unit | null>(null);
   const [ ingredient, setIngredient ] = useState<ingredient | null>(null);
   const [ ingredientModalOpen, setIngredientModalOpen ] = useState<boolean>(false);
@@ -45,13 +46,14 @@ const IngredientManager: FC<Props> = ({
 
   const onAddIngredient = () => {
     const re = /^\d+((\/\d+)|\.\d+)?(-\d+(\/\d+)?)?$/;
+    const amount = amountRef.current?.value;
     if (unit === null || ingredient === null) {
       notification({
         key: 'add-ingredient-error',
         color: 'error',
         message: 'Please specify an ingredient and unit'
       })
-    } else if (re.test(amount) || amount === '') {
+    } else if (amount && (re.test(amount) || amount === '')) {
       let minAmount = amount;
       let maxAmount = amount;
       if (amount.toString().includes('-')) {
@@ -60,10 +62,10 @@ const IngredientManager: FC<Props> = ({
         maxAmount = splits[1];
       }
       addIngredient({
-        unit,
         ingredient,
-        minAmount,
         maxAmount,
+        minAmount,
+        unit,
       });
       setAmount('');
       setUnit(null);
@@ -128,12 +130,11 @@ const IngredientManager: FC<Props> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            fullWidth
+            inputRef={amountRef}
             label="Amount"
             type="text"
             variant="outlined"
-            value={amount}
-            onChange={e => setAmount(e.target.value)}
-            fullWidth
           />
         </Grid>
         <Grid item xs={12} md={6}>

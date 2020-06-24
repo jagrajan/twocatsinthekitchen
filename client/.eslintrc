@@ -11,7 +11,6 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "airbnb-typescript",
     "airbnb/hooks"
   ],
   "rules": {
@@ -24,6 +23,7 @@
     "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}],
     "sort-vars": ["error", { "ignoreCase": true }],
     "react/prop-types": 0,
-    "react/jsx-props-no-spreading": 0
+    "react/jsx-props-no-spreading": 0,
+    "quotes": [2, "single", { "avoidEscape": true }]
   }
 }
