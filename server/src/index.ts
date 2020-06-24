@@ -1,7 +1,6 @@
 import App, { Express } from 'express';
 import BodyParser from 'body-parser';
 import Morgan from 'morgan'
-import cors from 'cors';
 import routes from './routes';
 import config from 'config';
 import checkUser from 'middleware/checkUser';
@@ -11,7 +10,6 @@ import fileUpload from 'express-fileupload';
 const app: Express = App();
 
 app.use(Morgan(':method :url :status :res[content-length] - :response-time ms'));
-app.use(cors());
 app.use(BodyParser.json({ limit: '50mb' }));
 app.use(fileUpload());
 app.use('/image', App.static(config.storage.imageFolder));
