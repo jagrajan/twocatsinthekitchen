@@ -1,52 +1,13 @@
-import {
-  FEEDBACK_ADD_MESSAGE,
-  FEEDBACK_REMOVE_MESSAGE,
-  AddMessageAction,
-  RemoveMessageAction,
-  FeedbackState,
-  FeedbackActionTypes
-} from './types';
+import { addMessage, removeMessage, FeedbackMessage } from './actions';
+import { createReducer } from 'typesafe-actions';
+import { RootAction } from '@twocats/store';
+import { Map } from 'immutable';
+import { combineReducers } from 'redux';
 
-const INITIAL_STATE: FeedbackState = {
-  messages: {}
-};
+const reducers = combineReducers({
+  messages: createReducer<Map<string, FeedbackMessage>, RootAction>(Map())
+    .handleAction(addMessage, (state, action) => state.set(action.payload.key, action.payload))
+    .handleAction(removeMessage, (state, action) => state.remove(action.payload))
+});
 
-const feedbackAddMessage = (
-  state: FeedbackState,
-  action: AddMessageAction
-): FeedbackState => {
-  const messages = { ...state.messages };
-  messages[action.payload.key] = { ...action.payload};
-  return {
-    ...state,
-    messages
-  };
-};
-
-const feedbackRemoveMessage = (
-  state: FeedbackState,
-  action: RemoveMessageAction
-): FeedbackState => {
-  const messages = { ...state.messages };
-  delete messages[action.payload.key];
-  return {
-    ...state,
-    messages
-  };
-};
-
-const reducer = (
-  state: FeedbackState = INITIAL_STATE,
-  action: FeedbackActionTypes
-) => {
-  switch(action.type) {
-    case FEEDBACK_ADD_MESSAGE:
-      return feedbackAddMessage(state, action);
-    case FEEDBACK_REMOVE_MESSAGE:
-      return feedbackRemoveMessage(state, action);
-    default:
-      return state;
-  }
-};
-
-export default reducer;
+export default reducers;

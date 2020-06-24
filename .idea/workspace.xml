@@ -1,13 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:BLOG-1-recipe-card-quantities" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="805b3ac4-6a8d-4135-baf0-5fe394481a10" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/migrations/1592887324822-init_and_populate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/server__install.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/client/.eslintignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/.eslintrc" beforeDir="false" afterPath="$PROJECT_DIR$/client/.eslintrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/App.test.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/assets/admin-dashboard/cookbook.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/RecipeCard/StrikeableListItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RecipeCard/StrikeableListItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/RecipeCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RecipeCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/RecipeRenderer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/RecipeRenderer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/Router/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ThemeProvider/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/UndecoratedLink/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/layout/Header/Navigation/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/layout/Header/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ui/Button/LoadingButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ui/Checkbox/FieldCheckbox.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ui/DropzoneCropper/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ui/Input/FieldInput.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/components/ui/LoadingStatus/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ui/LoadingStatus/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/config/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/config/navigation.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/BlogPostEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/BlogPostEditor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/CreateIngredientDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/CreateIngredientDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/CreateUnitDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/CreateUnitDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/InformationMetadata.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/InformationMetadata.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/IngredientManager.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/IngredientManager.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/IngredientsSteps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/IngredientsSteps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/NotesManager.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/NotesManager.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/RecipePreviewDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/RecipePreviewDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/StepsManager.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/StepsManager.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/CreateRecipe/markdownConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/CreateRecipe/markdownConfig.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/Recipes/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Admin/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Home/RecentRecipes.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Home/RecipeInfo.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Home/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Login/LoginForm.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Login/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/Logout/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/containers/NotificationManager/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/hooks/useNotification.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/hooks/useNotification.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/react-app-env.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/serviceWorker.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/api/api-auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/api/api-auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/api/api-recipe-editor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/api/api-recipe-editor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/api/api-recipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/api/api-recipe.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/axios/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/axios/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/services/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/services/types.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/setupTests.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/auth/actions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/auth/epics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/auth/epics.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/auth/reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/auth/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/auth/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/feedback/actions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/feedback/reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/feedback/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipe/actions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipe/epics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipe/epics.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipe/reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipeEditor/actions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipeEditor/epics.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipeEditor/epics.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipeEditor/reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/recipeEditor/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipeEditor/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/root-action.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/root-action.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/root-epic.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/root-epic.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/root-reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/root-reducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/src/store/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/types.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client-v2/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/config-overrides.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/paths.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/Router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/Router/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/layout/Header/Navigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/layout/Header/Navigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/ui/DropzoneCropper/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/ui/DropzoneCropper/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/config/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/config/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/IngredientManager.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/NotesManager.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/StepInformationMetadata.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/StepIngredientsSteps.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/StepsManager.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/CreateRecipe/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Admin/Recipes/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Home/RecentRecipes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Home/RecentRecipes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Login/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Logout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/Logout/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/NotificationManager/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/containers/NotificationManager/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Profile/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Recipe/RecipeCard.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Recipe/StrikableListItem.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/containers/Recipe/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/auth/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/auth/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/auth/reducers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/auth/reducers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/auth/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/feedback/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/feedback/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/feedback/reducers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/feedback/reducers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/navigation/actions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/navigation/reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/navigation/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipe/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipe/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipe/reducers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipe/reducers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipe/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipeEditor/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipeEditor/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipeEditor/reducers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/store/recipeEditor/reducers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/store/recipeEditor/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/util/axios/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/tsconfig.json.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/init/create-db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/init/create-db.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/init/populate-db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/init/populate-db.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/server/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/config/dev.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/config/dev.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +166,37 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="BLOG-1-recipe-card-quantities" />
+                    <option name="lastUsedInstant" value="1592961343" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1592961342" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="ProjectId" id="1dhpJFTCzKOGZMC1nzVUXMPwfF6" />
   <component name="ProjectViewState">
@@ -26,13 +207,29 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ignore_missing_gitignore" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="/usr/lib/node_modules/prettier" />
+    <property name="run.prettier.on.save" value="true" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/server/node_modules/typescript/lib" />
+  </component>
+  <component name="RunManager" selected="npm.server: migrate">
+    <list>
+      <item itemvalue="npm.client: install" />
+      <item itemvalue="npm.server: install" />
+      <item itemvalue="npm.server: build" />
+      <item itemvalue="npm.server: migrate" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -45,6 +242,7 @@
       <option name="presentableId" value="Default" />
       <updated>1592887105620</updated>
       <workItem from="1592887109176" duration="478000" />
+      <workItem from="1592961157149" duration="568000" />
     </task>
     <servers />
   </component>
@@ -56,17 +254,66 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="BLOG-1-recipe-card-quantities" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add migrations" />
     <option name="LAST_COMMIT_MESSAGE" value="add migrations" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="431" y="190" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1592961728215">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state x="431" y="190" key="#com.intellij.execution.impl.EditConfigurationsDialog/36.0.1884.1080@36.0.1884.1080" timestamp="1592961728215" />
+    <state x="705" y="240" key="FileChooserDialogImpl" timestamp="1592961536583">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state x="705" y="240" key="FileChooserDialogImpl/36.0.1884.1080@36.0.1884.1080" timestamp="1592961536583" />
+    <state width="1854" height="271" key="GridCell.Tab.0.bottom" timestamp="1592961699529">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state width="1854" height="271" key="GridCell.Tab.0.bottom/36.0.1884.1080@36.0.1884.1080" timestamp="1592961699529" />
+    <state width="1854" height="271" key="GridCell.Tab.0.center" timestamp="1592961699529">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state width="1854" height="271" key="GridCell.Tab.0.center/36.0.1884.1080@36.0.1884.1080" timestamp="1592961699529" />
+    <state width="1854" height="271" key="GridCell.Tab.0.left" timestamp="1592961699529">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state width="1854" height="271" key="GridCell.Tab.0.left/36.0.1884.1080@36.0.1884.1080" timestamp="1592961699529" />
+    <state width="1854" height="271" key="GridCell.Tab.0.right" timestamp="1592961699529">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state width="1854" height="271" key="GridCell.Tab.0.right/36.0.1884.1080@36.0.1884.1080" timestamp="1592961699529" />
+    <state x="354" y="88" key="SettingsEditor" timestamp="1592961256954">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state x="354" y="88" key="SettingsEditor/36.0.1884.1080@36.0.1884.1080" timestamp="1592961256954" />
+    <state x="705" y="155" key="VCS.ChangeListViewerDialog" timestamp="1592961280955">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state x="705" y="155" key="VCS.ChangeListViewerDialog/36.0.1884.1080@36.0.1884.1080" timestamp="1592961280955" />
+    <state x="538" y="352" key="git4idea.ui.GitUnstashDialog" timestamp="1592961372181">
+      <screen x="36" y="0" width="1884" height="1080" />
+    </state>
+    <state x="538" y="352" key="git4idea.ui.GitUnstashDialog/36.0.1884.1080@36.0.1884.1080" timestamp="1592961372181" />
     <state x="1449" y="519" width="1009" height="1470" key="search.everywhere.popup" timestamp="1592887240051">
       <screen x="72" y="37" width="3768" height="2123" />
     </state>

@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build": "tsc -b",
+    "start-integration": "NODE_ENV=integration NODE_PATH=./dist node dist/index.js",
     "introspect": "prisma introspect --schema=prisma/schema.prisma",
     "migrate": "NODE_PATH=./dist migrate",
     "create-db": "NODE_PATH=./dist node dist/init/create-db.js",

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import RecipeInfo from './RecipeInfo';
-import { RecipeShortInformation } from 'store/recipe/types';
+import { recipe_version } from '@twocats/server/node_modules/.prisma/client';
 import { IMAGE_SERVER } from 'config';
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  recentRecipes: Array<RecipeShortInformation>;
+  recentRecipes: recipe_version[];
 }
 
 const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
@@ -26,11 +26,11 @@ const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
     <div className={classes.container}>
       {recentRecipes.map(recipe =>
         <RecipeInfo
-          key={recipe.info.id}
-          name={recipe.info.name}
-          imageFile={`${IMAGE_SERVER}/${recipe.info.image_file}`}
-          slug={recipe.metadata.slug}
-          updateDate={moment(recipe.info.last_update)
+          key={recipe.id}
+          name={recipe.name || ''}
+          imageFile={`${IMAGE_SERVER}/${recipe.image_file || ''}`}
+          slug={recipe.slug || ''}
+          updateDate={moment(recipe.last_update)
             .format('MMMM Do YYYY, h:mm:ss a')}
         />
       )}

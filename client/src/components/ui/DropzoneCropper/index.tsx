@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useState, useEffect, MutableRefObject } from 'react';
 import { DropzoneArea, DropzoneAreaProps } from 'material-ui-dropzone';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -7,10 +7,16 @@ import 'cropperjs/dist/cropper.css'
 
 interface Props {
   dropzoneProps?: DropzoneAreaProps;
+  cropperRef?: MutableRefObject<Cropper | null>;
+  originalImage?: string;
 }
 
-const DropzoneCropper: FC<Props> = ({ dropzoneProps }) => {
+const DropzoneCropper: FC<Props> = ({ cropperRef, dropzoneProps, originalImage }) => {
   const [ file, setFile ] = useState<string | null>(null);
+
+  useEffect(() => {
+    setFile(originalImage || null);
+  }, [originalImage]);
 
   const onFileChange = (files: File[]) => {
     if (files.length > 0) {
@@ -37,10 +43,10 @@ const DropzoneCropper: FC<Props> = ({ dropzoneProps }) => {
           style={{height: '25rem', margin: '1rem auto' }}
           aspectRatio={1/1}
           src={file}
-          // src='https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg'
           guides={true}
           viewMode={2}
           autoCropArea={1}
+          ref={cropperRef}
         />
         <Box textAlign="center">
           <Button

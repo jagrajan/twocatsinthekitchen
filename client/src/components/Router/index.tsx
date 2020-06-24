@@ -1,60 +1,57 @@
 import React, { FC } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from 'store';
 import {
-  BrowserRouter,
   Route,
   Switch
 } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@twocats/store';
+import { getAuthKey, getIsAdmin } from 'store/auth/selectors';
+import { history } from 'store';
 
-// Admin related containers
-import Admin from 'containers/Admin';
+import AdminDashboard from 'containers/Admin';
 import AdminRecipes from 'containers/Admin/Recipes';
-import CreateRecipe from 'containers/Admin/CreateRecipe';
+import CreateRecipe from 'containers/Admin/Recipes/CreateRecipe';
 
 import Header from 'components/layout/Header';
 import Home from 'containers/Home';
-import LoginContainer from 'containers/Login';
+import Login from 'containers/Login';
 import Logout from 'containers/Logout';
-import Profile from 'containers/Profile';
-import Recipe from 'containers/Recipe';
 
-const Router: FC<PropsFromRedux> = ({ authInfo, children }) => {
+const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
   return (
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <Header />
       <Switch>
-        <Route exact path="/">
+        <Route exact path='/'>
           <Home />
         </Route>
-        <Route exact path="/login">
-          <LoginContainer />
+        <Route exact path='/login'>
+          <Login />
         </Route>
-        <Route exact path="/logout">
+        <Route exact path='/logout'>
           <Logout />
         </Route>
-        <Route exact path="/recipe/:id">
-          <Recipe />
+        <Route exact path='/admin'>
+          {isAdmin && <AdminDashboard />}
         </Route>
-        <Route exact path="/profile">
-          {authInfo && <Profile />}
+        <Route exact path='/admin/recipes'>
+          {isAdmin && <AdminRecipes />}
         </Route>
-        <Route exact path="/admin">
-          {authInfo && authInfo.admin && <Admin />}
+        <Route exact path='/admin/recipes/create'>
+          {isAdmin && <CreateRecipe />}
         </Route>
-        <Route exact path="/admin/recipes">
-          {authInfo && authInfo.admin && <AdminRecipes />}
-        </Route>
-        <Route exact path="/admin/create-recipe">
-          {authInfo && authInfo.admin && <CreateRecipe />}
+        <Route path='/admin/recipes/edit/:id'>
+          {isAdmin && <CreateRecipe />}
         </Route>
       </Switch>
-    </BrowserRouter>
+    </ConnectedRouter>
   );
 };
 
 const mapState = (state: RootState) => ({
-  authInfo: state.auth.info
+  authKey: getAuthKey(state),
+  isAdmin: getIsAdmin(state),
 });
 
 const connector = connect(mapState, {});

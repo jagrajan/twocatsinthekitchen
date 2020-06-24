@@ -1,24 +1,9 @@
-import {
-  FEEDBACK_ADD_MESSAGE,
-  FEEDBACK_REMOVE_MESSAGE,
-  FeedbackActionTypes,
-  FeedbackMessage
-} from './types';
+import { createAction } from 'typesafe-actions';
 
-export const removeMessage = (key: string): FeedbackActionTypes => {
-  return {
-    type: FEEDBACK_REMOVE_MESSAGE,
-    payload: {
-      key
-    }
-  };
-};
-
-export const addMessage = (message: FeedbackMessage): FeedbackActionTypes => {
-  return {
-    type: FEEDBACK_ADD_MESSAGE,
-    payload: {
-      ...message
-    }
-  };
-};
+export type FeedbackMessage = {
+  key: string;
+  color: 'success' | 'info' | 'warning' | 'error';
+  message: string;
+}
+export const addMessage = createAction('@feedback/ADD_MESSAGE')<FeedbackMessage>();
+export const removeMessage = createAction('@feedback/REMOVE_MESSAGE')<string>();

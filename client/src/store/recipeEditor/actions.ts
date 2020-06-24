@@ -1,198 +1,114 @@
-import { Dispatch } from 'redux';
-import { AxiosInstance } from 'axios';
-import { RootState } from 'store';
+import { createAction, createAsyncAction } from 'typesafe-actions';
 import {
-  RE_FETCH_DASHBOARD_RECIPES,
-  RE_FETCH_DASHBOARD_RECIPES_SUCCESS,
-  RE_FETCH_ALL_INGREDIENTS,
-  RE_FETCH_ALL_INGREDIENTS_SUCCESS,
-  RE_FETCH_ALL_UNITS,
-  RE_FETCH_ALL_UNITS_SUCCESS,
-  RE_ADD_INGREDIENT,
-  RE_REMOVE_INGREDIENT,
-  RE_SWAP_INGREDIENTS,
-  RE_ADD_STEP,
-  RE_REMOVE_STEP,
-  RE_SWAP_STEPS,
-  RE_ADD_NOTE,
-  RE_REMOVE_NOTE,
-  RE_SWAP_NOTES,
-  DashboardRecipes,
-  Ingredient,
-  Unit,
-  RecipeIngredient,
-  RecipeStep,
-  RecipeNote,
-  RecipeEditorActionTypes
-} from './types';
+  ingredient,
+  recipe_version,
+  unit,
+} from '@twocats/server/node_modules/.prisma/client';
+import { DashboardRecipe } from 'services/api/api-recipe-editor';
+import { RecipeDetails } from '@twocats/server/src/types/responses';
 
-export function addIngredient(ingredient: RecipeIngredient): RecipeEditorActionTypes {
-  return {
-    type: RE_ADD_INGREDIENT,
-    payload: {
-      ingredient,
-    },
-  };
-}
+export type Unit = unit;
 
-export function removeIngredient(position: number): RecipeEditorActionTypes {
-  return {
-    type: RE_REMOVE_INGREDIENT,
-    payload: {
-      position,
-    },
-  };
-}
+export type Ingredient = ingredient;
 
-export function swapIngredients(a: number, b: number): RecipeEditorActionTypes {
-  return {
-    type: RE_SWAP_INGREDIENTS,
-    payload: {
-      a,
-      b,
-    },
-  };
-}
-
-export function addStep(step: RecipeStep): RecipeEditorActionTypes {
-  return {
-    type: RE_ADD_STEP,
-    payload: {
-      step,
-    },
-  };
-}
-
-export function removeStep(position: number): RecipeEditorActionTypes {
-  return {
-    type: RE_REMOVE_STEP,
-    payload: {
-      position,
-    },
-  };
-}
-
-export function swapSteps(a: number, b: number): RecipeEditorActionTypes {
-  return {
-    type: RE_SWAP_STEPS,
-    payload: {
-      a,
-      b,
-    },
-  };
-}
-
-export function addNote(note: RecipeNote): RecipeEditorActionTypes {
-  return {
-    type: RE_ADD_NOTE,
-    payload: {
-      note,
-    },
-  };
-}
-
-export function removeNote(position: number): RecipeEditorActionTypes {
-  return {
-    type: RE_REMOVE_NOTE,
-    payload: {
-      position,
-    },
-  };
-}
-
-export function swapNotes(a: number, b: number): RecipeEditorActionTypes {
-  return {
-    type: RE_SWAP_NOTES,
-    payload: {
-      a,
-      b,
-    },
-  };
-}
-
-export function startFetchDashboardRecipes(): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_DASHBOARD_RECIPES
-  };
-}
-
-export function successFetchDashboardRecipes(recipes: DashboardRecipes): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_DASHBOARD_RECIPES_SUCCESS,
-    payload: {
-      recipes,
-    }
-  }
-}
-
-export function startFetchAllIngredients(): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_ALL_INGREDIENTS
-  };
-}
-
-export function successfetchAllIngredients(ingredients: Ingredient[]): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_ALL_INGREDIENTS_SUCCESS,
-    payload: {
-      ingredients: ingredients
-    }
-  };
-}
-
-export function startFetchAllUnits(): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_ALL_UNITS,
-  };
-}
-
-export function successfetchAllUnits(units: Unit[]): RecipeEditorActionTypes {
-  return {
-    type: RE_FETCH_ALL_UNITS_SUCCESS,
-    payload: {
-      units
-    }
-  };
-}
-
-export const fetchDashboardRecipes = () => async(
-  dispatch: Dispatch,
-  getState: () => RootState,
-  api: AxiosInstance
-) => {
-  dispatch(startFetchDashboardRecipes());
-  const res = await api.get('/recipe/dashboard');
-  if (res.data.error) {
-    console.error(res.data.error);
-  } else {
-    dispatch(successFetchDashboardRecipes(res.data.recipes));
-  }
+export type MeasuredIngredient = {
+  unit: unit;
+  ingredient: ingredient;
+  minAmount: string;
+  maxAmount: string;
 };
 
-export const fetchAllIngredients = () => async (
-  dispatch: Dispatch,
-  getState: () => RootState,
-  api: AxiosInstance
-) => {
-  dispatch(startFetchAllIngredients());
-  const res = await api.get('/ingredient');
-  if (res.data.error) {
-    console.error(res.data.error);
-  } else {
-    dispatch(successfetchAllIngredients(res.data.ingredients));
-  }
-};
+export const loadDashboardRecipesAsync = createAsyncAction(
+  '@recipeEditor/LOAD_DASHBOARD_RECIPES_REQUEST',
+  '@recipeEditor/LOAD_DASHBOARD_RECIPES_SUCCESS',
+  '@recipeEditor/LOAD_DASHBOARD_RECIPES_FAILURE',
+)<undefined, DashboardRecipe[], undefined>();
 
-export const fetchAllUnits = () => async (
-  dispatch: Dispatch,
-  getState: () => RootState,
-  api: AxiosInstance
-) => {
-  dispatch(startFetchAllUnits());
-  const res = await api.get('/unit');
-  if (res.data.error) {
-    console.error(res.data.error);
-  } else {
-    dispatch(successfetchAllUnits(res.data.units));
-  }
-};
+export const loadAllIngredientsAsync = createAsyncAction(
+  '@recipeEditor/LOAD_ALL_INGREDIENTS_REQUEST',
+  '@recipeEditor/LOAD_ALL_INGREDIENTS_SUCCESS',
+  '@recipeEditor/LOAD_ALL_INGREDIENTS_FAILURE',
+)<undefined, ingredient[], undefined>();
+
+export const loadAllUnitsAsync = createAsyncAction(
+  '@recipeEditor/LOAD_ALL_UNITS_REQUEST',
+  '@recipeEditor/LOAD_ALL_UNITS_SUCCESS',
+  '@recipeEditor/LOAD_ALL_UNITS_FAILURE',
+)<undefined, unit[], undefined>();
+
+export const createRecipeAsync = createAsyncAction(
+  '@recipeEditor/CREATE_RECIPE_REQUEST',
+  '@recipeEditor/CREATE_RECIPE_SUCCESS',
+  '@recipeEditor/CREATE_RECIPE_FAILURE',
+)<undefined, recipe_version, undefined>();
+
+export const loadRecipeDetailsAsync = createAsyncAction(
+  '@recipeEditor/LOAD_RECIPE_DETAILS_REQUEST',
+  '@recipeEditor/LOAD_RECIPE_DETAILS_SUCCESS',
+  '@recipeEditor/LOAD_RECIPE_DETAILS_FAILURE',
+)<number, RecipeDetails, undefined>();
+
+export const uploadRecipeImageAsync = createAsyncAction(
+  '@recipeEditor/UPLOAD_RECIPE_IMAGE_REQUEST',
+  '@recipeEditor/UPLOAD_RECIPE_IMAGE_SUCCESS',
+  '@recipeEditor/UPLOAD_RECIPE_IMAGE_FAILURE',
+)<string, string, undefined>();
+
+export const uploadBlogImageAsync = createAsyncAction(
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_REQUEST',
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_SUCCESS',
+  '@recipeEditor/UPLOAD_BLOG_IMAGE_FAILURE',
+)<File, string, undefined>();
+
+export const createIngredientAsync = createAsyncAction(
+  '@recipeEditor/CREATE_INGREDIENT_REQUEST',
+  '@recipeEditor/CREATE_INGREDIENT_SUCCESS',
+  '@recipeEditor/CREATE_INGREDIENT_FAILURE',
+)<{ name: string; plural: string }, ingredient, Error>();
+
+export const createUnitAsync = createAsyncAction(
+  '@recipeEditor/CREATE_UNIT_REQUEST',
+  '@recipeEditor/CREATE_UNIT_SUCCESS',
+  '@recipeEditor/CREATE_UNIT_FAILURE',
+)<{ name: string; plural: string }, unit, Error>();
+
+export const addNote = createAction('@recipeEditor/ADD_NOTE')<string>();
+export const removeNote = createAction('@recipeEditor/REMOVE_NOTE')<number>();
+export const swapNotes = createAction('@recipeEditor/SWAP_NOTES')<
+[number, number]
+>();
+export const setNotes = createAction('@recipeEditor/SET_NOTES')<string[]>();
+
+export const addStep = createAction('@recipeEditor/ADD_STEP')<string>();
+export const removeStep = createAction('@recipeEditor/REMOVE_STEP')<number>();
+export const swapSteps = createAction('@recipeEditor/SWAP_STEPS')<
+[number, number]
+>();
+export const setSteps = createAction('@recipeEditor/SET_STEPS')<string[]>();
+
+export const addIngredient = createAction('@recipeEditor/ADD_INGREDIENT')<
+MeasuredIngredient
+>();
+export const removeIngredient = createAction('@recipeEditor/REMOVE_INGREDIENT')<
+number
+>();
+export const swapIngredients = createAction('@recipeEditor/SWAP_INGREDIENTS')<
+[number, number]
+>();
+export const setIngredients = createAction('@recipeEditor/SET_INGREDIENTS')<
+MeasuredIngredient[]
+>();
+
+export const setRecipeId = createAction('@recipeEditor/SET_RECIPE_ID')<
+number | null
+>();
+export const setImageData = createAction('@recipeEditor/SET_IMAGE_DATA')<
+string | null
+>();
+export const setIntroduction = createAction('@recipeEditor/SET_INTRODUCTION')<
+string
+>();
+export const setPreviewImage = createAction('@recipeEditor/SET_PREVIEW_IMAGE')<
+string
+>();
+export const clearRecipe = createAction('@recipeEditor/CLEAR_RECIPE')();
