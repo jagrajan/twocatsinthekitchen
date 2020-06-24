@@ -1,37 +1,17 @@
-import{
-  RECIPE_FETCH_RECENTS,
-  RECIPE_SUCCESS_FETCH_RECENTS,
-  RECIPE_FETCH_DETAILS,
-  RECIPE_SUCCESS_FETCH_DETAILS,
-  RecipeState,
-  RecipeActionTypes
-} from './types';
+import { combineReducers } from 'redux';
+import { createReducer, ActionType } from 'typesafe-actions';
+import { recipe_version } from '@twocats/server/node_modules/.prisma/client';
 
-const INITIAL_STATE: RecipeState = {
-  fetchingRecipes: false,
-};
+import {
+  loadRecentRecipesAsync
+} from './actions';
 
-const reducer = (state: RecipeState = INITIAL_STATE,
-                 action: RecipeActionTypes) => {
-  switch(action.type) {
-    case RECIPE_FETCH_RECENTS:
-    case RECIPE_FETCH_DETAILS:
-      return { ...state, fetchingRecipes: true };
-    case RECIPE_SUCCESS_FETCH_RECENTS:
-      return {
-        ...state,
-        fetchingRecipes: false,
-        recentRecipes: action.payload.recipes
-      };
-    case RECIPE_SUCCESS_FETCH_DETAILS:
-      return {
-        ...state,
-        fetchingRecipes: false,
-        recipeDetails: action.payload.recipe
-      };
-    default:
-      return state;
-  }
-};
+const reducer = combineReducers({
+  isLoadingRecentRecipes: createReducer(false as boolean)
+    .handleAction([loadRecentRecipesAsync.request], () => false)
+    .handleAction([loadRecentRecipesAsync.success, loadRecentRecipesAsync.failure], () => false),
+  recentRecipes: createReducer<recipe_version[], ActionType<typeof loadRecentRecipesAsync>>([])
+    .handleAction(loadRecentRecipesAsync.success, (_, action) => action.payload)
+});
 
 export default reducer;

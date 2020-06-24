@@ -1,32 +1,33 @@
-import { combineReducers } from 'redux';
-import { reducer as form } from 'redux-form';
-import { persistReducer, persistStore } from 'redux-persist';
+import { RootAction, RootState } from '@twocats/store';
+import { Services } from '@twocats/services';
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { createEpicMiddleware } from 'redux-observable';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware } from 'connected-react-router';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import axios from 'util/axios';
-import storage from 'redux-persist/lib/storage';
-import auth from './auth/reducers';
-import feedback from './feedback/reducers';
-import navigation from './navigation/reducers';
-import recipe from './recipe/reducers';
-import recipeEditor from './recipeEditor/reducers';
 
-const rootReducer = combineReducers({
-  auth: persistReducer({ key: 'auth', storage }, auth),
-  feedback,
-  form,
-  navigation,
-  recipe,
-  recipeEditor,
+import rootReducer from './root-reducer';
+import rootEpic from './root-epic';
+import services from '../services';
+
+export const epicMiddleware = createEpicMiddleware<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+>({
+  dependencies: services
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export const history = createBrowserHistory();
+const middlewares = [routerMiddleware(history), epicMiddleware];
 
-export const store = createStore(
-  rootReducer,
-  {},
-  composeWithDevTools(applyMiddleware(thunk.withExtraArgument(axios)))
-);
+const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
 
-export const persistor = persistStore(store);
+const initialState = {};
+
+const store = createStore(rootReducer(history), initialState, enhancer);
+
+epicMiddleware.run(rootEpic);
+
+export default store;

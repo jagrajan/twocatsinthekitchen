@@ -1,14 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import Container from '@material-ui/core/Container';
-import { RootState } from 'store';
-import { fetchRecentRecipes } from 'store/recipe/actions';
+import { RootState } from '@twocats/store';
+import { loadRecentRecipesAsync } from 'store/recipe/actions';
 import RecentRecipes from './RecentRecipes';
 
-const Home: FC<PropsFromRedux> = ({ fetchRecentRecipes, recentRecipes }) => {
+const Home: FC<PropsFromRedux> = ({ loadRecentRecipe, recentRecipes }) => {
   useEffect(() => {
-    fetchRecentRecipes();
-  }, [fetchRecentRecipes]);
+    loadRecentRecipe();
+  }, [loadRecentRecipe]);
   if (recentRecipes) {
     return (
       <Container>
@@ -25,7 +25,7 @@ const mapState = (state: RootState) => ({
 });
 
 const mapDispatch = {
-  fetchRecentRecipes
+  loadRecentRecipe: loadRecentRecipesAsync.request,
 };
 
 const connector = connect(mapState, mapDispatch);

@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { FC, useState } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@twocats/store';
+import { getAuthKey, getIsAdmin } from 'store/auth/selectors';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import MenuIcon from '@material-ui/icons/Menu';
-import { RootState } from 'store';
-import { showNav, hideNav } from 'store/navigation/actions';
 import UndecoratedLink from 'components/UndecoratedLink';
 import { NAVIGATION_ENTRIES, AccessLevel } from 'config/navigation';
 
@@ -33,17 +33,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => {
+const Navigation: FC<PropsFromRedux> = ({ isAdmin, authKey }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState<boolean>(false);
 
   const entries = NAVIGATION_ENTRIES.filter(e => {
     switch(e.view) {
       case AccessLevel.USERS:
-        return authKey !== undefined && authKey !== null;
+        return authKey;
       case AccessLevel.UNREGISTERED:
-        return authKey === undefined || authKey === null;
+        return !authKey;
       case AccessLevel.ADMINS:
-        return authKey !== undefined && authKey !== null && authKey.admin;
+        return isAdmin;
       case AccessLevel.EVERYONE:
         return true;
     }
@@ -65,7 +66,7 @@ const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => 
 
   const navButtonsMobile = entries.map(i => {
     return (
-      <UndecoratedLink to={i.url} key={i.text} onClick={() => hideNav()}>
+      <UndecoratedLink to={i.url} key={i.text}>
         <ListItem>{i.text}</ListItem>
       </UndecoratedLink>
     );
@@ -77,12 +78,12 @@ const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => 
         {navButtonsDesktop}
       </div>
       <div className={classes.sectionMobile}>
-        <IconButton onClick={() => showNav()} color="inherit">
+        <IconButton color="inherit" onClick={() => setOpen(true)}>
           <MenuIcon />
         </IconButton>
         <Drawer
           anchor={"right"}
-          onClose={() => hideNav()}
+          onClick={() => setOpen(false)}
           open={open}
         >
           <List className={classes.navList}>{navButtonsMobile}</List>
@@ -92,15 +93,13 @@ const Navigation: FC<PropsFromRedux> = ({ authKey, hideNav, open, showNav }) => 
   );
 };
 
+
 const mapState = (state: RootState) => ({
-  authKey: state.auth.info,
-  open: state.navigation.showNav
+  authKey: getAuthKey(state),
+  isAdmin: getIsAdmin(state),
 });
 
-const mapDispatch = {
-  showNav,
-  hideNav
-};
+const mapDispatch = { };
 
 const connector = connect(mapState, mapDispatch);
 

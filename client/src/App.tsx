@@ -1,36 +1,27 @@
-import React, { FC, useEffect }  from 'react';
-import Router from './components/Router';
+import React, { FC, useEffect } from 'react';
+import ThemeProvider from 'components/ThemeProvider';
+import Router from 'components/Router';
+import { loadJWTAsync } from 'store/auth/actions';
+import { RootState } from '@twocats/store';
 import { connect, ConnectedProps } from 'react-redux';
-import { fetchProfile, validateKey } from 'store/auth/actions';
-import { RootState } from 'store';
-import ThemeProvider from './components/ThemeProvider';
-import NotificationsManager from './containers/NotificationManager';
 
-const App: FC<PropsFromRedux> = ({ fetchProfile, jwt, keyInfo, validateKey }) => {
+const App: FC<PropsFromRedux> = ({ loadJWT }) => {
   useEffect(() => {
-    validateKey();
-  }, [validateKey, jwt]);
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile, keyInfo]);
+    loadJWT();
+  }, [loadJWT]);
 
   return (
     <ThemeProvider>
-      <NotificationsManager>
-        <Router />
-      </NotificationsManager>
+      <Router />
     </ThemeProvider>
   );
 }
 
 const mapState = (state: RootState) => ({
-  jwt: state.auth.key,
-  keyInfo: state.auth.info,
 });
 
 const mapDispatch = {
-  fetchProfile,
-  validateKey
+  loadJWT: loadJWTAsync.request,
 };
 
 const connector = connect(mapState, mapDispatch);
