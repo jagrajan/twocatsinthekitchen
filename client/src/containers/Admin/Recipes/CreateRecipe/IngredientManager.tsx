@@ -30,7 +30,6 @@ const IngredientManager: FC<Props> = ({
   swapIngredients,
   units,
 }) => {
-  const [ amount, setAmount ] = useState('');
   const amountRef = useRef<HTMLInputElement>(null);
   const [ unit, setUnit ] = useState<unit | null>(null);
   const [ ingredient, setIngredient ] = useState<ingredient | null>(null);
@@ -67,9 +66,11 @@ const IngredientManager: FC<Props> = ({
         minAmount,
         unit,
       });
-      setAmount('');
       setUnit(null);
       setIngredient(null);
+      if (amountRef.current) {
+        amountRef.current.value = '';
+      }
     }
   };
 
