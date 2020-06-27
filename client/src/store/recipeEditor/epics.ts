@@ -122,7 +122,7 @@ export const createUnitEpic: RootEpic = (action$, _, { api }) => action$.pipe(
 
 export const uploadRecipeImageEpic: RootEpic = (action$, _, { api }) => action$.pipe(
   filter(isActionOf(uploadRecipeImageAsync.request)),
-  exhaustMap((action) => from(api.recipeEditor.uploadRecipeImage(action.payload)).pipe(
+  exhaustMap((action) => from(api.recipeEditor.uploadBlogImage(new File([action.payload], 'image.png'))).pipe(
     map((x) => uploadRecipeImageAsync.success(x)),
     catchError(() => of(uploadRecipeImageAsync.failure())),
   )),
