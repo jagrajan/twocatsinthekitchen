@@ -55,69 +55,27 @@ export const getVersions = async(req: Request, res: Response): Promise<void> => 
 export const getDetails = async(req: Request, res: Response): Promise<void> => {
   let response: any = {};
   let input: string = req.params.id;
-  let field: string = 'id';
+  let where: { slug: string } | { recipe_id: number } = { slug: input };
 
-  if (input && isNaN(input as any)) {
-    field  = 'slug';
+  if (input && !isNaN(input as any)) {
+    where = { recipe_id: parseInt(input) };
   }
-  const recipeFetcher = new RecipeFetcher();
-  const recipeData  = await recipeFetcher.getDataByFieldsEqual({ [field]: input });
-  if (recipeData != null) {
-    const recipeVersionFetcher = new RecipeVersionFetcher();
-    const version = await recipeVersionFetcher
-      .getReleasedVersion(new Recipe(recipeData[0]));
-    if (version != null) {
 
-      // Get ingredients for this recipe
-      const ingRes = await client.query(`
-        SELECT
-          mi.min_amount,
-          mi.max_amount,
-          mi.position,
-          u.name AS unit_name,
-          u.plural AS unit_plural,
-          i.name AS ingredient_name,
-          i.plural AS ingredient_plural
-        FROM cookbook.measured_ingredient mi
-        INNER JOIN cookbook.ingredient i
-          ON i.id = mi.ingredient_id
-        INNER JOIN cookbook.unit u
-          ON u.id = mi.unit_id
-        WHERE mi.recipe_version_id = $1
-      `, [version.dataValues.id]);
-
-      // Get notes for this recipe
-      const notesRes = await client.query(`
-        SELECT
-          rn.text,
-          rn.position
-        FROM cookbook.recipe_note rn
-        WHERE rn.global = true AND rn.recipe_version_id = $1
-      `, [version.dataValues.id]);
-
-      // Get steps for thsi recipe
-      const stepsRes = await client.query(`
-        SELECT
-          rs.description,
-          rs.position
-        FROM cookbook.recipe_step rs
-        WHERE rs.recipe_version_id = $1
-      `, [version.dataValues.id]);
-
-      response.recipe = {
-        metadata: recipeData[0],
-        info: version?.dataValues,
-        ingredients: ingRes.rows,
-        notes: notesRes.rows,
-        steps: stepsRes.rows,
-      };
+  const result = await prisma.recipe_version.findMany({
+    include: {
+      measured_ingredient: {
+        select: { min_amount: true, max_amount: true, unit: true, ingredient: true },
+        orderBy: { position: 'asc' }
+      },
+      recipe_step: { select: { description: true }, orderBy: { position: 'asc' } },
+      recipe_note: { select: { text: true }, orderBy: { position: 'asc' } },
+    },
+    where: {
+      recipe_release_recipe_release_released_versionTorecipe_version: { some: { released_version: { not: null } }},
+      ...where,
     }
-  }
-
-  if (!response.recipe) {
-    response.error = 'No recipe found';
-  }
-  res.json(response);
+  });
+  res.json(result.length == 1 ? result[0] : {});
 };
 
 export const getDashboard = async(req: Request, res: Response): Promise<void> => {

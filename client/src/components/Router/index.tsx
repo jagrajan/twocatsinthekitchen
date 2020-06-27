@@ -18,6 +18,7 @@ import Header from 'components/layout/Header';
 import Home from 'containers/Home';
 import Login from 'containers/Login';
 import Logout from 'containers/Logout';
+import Recipe from 'containers/Recipe';
 
 const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
   return (
@@ -32,6 +33,9 @@ const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
         </Route>
         <Route exact path='/logout'>
           <Logout />
+        </Route>
+        <Route path='/recipe/:id'>
+          <Recipe />
         </Route>
         <Route exact path='/admin'>
           {isAdmin && <AdminDashboard />}
