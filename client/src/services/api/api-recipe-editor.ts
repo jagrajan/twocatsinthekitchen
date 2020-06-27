@@ -59,11 +59,6 @@ export async function updateRecipeRelease(
   return res.data;
 }
 
-export async function uploadRecipeImage(data: string): Promise<string> {
-  const res = await axios.post<{ filename: string }>('/image', { data });
-  return res.data.filename;
-}
-
 export async function uploadBlogImage(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('blogImage', file);

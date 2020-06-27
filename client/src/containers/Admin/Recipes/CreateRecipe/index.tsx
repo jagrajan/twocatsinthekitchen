@@ -76,11 +76,11 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   }, [id, loadRecipeDetails, clearRecipe]);
 
   const onSubmit: FormSubmitHandler = () => {
-    const dataUrl = cropperRef.current?.getCroppedCanvas()?.toDataURL();
-    if (dataUrl) {
-      uploadRecipeImage(dataUrl);
-    }
-    // createRecipe();
+    cropperRef.current?.getCroppedCanvas()?.toBlob((blob) => {
+      if (blob) {
+        uploadRecipeImage(blob);
+      }
+    });
   };
 
   const onPreview = () => {

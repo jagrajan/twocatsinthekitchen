@@ -53,7 +53,7 @@ export const uploadRecipeImageAsync = createAsyncAction(
   '@recipeEditor/UPLOAD_RECIPE_IMAGE_REQUEST',
   '@recipeEditor/UPLOAD_RECIPE_IMAGE_SUCCESS',
   '@recipeEditor/UPLOAD_RECIPE_IMAGE_FAILURE',
-)<string, string, undefined>();
+)<Blob, string, undefined>();
 
 export const uploadBlogImageAsync = createAsyncAction(
   '@recipeEditor/UPLOAD_BLOG_IMAGE_REQUEST',
