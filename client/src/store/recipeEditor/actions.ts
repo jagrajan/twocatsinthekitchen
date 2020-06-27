@@ -6,6 +6,7 @@ import {
 } from '@twocats/server/node_modules/.prisma/client';
 import { DashboardRecipe } from 'services/api/api-recipe-editor';
 import { RecipeDetails } from '@twocats/server/src/types/responses';
+import { RecipeRelease} from './types';
 
 export type Unit = unit;
 
@@ -112,3 +113,23 @@ export const setPreviewImage = createAction('@recipeEditor/SET_PREVIEW_IMAGE')<
 string
 >();
 export const clearRecipe = createAction('@recipeEditor/CLEAR_RECIPE')();
+
+// RecipeOverview actions
+export const loadRecipeReleaseAsync = createAsyncAction(
+  '@recipeEditor/LOAD_RECIPE_RELEASE_REQUEST',
+  '@recipeEditor/LOAD_RECIPE_RELEASE_SUCCESS',
+  '@recipeEditor/LOAD_RECIPE_RELEASE_FAILURE',
+)<string | number, RecipeRelease, Error>();
+
+export const updateRecipeReleaseAsync = createAsyncAction(
+  '@recipeEditor/UPDATE_RECIPE_RELEASE_REQUEST',
+  '@recipeEditor/UPDATE_RECIPE_RELEASE_SUCCESS',
+  '@recipeEditor/UPDATE_RECIPE_RELEASE_FAILURE',
+)<{ id: string | number, versionId: string | number }, RecipeRelease, Error>();
+
+export const loadRecipeVersionsAsync = createAsyncAction(
+  '@recipeEditor/LOAD_RECIPE_VERSIONS_REQUEST',
+  '@recipeEditor/LOAD_RECIPE_VERSIONS_SUCCESS',
+  '@recipeEditor/LOAD_RECIPE_VERSIONS_FAILURE',
+)<string | number, recipe_version[], Error>();
+
