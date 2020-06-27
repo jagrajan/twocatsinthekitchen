@@ -12,6 +12,7 @@ import { history } from 'store';
 import AdminDashboard from 'containers/Admin';
 import AdminRecipes from 'containers/Admin/Recipes';
 import CreateRecipe from 'containers/Admin/Recipes/CreateRecipe';
+import RecipeOverview from 'containers/Admin/Recipes/RecipeOverview';
 
 import Header from 'components/layout/Header';
 import Home from 'containers/Home';
@@ -43,6 +44,9 @@ const Router: FC<PropsFromRedux> = ({ authKey, isAdmin, children }) => {
         </Route>
         <Route path='/admin/recipes/edit/:id'>
           {isAdmin && <CreateRecipe />}
+        </Route>
+        <Route path='/admin/recipes/overview/:id'>
+          {isAdmin && <RecipeOverview />}
         </Route>
       </Switch>
     </ConnectedRouter>

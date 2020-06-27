@@ -1,5 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions';
-import { ingredient, unit } from '@twocats/server/node_modules/.prisma/client';
+import { ingredient, recipe_version, unit } from '@twocats/server/node_modules/.prisma/client';
 import { DashboardRecipe } from 'services/api/api-recipe-editor';
 import { List } from 'immutable';
 import { RootAction } from '@twocats/store';
@@ -15,7 +15,7 @@ import {
   loadAllIngredientsAsync,
   loadAllUnitsAsync,
   loadDashboardRecipesAsync,
-  loadRecipeDetailsAsync,
+  loadRecipeDetailsAsync, loadRecipeReleaseAsync, loadRecipeVersionsAsync,
   MeasuredIngredient,
   removeIngredient,
   removeNote,
@@ -29,9 +29,10 @@ import {
   setSteps,
   swapIngredients,
   swapNotes,
-  swapSteps,
+  swapSteps, updateRecipeReleaseAsync,
   uploadRecipeImageAsync,
 } from './actions';
+import { RecipeRelease } from './types';
 
 function fixSwapPositions(
   indices: [number, number],
@@ -54,73 +55,16 @@ function swap<T>(indices_: [number, number], list: List<T>) {
 }
 
 const reducer = combineReducers({
-  recipeDashboard: combineReducers({
-    isLoadingDashboardRecipes: createReducer(false as boolean)
-      .handleAction([loadDashboardRecipesAsync.request], () => false)
-      .handleAction(
-        [loadDashboardRecipesAsync.success, loadDashboardRecipesAsync.failure],
-        () => false,
-      ),
-    dashboardRecipes: createReducer<
-    DashboardRecipe[],
-    ActionType<typeof loadDashboardRecipesAsync>
-    >([]).handleAction(
-      loadDashboardRecipesAsync.success,
-      (_, action) => action.payload,
-    ),
-  }),
-  recipe: combineReducers({
-    recipeId: createReducer<number | null, RootAction>(null)
-      .handleAction(setRecipeId, (_, action) => action.payload)
-      .handleAction(clearRecipe, () => null),
-    notes: createReducer<List<string>, RootAction>(List())
-      .handleAction(addNote, (state, action) => state.push(action.payload))
-      .handleAction(removeNote, (state, action) => state.remove(action.payload))
-      .handleAction(swapNotes, (state, action) => swap<string>(action.payload, state))
-      .handleAction(setNotes, (_, action) => List(action.payload))
-      .handleAction(clearRecipe, () => List()),
-    steps: createReducer<List<string>, RootAction>(List())
-      .handleAction(addStep, (state, action) => state.push(action.payload))
-      .handleAction(removeStep, (state, action) => state.remove(action.payload))
-      .handleAction(swapSteps, (state, action) => swap<string>(action.payload, state))
-      .handleAction(setSteps, (_, action) => List(action.payload))
-      .handleAction(clearRecipe, () => List()),
-    ingredients: createReducer<List<MeasuredIngredient>, RootAction>(List())
-      .handleAction(addIngredient, (state, action) => state.push(action.payload))
-      .handleAction(removeIngredient, (state, action) => state.remove(action.payload))
-      .handleAction(swapIngredients, (state, action) => swap<MeasuredIngredient>(
-        action.payload, state,
-      ))
-      .handleAction(setIngredients, (_, action) => List(action.payload))
-      .handleAction(clearRecipe, () => List()),
-    imageFile: createReducer<string | null, RootAction>(null).handleAction(
-      uploadRecipeImageAsync.success,
-      (_, action) => action.payload,
-    ),
-    imageData: createReducer<string | null, RootAction>(null)
-      .handleAction(setImageData, (_, action) => action.payload)
-      .handleAction(clearRecipe, () => null),
-    previewImage: createReducer<string, RootAction>('')
-      .handleAction(setPreviewImage, (_, action) => action.payload),
-    introduction: createReducer<string, RootAction>('').handleAction(
-      setIntroduction,
-      (_, action) => action.payload,
-    ),
-  }),
-  ingredients: createReducer<ingredient[], RootAction>([]).handleAction(
-    loadAllIngredientsAsync.success,
-    (_, action) => action.payload,
-  ),
-  units: createReducer<unit[], RootAction>([]).handleAction(
-    loadAllUnitsAsync.success,
-    (_, action) => action.payload,
-  ),
   creatingIngredient: createReducer<boolean, RootAction>(false)
     .handleAction(createIngredientAsync.request, () => true)
     .handleAction(loadAllIngredientsAsync.success, () => false),
   creatingUnit: createReducer<boolean, RootAction>(false)
     .handleAction(createUnitAsync.request, () => true)
     .handleAction(loadAllUnitsAsync.success, () => false),
+  ingredients: createReducer<ingredient[], RootAction>([]).handleAction(
+    loadAllIngredientsAsync.success,
+    (_, action) => action.payload,
+  ),
   loading: createReducer<boolean, RootAction>(false)
     .handleAction(
       [
@@ -140,6 +84,71 @@ const reducer = combineReducers({
       ],
       () => false,
     ),
+  recipe: combineReducers({
+    imageData: createReducer<string | null, RootAction>(null)
+      .handleAction(setImageData, (_, action) => action.payload)
+      .handleAction(clearRecipe, () => null),
+    imageFile: createReducer<string | null, RootAction>(null).handleAction(
+      uploadRecipeImageAsync.success,
+      (_, action) => action.payload,
+    ),
+    ingredients: createReducer<List<MeasuredIngredient>, RootAction>(List())
+      .handleAction(addIngredient, (state, action) => state.push(action.payload))
+      .handleAction(removeIngredient, (state, action) => state.remove(action.payload))
+      .handleAction(swapIngredients, (state, action) => swap<MeasuredIngredient>(
+        action.payload, state,
+      ))
+      .handleAction(setIngredients, (_, action) => List(action.payload))
+      .handleAction(clearRecipe, () => List()),
+    introduction: createReducer<string, RootAction>('').handleAction(
+      setIntroduction,
+      (_, action) => action.payload,
+    ),
+    notes: createReducer<List<string>, RootAction>(List())
+      .handleAction(addNote, (state, action) => state.push(action.payload))
+      .handleAction(removeNote, (state, action) => state.remove(action.payload))
+      .handleAction(swapNotes, (state, action) => swap<string>(action.payload, state))
+      .handleAction(setNotes, (_, action) => List(action.payload))
+      .handleAction(clearRecipe, () => List()),
+    recipeId: createReducer<number | null, RootAction>(null)
+      .handleAction(setRecipeId, (_, action) => action.payload)
+      .handleAction(clearRecipe, () => null),
+    previewImage: createReducer<string, RootAction>('')
+      .handleAction(setPreviewImage, (_, action) => action.payload),
+    steps: createReducer<List<string>, RootAction>(List())
+      .handleAction(addStep, (state, action) => state.push(action.payload))
+      .handleAction(removeStep, (state, action) => state.remove(action.payload))
+      .handleAction(swapSteps, (state, action) => swap<string>(action.payload, state))
+      .handleAction(setSteps, (_, action) => List(action.payload))
+      .handleAction(clearRecipe, () => List()),
+  }),
+  recipeDashboard: combineReducers({
+    dashboardRecipes: createReducer<
+      DashboardRecipe[],
+      ActionType<typeof loadDashboardRecipesAsync>
+      >([]).handleAction(
+      loadDashboardRecipesAsync.success,
+      (_, action) => action.payload,
+    ),
+    isLoadingDashboardRecipes: createReducer(false as boolean)
+      .handleAction([loadDashboardRecipesAsync.request], () => false)
+      .handleAction(
+        [loadDashboardRecipesAsync.success, loadDashboardRecipesAsync.failure],
+        () => false,
+      ),
+  }),
+  recipeOverview: combineReducers({
+    release: createReducer<RecipeRelease | null, RootAction>(null)
+      .handleAction(loadRecipeReleaseAsync.request, () => null)
+      .handleAction([loadRecipeReleaseAsync.success, updateRecipeReleaseAsync.success], (_, action) => action.payload),
+    versions: createReducer<recipe_version[], RootAction>([])
+      .handleAction(loadRecipeVersionsAsync.request, () => [])
+      .handleAction(loadRecipeVersionsAsync.success, (_, action) => action.payload),
+  }),
+  units: createReducer<unit[], RootAction>([]).handleAction(
+    loadAllUnitsAsync.success,
+    (_, action) => action.payload,
+  ),
 });
 
 export default reducer;

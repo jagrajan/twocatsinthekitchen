@@ -5,6 +5,7 @@ import {
 } from '@twocats/server/node_modules/.prisma/client';
 import { CreateRecipeBody } from '@twocats/server/src/types/requests';
 import { RecipeDetails } from '@twocats/server/src/types/responses';
+import { RecipeRelease } from '../../store/recipeEditor/types';
 import axios from '../axios';
 
 export type DashboardRecipe = {
@@ -33,6 +34,28 @@ export async function loadRecipeDetails(
   version: number
 ): Promise<RecipeDetails> {
   const res = await axios.get<RecipeDetails>(`/recipe/version/${version}`);
+  return res.data;
+}
+
+export async function loadRecipeVersions(
+  version: number | string
+): Promise<recipe_version[]> {
+  const res = await axios.get<recipe_version[]>(`/recipe/versions/${version}`);
+  return res.data;
+}
+
+export async function loadRecipeRelease(
+  id: number | string
+): Promise<RecipeRelease> {
+  const res = await axios.get<RecipeRelease>(`/recipe/release/${id}`);
+  return res.data;
+}
+
+export async function updateRecipeRelease(
+  id: number | string,
+  versionId: number | string
+): Promise<RecipeRelease> {
+  const res = await axios.post<RecipeRelease>(`/recipe/release/${id}`, { id: versionId });
   return res.data;
 }
 

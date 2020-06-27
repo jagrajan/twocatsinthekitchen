@@ -1,14 +1,12 @@
-import { RootEpic } from '@twocats/store';
-import { from, of } from 'rxjs';
-import {
-  catchError, exhaustMap, filter, map, mergeMap, switchMap, withLatestFrom,
-} from 'rxjs/operators';
-import { isActionOf } from 'typesafe-actions';
 import { CreateRecipeBody } from '@twocats/server/src/types/requests';
+import { RootEpic } from '@twocats/store';
+import { IMAGE_SERVER } from 'config';
 import { push } from 'connected-react-router';
 import { initialize } from 'redux-form';
-import { IMAGE_SERVER } from 'config';
+import { from, of } from 'rxjs';
+import { catchError, exhaustMap, filter, map, mergeMap, switchMap, withLatestFrom, } from 'rxjs/operators';
 import { addMessage } from 'store/feedback/actions';
+import { isActionOf } from 'typesafe-actions';
 import {
   createIngredientAsync,
   createRecipeAsync,
@@ -17,12 +15,13 @@ import {
   loadAllUnitsAsync,
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync,
+  loadRecipeReleaseAsync, loadRecipeVersionsAsync,
   setImageData,
   setIngredients,
   setIntroduction,
   setNotes,
   setRecipeId,
-  setSteps,
+  setSteps, updateRecipeReleaseAsync,
   uploadBlogImageAsync,
   uploadRecipeImageAsync,
 } from './actions';
@@ -158,10 +157,10 @@ export const setRecipeEditorEpic: RootEpic = (action$) => action$.pipe(
           unit, ingredient, min_amount, max_amount,
         } = x;
         return {
-          unit,
           ingredient,
-          minAmount: min_amount,
           maxAmount: max_amount,
+          minAmount: min_amount,
+          unit,
         };
       })),
       setRecipeId(action.payload.recipe_id),
@@ -169,4 +168,28 @@ export const setRecipeEditorEpic: RootEpic = (action$) => action$.pipe(
       setIntroduction(action.payload.introduction || ''),
     );
   }),
+);
+
+export const loadRecipeReleaseEpic: RootEpic = (action$, _, { api }) => action$.pipe(
+  filter(isActionOf(loadRecipeReleaseAsync.request)),
+  switchMap((action) => from(api.recipeEditor.loadRecipeRelease(action.payload)).pipe(
+    map((x) => loadRecipeReleaseAsync.success(x)),
+    catchError((error) => of(loadRecipeReleaseAsync.failure(error))),
+  )),
+);
+
+export const updateRecipeReleaseEpic: RootEpic = (action$, _, { api }) => action$.pipe(
+  filter(isActionOf(updateRecipeReleaseAsync.request)),
+  switchMap((action) => from(api.recipeEditor.updateRecipeRelease(action.payload.id, action.payload.versionId)).pipe(
+    map((x) => updateRecipeReleaseAsync.success(x)),
+    catchError((error) => of(updateRecipeReleaseAsync.failure(error))),
+  )),
+);
+
+export const loadRecipeVersionsEpic: RootEpic = (action$, _, { api }) => action$.pipe(
+  filter(isActionOf(loadRecipeVersionsAsync.request)),
+  switchMap((action) => from(api.recipeEditor.loadRecipeVersions(action.payload)).pipe(
+    map((x) => loadRecipeVersionsAsync.success(x)),
+    catchError((error) => of(loadRecipeVersionsAsync.failure(error))),
+  )),
 );
