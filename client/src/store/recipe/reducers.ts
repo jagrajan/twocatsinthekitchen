@@ -4,7 +4,7 @@ import { RootAction } from '@twocats/store';
 import { combineReducers } from 'redux';
 import { ActionType, createReducer } from 'typesafe-actions';
 
-import { loadRecentRecipesAsync, loadRecipeDetailsAsync } from './actions';
+import { loadRecentRecipesAsync, loadRecipeDetailsAsync, setRecipeScale } from './actions';
 
 const reducer = combineReducers({
   isLoadingRecentRecipes: createReducer(false as boolean)
@@ -14,6 +14,8 @@ const reducer = combineReducers({
     .handleAction(loadRecentRecipesAsync.success, (_, action) => action.payload),
   recipe: createReducer<RecipeDetails | null, RootAction>(null)
     .handleAction([loadRecipeDetailsAsync.success], (_, action) => action.payload),
+  scale: createReducer<number, RootAction>(1)
+    .handleAction(setRecipeScale, (_, action) => action.payload),
 });
 
 export default reducer;

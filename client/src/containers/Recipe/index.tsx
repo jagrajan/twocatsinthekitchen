@@ -13,6 +13,7 @@ const Recipe: FC<PropsFromRedux> = ({
   loadRecipeDetails,
   match,
   recipe,
+  scale,
 }) => {
   const id = match?.params.id;
   useEffect(() => {
@@ -36,7 +37,7 @@ const Recipe: FC<PropsFromRedux> = ({
             minAmount: a.min_amount,
             unit: a.unit,
           })),
-        }),
+        }, scale),
       }));
     const notes = recipe.recipe_note.map((x, position) => ({
       position,
@@ -56,6 +57,7 @@ const Recipe: FC<PropsFromRedux> = ({
           name={recipe.name || ''}
           notes={notes}
           prepTime={recipe.prep_time || ''}
+          scale={scale}
           servings={recipe.serves?.toString() || ''}
           steps={steps}
         />
@@ -67,6 +69,7 @@ const Recipe: FC<PropsFromRedux> = ({
 const mapState = (state: RootState) => ({
   match: createMatchSelector<RootState, {id: string | undefined }>('/recipe/:id')(state),
   recipe: state.recipe.recipe,
+  scale: state.recipe.scale,
 });
 
 const mapDispatch = {

@@ -8,7 +8,7 @@ interface Props {
 
 const RecipeFact: FC<Props> = ({ children, name }) => {
   return (
-    <Box>
+    <Box textAlign='center'>
       <Typography variant="overline">{name}</Typography>
       <Typography>{children}</Typography>
     </Box>

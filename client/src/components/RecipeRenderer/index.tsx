@@ -4,6 +4,8 @@ import React, { FC } from 'react';
 import Markdown, { Renderer } from 'react-markdown';
 import styled from 'styled-components';
 import RecipeCard from '../RecipeCard';
+import Divider from '@material-ui/core/Divider';
+import Box from '@material-ui/core/Box';
 
 const StyledContainer = styled.div`
   img {
@@ -36,6 +38,7 @@ type Props = {
   name: string;
   notes: { text: string; position: number }[];
   prepTime: string;
+  scale?: number;
   servings: string;
   steps: { text: string; position: number }[];
 };
@@ -54,6 +57,7 @@ const RecipeRenderer: FC<Props> = ({
   name,
   notes,
   prepTime,
+  scale,
   servings,
   steps,
 }) => (
@@ -63,16 +67,23 @@ const RecipeRenderer: FC<Props> = ({
     </Typography>
     <Markdown source={introduction} renderers={{ image }} />
     <Container maxWidth="md">
+      <Box my={2}>
+        <Divider />
+      </Box>
       <RecipeCard
         cookTime={cookTime}
-        name={name}
         imageUrl={imageUrl}
         ingredients={ingredients}
-        prepTime={prepTime}
-        servings={servings}
+        name={name}
         notes={notes}
+        prepTime={prepTime}
+        scale={scale || 1}
+        servings={servings}
         steps={steps}
       />
+      <Box my={2}>
+        <Divider />
+      </Box>
     </Container>
   </StyledContainer>
 );
