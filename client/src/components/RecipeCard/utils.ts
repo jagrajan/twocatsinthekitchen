@@ -1,12 +1,13 @@
 import Fraction from 'fraction.js';
 import { MeasuredIngredient } from 'store/recipeEditor/actions';
 
-export const transformIngredient = (
-  ingredient: MeasuredIngredient,
-  scaleFactor = 1
-): string => {
-  const { minAmount, maxAmount } = ingredient;
-  const { name, plural } = ingredient.unit;
+function createMeasurementText(
+  minAmount: string,
+  maxAmount: string,
+  name: string,
+  plural: string,
+  scaleFactor: number
+): string {
   let _max,
     _min,
     text = '';
@@ -25,6 +26,27 @@ export const transformIngredient = (
     } else {
       text += ` ${plural}`;
     }
+  }
+  return text;
+}
+
+export const transformIngredient = (
+  ingredient: MeasuredIngredient,
+  scaleFactor = 1
+): string => {
+  const { minAmount, maxAmount } = ingredient;
+  const { name, plural } = ingredient.unit;
+  let text = createMeasurementText(minAmount, maxAmount, name || '', plural || '', scaleFactor);
+  if (ingredient.alternativeMeasurement.length > 0) {
+    text += ' (or ';
+    text += ingredient.alternativeMeasurement.map(a => createMeasurementText(
+      a.minAmount,
+      a.maxAmount,
+      a.unit.name || '',
+      a.unit.plural || '',
+      scaleFactor
+    )).join(' or ');
+    text += ') ';
   }
   if (name !== '') {
     text += ` of ${ingredient.ingredient.plural}`;

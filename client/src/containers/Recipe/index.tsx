@@ -26,7 +26,17 @@ const Recipe: FC<PropsFromRedux> = ({
     const ingredients = recipe.measured_ingredient
       .map((x, position) => ({
         position,
-        text: transformIngredient({...x, maxAmount: x.max_amount, minAmount: x.min_amount }),
+        text: transformIngredient({
+          ingredient: x.ingredient,
+          unit: x.unit,
+          maxAmount: x.max_amount,
+          minAmount: x.min_amount,
+          alternativeMeasurement: x.alternative_measurement.map(a => ({
+            maxAmount: a.max_amount,
+            minAmount: a.min_amount,
+            unit: a.unit,
+          })),
+        }),
       }));
     const notes = recipe.recipe_note.map((x, position) => ({
       position,

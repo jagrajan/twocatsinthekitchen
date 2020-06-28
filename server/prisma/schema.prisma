@@ -16,6 +16,15 @@ model admin {
   profile     profile   @relation(fields: [user_id], references: [id])
 }
 
+model alternative_measurement {
+  max_amount             String
+  measured_ingredient_id Int                 @id
+  min_amount             String
+  unit_id                Int
+  measured_ingredient    measured_ingredient @relation(fields: [measured_ingredient_id], references: [id])
+  unit                   unit                @relation(fields: [unit_id], references: [id])
+}
+
 model auth_key {
   admin       Boolean? @default(false)
   create_date DateTime @default(now())
@@ -63,18 +72,19 @@ model ingredient_category {
 }
 
 model measured_ingredient {
-  create_date       DateTime       @default(now())
-  id                Int            @default(autoincrement()) @id
-  ingredient_id     Int
-  last_update       DateTime       @default(now())
-  max_amount        String
-  min_amount        String
-  position          Int
-  recipe_version_id Int
-  unit_id           Int
-  ingredient        ingredient     @relation(fields: [ingredient_id], references: [id])
-  recipe_version    recipe_version @relation(fields: [recipe_version_id], references: [id])
-  unit              unit           @relation(fields: [unit_id], references: [id])
+  create_date             DateTime                  @default(now())
+  id                      Int                       @default(autoincrement()) @id
+  ingredient_id           Int
+  last_update             DateTime                  @default(now())
+  max_amount              String
+  min_amount              String
+  position                Int
+  recipe_version_id       Int
+  unit_id                 Int
+  ingredient              ingredient                @relation(fields: [ingredient_id], references: [id])
+  recipe_version          recipe_version            @relation(fields: [recipe_version_id], references: [id])
+  unit                    unit                      @relation(fields: [unit_id], references: [id])
+  alternative_measurement alternative_measurement[]
 }
 
 model profile {
@@ -173,11 +183,12 @@ model tag {
 }
 
 model unit {
-  create_date         DateTime              @default(now())
-  id                  Int                   @default(autoincrement()) @id
-  last_update         DateTime              @default(now())
-  name                String?               @unique
-  plural              String?
-  ingredient          ingredient[]
-  measured_ingredient measured_ingredient[]
+  create_date             DateTime                  @default(now())
+  id                      Int                       @default(autoincrement()) @id
+  last_update             DateTime                  @default(now())
+  name                    String?                   @unique
+  plural                  String?
+  alternative_measurement alternative_measurement[]
+  ingredient              ingredient[]
+  measured_ingredient     measured_ingredient[]
 }

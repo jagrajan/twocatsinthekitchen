@@ -7,6 +7,11 @@ export type CreateRecipeBody = {
     ingredient: number,
     minAmount: string;
     maxAmount: string,
+    alternativeMeasurement: {
+      unit: number,
+      minAmount: string,
+      maxAmount: string
+    }[]
   }[],
   slug: string,
   name: string,

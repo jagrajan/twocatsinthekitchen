@@ -1,17 +1,18 @@
+import Typography from '@material-ui/core/Typography';
+import { RootState } from '@twocats/store';
 import React, { FC, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '@twocats/store';
 import {
+  addIngredient,
+  addStep,
   loadAllIngredientsAsync,
   loadAllUnitsAsync,
-  addIngredient,
   removeIngredient,
-  swapIngredients,
-  addStep,
   removeStep,
+  setIngredients,
+  swapIngredients,
   swapSteps
 } from 'store/recipeEditor/actions';
-import Typography from '@material-ui/core/Typography';
 import IngredientManager from './IngredientManager';
 import StepsManager from './StepsManager';
 
@@ -27,6 +28,7 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
   recipeSteps,
   removeIngredient,
   removeStep,
+  setIngredients,
   swapIngredients,
   swapSteps,
   units,
@@ -45,6 +47,7 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
         ingredients={ingredients}
         recipeIngredients={recipeIngredients.toArray()}
         removeIngredient={removeIngredient}
+        setIngredients={setIngredients}
         swapIngredients={swapIngredients}
         units={units}
         />
@@ -75,6 +78,7 @@ const mapDispatch = {
   loadAllUnits: loadAllUnitsAsync.request,
   removeIngredient,
   removeStep,
+  setIngredients,
   swapIngredients,
   swapSteps
 };
