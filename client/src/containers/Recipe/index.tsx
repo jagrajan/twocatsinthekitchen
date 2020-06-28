@@ -49,11 +49,14 @@ const Recipe: FC<PropsFromRedux> = ({
     return (
       <Container>
         <RecipeRenderer
+          cookTime={recipe.cook_time || ''}
           imageUrl={`${IMAGE_SERVER}/${recipe.image_file}` || ''}
           ingredients={ingredients}
           introduction={recipe.introduction || ''}
           name={recipe.name || ''}
           notes={notes}
+          prepTime={recipe.prep_time || ''}
+          servings={recipe.serves?.toString() || ''}
           steps={steps}
         />
       </Container>

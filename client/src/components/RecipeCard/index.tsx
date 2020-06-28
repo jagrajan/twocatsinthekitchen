@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import StrikeableListItem from './StrikeableListItem';
+import Box from '@material-ui/core/Box';
+import RecipeFact from './RecipeFact';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -27,12 +29,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
+  cookTime: string;
   imageUrl: string;
   name: string;
   notes: {
     position: number;
     text: string;
   }[];
+  prepTime: string;
+  servings: string;
   steps: {
     position: number;
     text: string;
@@ -44,10 +49,13 @@ interface Props {
 }
 
 const RecipeCard: FC<Props> = ({
+  cookTime,
   imageUrl,
   ingredients,
   name,
   notes,
+  prepTime,
+  servings,
   steps,
 }) => {
   const classes = useStyles();
@@ -68,12 +76,19 @@ const RecipeCard: FC<Props> = ({
   return (
     <Paper className={classes.root}>
       <Grid container>
-        <Grid item xs={12} md={6}>
-          <div className={classes.infoContainer}>
-            <Typography variant="h4">{name}</Typography>
-          </div>
+        <Grid item xs={12} md={8}>
+          <Box display="flex" flexDirection="column" height="100%">
+            <div className={classes.infoContainer}>
+              <Typography variant="h4">{name}</Typography>
+            </div>
+            <Box display="flex" justifyContent="space-evenly" flexGrow="1" alignItems="flex-end">
+              <RecipeFact name="Cook time">{cookTime}</RecipeFact>
+              <RecipeFact name="Prep time">{prepTime}</RecipeFact>
+              <RecipeFact name="Servings">{servings}</RecipeFact>
+            </Box>
+          </Box>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <div className={classes.imageContainer}>
             <img className={classes.image} src={imageUrl} alt={name} />
           </div>

@@ -17,11 +17,14 @@ import RecipeRenderer from 'components/RecipeRenderer';
 const CreateIngredientDialog: FC<
   DialogProps & { close: () => void } & PropsFromRedux
 > = ({
+  cookTime,
   close,
   name,
   introduction,
   ingredients,
   imageUrl,
+  prepTime,
+  servings,
   steps,
   notes,
   ...props
@@ -45,11 +48,14 @@ const CreateIngredientDialog: FC<
       <DialogContentText />
       <Container maxWidth="md">
         <RecipeRenderer
+          cookTime={cookTime}
           imageUrl={imageUrl || ''}
           ingredients={ingredients}
           introduction={introduction}
           name={name}
           notes={notes}
+          prepTime={prepTime}
+          servings={servings}
           steps={steps}
         />
       </Container>
@@ -58,6 +64,7 @@ const CreateIngredientDialog: FC<
 );
 
 const mapState = (state: RootState) => ({
+  cookTime: state.form.recipeEditor?.values?.cookTime || 'Missing',
   imageUrl: state.recipeEditor.recipe.previewImage,
   ingredients: state.recipeEditor.recipe.ingredients
     .toArray()
@@ -71,6 +78,8 @@ const mapState = (state: RootState) => ({
     position,
     text,
   })),
+  prepTime: state.form.recipeEditor?.values?.prepTime || 'Missing',
+  servings: state.form.recipeEditor?.values?.servings || 'Missing',
   steps: state.recipeEditor.recipe.steps.toArray().map((text, position) => ({
     position,
     text,
