@@ -1,4 +1,4 @@
-import { ingredient, unit, recipe_version } from '@prisma/client';
+import { alternative_measurement, ingredient, unit, recipe_version } from '@prisma/client';
 
 export type RecipeDetails = recipe_version & {
   recipe_step: { description: string }[],
@@ -8,5 +8,10 @@ export type RecipeDetails = recipe_version & {
     unit: unit,
     min_amount: string,
     max_amount: string,
+    alternative_measurement: {
+      unit: unit,
+      min_amount: string,
+      max_amount: string,
+    }[],
   }[],
 };

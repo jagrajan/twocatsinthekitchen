@@ -13,10 +13,15 @@ export type Unit = unit;
 export type Ingredient = ingredient;
 
 export type MeasuredIngredient = {
-  unit: unit;
+  alternativeMeasurement: {
+    maxAmount: string;
+    minAmount: string;
+    unit: unit;
+  }[];
   ingredient: ingredient;
-  minAmount: string;
   maxAmount: string;
+  minAmount: string;
+  unit: unit;
 };
 
 export const loadDashboardRecipesAsync = createAsyncAction(
