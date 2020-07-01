@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@twocats/store';
+import { IMAGE_SERVER } from 'config';
 import { transformIngredient } from '../../../../components/RecipeCard/utils';
 import AppBar from '@material-ui/core/AppBar';
 import Container from '@material-ui/core/Container';
@@ -65,7 +66,7 @@ const CreateIngredientDialog: FC<
 
 const mapState = (state: RootState) => ({
   cookTime: state.form.recipeEditor?.values?.cookTime || 'Missing',
-  imageUrl: state.recipeEditor.recipe.previewImage,
+  imageUrl: `${IMAGE_SERVER}/${state.recipeEditor.recipe.imageFile}`,
   ingredients: state.recipeEditor.recipe.ingredients
     .toArray()
     .map((x, position) => ({

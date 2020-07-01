@@ -10,6 +10,9 @@ import Box from '@material-ui/core/Box';
 const StyledContainer = styled.div`
   img {
     max-width: 100%;
+    @media only screen and (min-width: 900px)  {
+      max-width: 70%;
+    }
   }
 
   a,

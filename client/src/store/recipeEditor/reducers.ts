@@ -20,7 +20,7 @@ import {
   removeIngredient,
   removeNote,
   removeStep, removeTag,
-  setImageData,
+  setImageData, setImageFile,
   setIngredients,
   setIntroduction,
   setNotes,
@@ -91,10 +91,9 @@ const reducer = combineReducers({
     imageData: createReducer<string | null, RootAction>(null)
       .handleAction(setImageData, (_, action) => action.payload)
       .handleAction(clearRecipe, () => null),
-    imageFile: createReducer<string | null, RootAction>(null).handleAction(
-      uploadRecipeImageAsync.success,
-      (_, action) => action.payload,
-    ),
+    imageFile: createReducer<string | null, RootAction>(null)
+      .handleAction(uploadRecipeImageAsync.success, (_, action) => action.payload)
+      .handleAction(setImageFile, (_, action) => action.payload),
     ingredients: createReducer<List<MeasuredIngredient>, RootAction>(List())
       .handleAction(addIngredient, (state, action) => state.push(action.payload))
       .handleAction(removeIngredient, (state, action) => state.remove(action.payload))

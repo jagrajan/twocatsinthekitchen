@@ -1,37 +1,31 @@
 import { CreateRecipeBody } from '@twocats/server/src/types/requests';
 import { RootEpic } from '@twocats/store';
-import { IMAGE_SERVER } from 'config';
 import { push } from 'connected-react-router';
 import { initialize } from 'redux-form';
 import { from, of } from 'rxjs';
-import {
-  catchError,
-  exhaustMap,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { catchError, exhaustMap, filter, map, mergeMap, switchMap, withLatestFrom, } from 'rxjs/operators';
 import { addMessage } from 'store/feedback/actions';
 import { isActionOf } from 'typesafe-actions';
 import {
   addTag,
   createIngredientAsync,
-  createRecipeAsync, createTagAsync,
+  createRecipeAsync,
+  createTagAsync,
   createUnitAsync,
-  loadAllIngredientsAsync, loadAllTagsAsync,
+  loadAllIngredientsAsync,
+  loadAllTagsAsync,
   loadAllUnitsAsync,
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync,
   loadRecipeReleaseAsync,
   loadRecipeVersionsAsync,
-  setImageData,
+  setImageFile,
   setIngredients,
   setIntroduction,
   setNotes,
   setRecipeId,
-  setSteps, setTags,
+  setSteps,
+  setTags,
   updateRecipeReleaseAsync,
   uploadBlogImageAsync,
   uploadRecipeImageAsync,
@@ -283,7 +277,7 @@ export const setRecipeEditorEpic: RootEpic = (action$) =>
           })
         ),
         setRecipeId(action.payload.recipe_id),
-        setImageData(`${IMAGE_SERVER}/${action.payload.image_file}`),
+        setImageFile(action.payload.image_file),
         setIntroduction(action.payload.introduction || ''),
         setTags(action.payload.recipe_tag.map(rt => rt.tag))
       );

@@ -1,23 +1,29 @@
-import React, { FC, MutableRefObject } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import { RootState } from '@twocats/store';
+import FieldInput from 'components/ui/Input/FieldInput';
+import LoadingStatus from 'components/ui/LoadingStatus';
+import { IMAGE_SERVER } from 'config';
+import { DropzoneArea } from 'material-ui-dropzone';
+import React, { FC, MutableRefObject, useState } from 'react';
+import Cropper from 'react-cropper';
+import { connect, ConnectedProps } from 'react-redux';
+import { Field } from 'redux-form';
+import { uploadBlogImage } from 'services/api/api-recipe-editor'
 import {
   addNote,
   addTag as addTagAction,
   createTagAsync,
   removeNote,
   removeTag,
+  setImageFile,
   setNotes,
   swapNotes,
 } from 'store/recipeEditor/actions';
-import { Field } from 'redux-form';
-import validator from 'validator'
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import FieldInput from 'components/ui/Input/FieldInput';
-import DropzoneCropper from 'components/ui/DropzoneCropper';
-import Cropper from 'react-cropper';
+import validator from 'validator'
 import NotesManager from './NotesManager';
 import TagsManager from './TagsManager';
 
@@ -106,23 +112,44 @@ const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
   addTag,
   allTags,
   createTag,
-  cropperRef,
   imageData,
+  imageFile,
   recipeNotes,
   removeNote,
   removeTag,
+  setImageFile,
   setNotes,
   swapNotes,
   tags,
 }) => {
-  const cropperProps = imageData ? { originalImage: imageData } : {};
+  const [loading, setLoading] = useState<boolean>(false);
+  const onFileChange = async (files: File[]) => {
+    setLoading(true);
+    const file = files[0];
+    if (file) {
+      const filename = await uploadBlogImage(file);
+      setImageFile(filename);
+    }
+    setLoading(false);
+  }
+  if (loading) {
+    return <LoadingStatus />;
+  }
   return (
     <>
       <Typography component="h2" variant="h3">Information & Metadata</Typography>
       <Fields />
       <Typography component="h2" variant="h3">Image</Typography>
       <Container maxWidth="sm">
-        <DropzoneCropper cropperRef={cropperRef} {...cropperProps}  />
+        {imageFile && <>
+          <img style={{width: '100%'}} src={`${IMAGE_SERVER}/${imageFile}`}/>
+          <Box textAlign="center" my={2}>
+            <Button variant="contained" color="primary" onClick={() => setImageFile(null)}>Delete</Button>
+          </Box>
+        </> }
+        {!imageFile && <>
+          <DropzoneArea onChange={onFileChange} />
+        </>}
       </Container>
       <Typography component="h2" variant="h3">Notes</Typography>
       <NotesManager
@@ -147,6 +174,7 @@ const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
 const mapState = (state: RootState) => ({
   allTags: state.recipeEditor.tags,
   imageData: state.recipeEditor.recipe.imageData,
+  imageFile: state.recipeEditor.recipe.imageFile,
   recipeNotes: state.recipeEditor.recipe.notes,
   tags: state.recipeEditor.recipe.tags.toArray(),
 });
@@ -157,6 +185,7 @@ const mapDispatch = {
   createTag: createTagAsync.request,
   removeNote,
   removeTag,
+  setImageFile,
   setNotes,
   swapNotes,
 };

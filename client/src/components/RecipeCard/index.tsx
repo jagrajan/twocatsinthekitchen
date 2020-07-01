@@ -1,3 +1,5 @@
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -119,7 +121,9 @@ const RecipeCard: FC<Props> = ({
     <StrikeableListItem key={ing.position} text={`${ing.text}`} />
   ));
   const notesRender = notes.map((note) => (
-    <StrikeableListItem key={note.position} text={`${note.text}`} />
+    <ListItem>
+      <ListItemText primary={note.text} />
+    </ListItem>
   ));
 
   return (

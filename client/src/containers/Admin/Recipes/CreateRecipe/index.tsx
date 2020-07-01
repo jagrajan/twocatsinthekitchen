@@ -4,10 +4,10 @@ import React, {
 import { connect, ConnectedProps } from 'react-redux';
 import {
   clearRecipe as clearRecipeAction,
+  createRecipeAsync,
   loadAllTagsAsync,
   loadRecipeDetailsAsync,
   setPreviewImage as setPreviewImageAction,
-  uploadRecipeImageAsync,
 } from 'store/recipeEditor/actions';
 import { createMatchSelector } from 'connected-react-router';
 import Cropper from 'react-cropper';
@@ -57,12 +57,12 @@ const ReduxForm = reduxForm({
 
 const CreateRecipe: FC<PropsFromRedux> = ({
   clearRecipe,
+  createRecipe,
   loadAllTags,
   loadRecipeDetails,
   loading,
   match,
   setPreviewImage,
-  uploadRecipeImage,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modal, setModal] = useState(false);
@@ -82,18 +82,10 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   }, [id, loadRecipeDetails, clearRecipe]);
 
   const onSubmit: FormSubmitHandler = () => {
-    cropperRef.current?.getCroppedCanvas()?.toBlob((blob) => {
-      if (blob) {
-        uploadRecipeImage(blob);
-      }
-    });
+    createRecipe();
   };
 
   const onPreview = () => {
-    const dataUrl = cropperRef.current?.getCroppedCanvas()?.toDataURL();
-    if (dataUrl) {
-      setPreviewImage(dataUrl);
-    }
     setModal(true);
   };
 
@@ -137,7 +129,7 @@ const mapDispatch = {
   loadAllTags: loadAllTagsAsync.request,
   loadRecipeDetails: loadRecipeDetailsAsync.request,
   setPreviewImage: setPreviewImageAction,
-  uploadRecipeImage: uploadRecipeImageAsync.request,
+  createRecipe: createRecipeAsync.request,
 };
 
 const connector = connect(mapState, mapDispatch);

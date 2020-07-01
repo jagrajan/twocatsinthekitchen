@@ -132,6 +132,7 @@ number | null
 export const setImageData = createAction('@recipeEditor/SET_IMAGE_DATA')<
 string | null
 >();
+export const setImageFile = createAction('@recipeEditor/SET_IMAGE_FILE')<string | null>();
 export const setIntroduction = createAction('@recipeEditor/SET_INTRODUCTION')<
 string
 >();
