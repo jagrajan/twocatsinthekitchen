@@ -2,15 +2,19 @@ import { createAction, createAsyncAction } from 'typesafe-actions';
 import {
   ingredient,
   recipe_version,
+  tag,
   unit,
 } from '@twocats/server/node_modules/.prisma/client';
 import { DashboardRecipe } from 'services/api/api-recipe-editor';
 import { RecipeDetails } from '@twocats/server/src/types/responses';
 import { RecipeRelease} from './types';
 
-export type Unit = unit;
-
 export type Ingredient = ingredient;
+export type Tag = {
+  id: number;
+  text: string;
+};
+export type Unit = unit;
 
 export type MeasuredIngredient = {
   alternativeMeasurement: {
@@ -35,6 +39,12 @@ export const loadAllIngredientsAsync = createAsyncAction(
   '@recipeEditor/LOAD_ALL_INGREDIENTS_SUCCESS',
   '@recipeEditor/LOAD_ALL_INGREDIENTS_FAILURE',
 )<undefined, ingredient[], undefined>();
+
+export const loadAllTagsAsync = createAsyncAction(
+  '@recipeEditor/LOAD_ALL_TAGS_REQUEST',
+  '@recipeEditor/LOAD_ALL_TAGS_SUCCESS',
+  '@recipeEditor/LOAD_ALL_TAGS_FAILURE',
+)<undefined, tag[], Error>();
 
 export const loadAllUnitsAsync = createAsyncAction(
   '@recipeEditor/LOAD_ALL_UNITS_REQUEST',
@@ -72,6 +82,12 @@ export const createIngredientAsync = createAsyncAction(
   '@recipeEditor/CREATE_INGREDIENT_FAILURE',
 )<{ name: string; plural: string }, ingredient, Error>();
 
+export const createTagAsync = createAsyncAction(
+  '@recipeEditor/CREATE_TAG_REQUEST',
+  '@recipeEditor/CREATE_TAG_SUCCESS',
+  '@recipeEditor/CREATE_TAG_FAILURE',
+)<{ text: string, addTag: boolean }, tag, Error>();
+
 export const createUnitAsync = createAsyncAction(
   '@recipeEditor/CREATE_UNIT_REQUEST',
   '@recipeEditor/CREATE_UNIT_SUCCESS',
@@ -104,6 +120,10 @@ export const swapIngredients = createAction('@recipeEditor/SWAP_INGREDIENTS')<
 export const setIngredients = createAction('@recipeEditor/SET_INGREDIENTS')<
 MeasuredIngredient[]
 >();
+
+export const addTag = createAction('@recipeEditor/ADD_TAG')<Tag>();
+export const removeTag = createAction('@recipeEditor/REMOVE_TAG')<number>();
+export const setTags = createAction('@recipeEditor/SETl_TAGS')<Tag[]>();
 
 export const setRecipeId = createAction('@recipeEditor/SET_RECIPE_ID')<
 number | null

@@ -1,5 +1,5 @@
 import { ActionType, createReducer } from 'typesafe-actions';
-import { ingredient, recipe_version, unit } from '@twocats/server/node_modules/.prisma/client';
+import { ingredient, recipe_version, tag, unit } from '@twocats/server/node_modules/.prisma/client';
 import { DashboardRecipe } from 'services/api/api-recipe-editor';
 import { List } from 'immutable';
 import { RootAction } from '@twocats/store';
@@ -7,29 +7,31 @@ import { combineReducers } from 'redux';
 import {
   addIngredient,
   addNote,
-  addStep,
+  addStep, addTag,
   clearRecipe,
   createIngredientAsync,
   createRecipeAsync,
   createUnitAsync,
-  loadAllIngredientsAsync,
+  loadAllIngredientsAsync, loadAllTagsAsync,
   loadAllUnitsAsync,
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync, loadRecipeReleaseAsync, loadRecipeVersionsAsync,
   MeasuredIngredient,
   removeIngredient,
   removeNote,
-  removeStep,
+  removeStep, removeTag,
   setImageData,
   setIngredients,
   setIntroduction,
   setNotes,
   setPreviewImage,
   setRecipeId,
-  setSteps,
+  setSteps, setTags,
   swapIngredients,
   swapNotes,
-  swapSteps, updateRecipeReleaseAsync,
+  swapSteps,
+  Tag,
+  updateRecipeReleaseAsync,
   uploadRecipeImageAsync,
 } from './actions';
 import { RecipeRelease } from './types';
@@ -44,12 +46,13 @@ function fixSwapPositions(
 
 function swap<T>(indices_: [number, number], list: List<T>) {
   const indices = fixSwapPositions(indices_, list.count());
+  console.log(indices);
   const a = list.get(indices[0]);
   const b = list.get(indices[1]);
   let ret = list;
   if (a && b) {
     ret = list.set(indices[0], b);
-    ret = list.set(indices[1], a);
+    ret = ret.set(indices[1], a);
   }
   return ret;
 }
@@ -110,17 +113,21 @@ const reducer = combineReducers({
       .handleAction(swapNotes, (state, action) => swap<string>(action.payload, state))
       .handleAction(setNotes, (_, action) => List(action.payload))
       .handleAction(clearRecipe, () => List()),
+    previewImage: createReducer<string, RootAction>('')
+      .handleAction(setPreviewImage, (_, action) => action.payload),
     recipeId: createReducer<number | null, RootAction>(null)
       .handleAction(setRecipeId, (_, action) => action.payload)
       .handleAction(clearRecipe, () => null),
-    previewImage: createReducer<string, RootAction>('')
-      .handleAction(setPreviewImage, (_, action) => action.payload),
     steps: createReducer<List<string>, RootAction>(List())
       .handleAction(addStep, (state, action) => state.push(action.payload))
       .handleAction(removeStep, (state, action) => state.remove(action.payload))
       .handleAction(swapSteps, (state, action) => swap<string>(action.payload, state))
       .handleAction(setSteps, (_, action) => List(action.payload))
       .handleAction(clearRecipe, () => List()),
+    tags: createReducer<List<Tag>, RootAction>(List())
+      .handleAction(addTag, (state, action) => state.push(action.payload))
+      .handleAction(removeTag, (state, action) => state.remove(action.payload))
+      .handleAction(setTags, (state, action) => List(action.payload)),
   }),
   recipeDashboard: combineReducers({
     dashboardRecipes: createReducer<
@@ -145,6 +152,10 @@ const reducer = combineReducers({
       .handleAction(loadRecipeVersionsAsync.request, () => [])
       .handleAction(loadRecipeVersionsAsync.success, (_, action) => action.payload),
   }),
+  tags: createReducer<tag[], RootAction>([]).handleAction(
+    loadAllTagsAsync.success,
+    (_, action) => action.payload
+  ),
   units: createReducer<unit[], RootAction>([]).handleAction(
     loadAllUnitsAsync.success,
     (_, action) => action.payload,

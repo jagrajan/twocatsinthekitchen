@@ -4,6 +4,7 @@ import React, {
 import { connect, ConnectedProps } from 'react-redux';
 import {
   clearRecipe as clearRecipeAction,
+  loadAllTagsAsync,
   loadRecipeDetailsAsync,
   setPreviewImage as setPreviewImageAction,
   uploadRecipeImageAsync,
@@ -56,6 +57,7 @@ const ReduxForm = reduxForm({
 
 const CreateRecipe: FC<PropsFromRedux> = ({
   clearRecipe,
+  loadAllTags,
   loadRecipeDetails,
   loading,
   match,
@@ -66,6 +68,10 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   const [modal, setModal] = useState(false);
   const id = match?.params.id;
   const cropperRef = useRef<Cropper | null>(null);
+
+  useEffect(() => {
+    loadAllTags();
+  }, [loadAllTags]);
 
   useEffect(() => {
     if (id) {
@@ -128,6 +134,7 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = {
   clearRecipe: clearRecipeAction,
+  loadAllTags: loadAllTagsAsync.request,
   loadRecipeDetails: loadRecipeDetailsAsync.request,
   setPreviewImage: setPreviewImageAction,
   uploadRecipeImage: uploadRecipeImageAsync.request,

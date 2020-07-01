@@ -16,10 +16,11 @@ import {
 import { addMessage } from 'store/feedback/actions';
 import { isActionOf } from 'typesafe-actions';
 import {
+  addTag,
   createIngredientAsync,
-  createRecipeAsync,
+  createRecipeAsync, createTagAsync,
   createUnitAsync,
-  loadAllIngredientsAsync,
+  loadAllIngredientsAsync, loadAllTagsAsync,
   loadAllUnitsAsync,
   loadDashboardRecipesAsync,
   loadRecipeDetailsAsync,
@@ -30,7 +31,7 @@ import {
   setIntroduction,
   setNotes,
   setRecipeId,
-  setSteps,
+  setSteps, setTags,
   updateRecipeReleaseAsync,
   uploadBlogImageAsync,
   uploadRecipeImageAsync,
@@ -58,6 +59,17 @@ export const loadAllIngredientsEpic: RootEpic = (action$, _, { api }) =>
     )
   );
 
+export const loadAllTagsEpic: RootEpic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(loadAllTagsAsync.request)),
+    switchMap(() =>
+      from(api.recipeEditor.loadAllTags()).pipe(
+        map((x) => loadAllTagsAsync.success(x)),
+        catchError((error) => of(loadAllTagsAsync.failure(error)))
+      )
+    )
+  );
+
 export const loadAllUnitsEpic: RootEpic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(loadAllUnitsAsync.request)),
@@ -79,8 +91,10 @@ export const createRecipeEpic: RootEpic = (action$, state$, { api }) =>
       from(
         (() => {
           const recipe: CreateRecipeBody = {
-            steps: state.recipeEditor.recipe.steps.toArray(),
-            notes: state.recipeEditor.recipe.notes.toArray(),
+            cookTime: state.form.recipeEditor?.values?.cookTime || 'error',
+            description:
+              state.form.recipeEditor?.values?.description || 'No name',
+            imageFile: state.recipeEditor.recipe.imageFile || 'default.png',
             ingredients: state.recipeEditor.recipe.ingredients
               .map((ing) => ({
                 alternativeMeasurement: ing.alternativeMeasurement.map(x => ({
@@ -88,26 +102,25 @@ export const createRecipeEpic: RootEpic = (action$, state$, { api }) =>
                   minAmount: x.minAmount,
                   unit: x.unit.id,
                 })),
-                minAmount: ing.minAmount,
-                maxAmount: ing.maxAmount,
-                unit: ing.unit.id,
                 ingredient: ing.ingredient.id,
+                maxAmount: ing.maxAmount,
+                minAmount: ing.minAmount,
+                unit: ing.unit.id,
               }))
               .toArray(),
+            introduction: state.recipeEditor.recipe.introduction,
             recipe_id: state.recipeEditor.recipe.recipeId || undefined,
             name: state.form.recipeEditor?.values?.name || 'No name',
-            description:
-              state.form.recipeEditor?.values?.description || 'No name',
-            slug: state.form.recipeEditor?.values?.slug || 'error',
-            cookTime: state.form.recipeEditor?.values?.cookTime || 'error',
+            notes: state.recipeEditor.recipe.notes.toArray(),
             prepTime: state.form.recipeEditor?.values?.prepTime || 'error',
             servings:
               parseInt(
                 state.form.recipeEditor?.values?.servings.toString(),
                 10
               ) || 3,
-            imageFile: state.recipeEditor.recipe.imageFile || 'default.png',
-            introduction: state.recipeEditor.recipe.introduction,
+            slug: state.form.recipeEditor?.values?.slug || 'error',
+            steps: state.recipeEditor.recipe.steps.toArray(),
+            tags: state.recipeEditor.recipe.tags.toArray().map(tag => tag.id),
           };
           return api.recipeEditor.createRecipe(recipe);
         })()
@@ -141,6 +154,28 @@ export const createIngredientEpic: RootEpic = (action$, _, { api }) =>
     )
   );
 
+export const createTagEpic: RootEpic = (action$, _, { api }) =>
+  action$.pipe(
+    filter(isActionOf(createTagAsync.request)),
+    mergeMap((action) =>
+      from(api.recipeEditor.createTag(action.payload.text)).pipe(
+        mergeMap((x) =>
+          of(
+            createTagAsync.success(x),
+            loadAllTagsAsync.request(),
+            addTag(x),
+            addMessage({
+              key: 'add-tag',
+              color: 'success',
+              message: `${x.text} has been added to the database!`,
+            })
+          )
+        ),
+        catchError((error) => of(createIngredientAsync.failure(error)))
+      )
+    )
+  );
+
 export const createUnitEpic: RootEpic = (action$, _, { api }) =>
   action$.pipe(
     filter(isActionOf(createUnitAsync.request)),
@@ -151,8 +186,8 @@ export const createUnitEpic: RootEpic = (action$, _, { api }) =>
             createUnitAsync.success(x),
             loadAllUnitsAsync.request(),
             addMessage({
-              key: 'add-unit',
               color: 'success',
+              key: 'add-unit',
               message: `${x.name} has been added to the database!`,
             })
           )
@@ -246,7 +281,8 @@ export const setRecipeEditorEpic: RootEpic = (action$) =>
         ),
         setRecipeId(action.payload.recipe_id),
         setImageData(`${IMAGE_SERVER}/${action.payload.image_file}`),
-        setIntroduction(action.payload.introduction || '')
+        setIntroduction(action.payload.introduction || ''),
+        setTags(action.payload.recipe_tag.map(rt => rt.tag))
       );
     })
   );

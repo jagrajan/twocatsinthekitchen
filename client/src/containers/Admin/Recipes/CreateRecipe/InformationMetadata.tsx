@@ -3,11 +3,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@twocats/store';
 import {
   addNote,
+  addTag as addTagAction,
+  createTagAsync,
   removeNote,
+  removeTag,
   swapNotes,
 } from 'store/recipeEditor/actions';
-// import { addMessage } from 'store/feedback/actions';
-import { Field  } from 'redux-form';
+import { Field } from 'redux-form';
 import validator from 'validator'
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +18,7 @@ import FieldInput from 'components/ui/Input/FieldInput';
 import DropzoneCropper from 'components/ui/DropzoneCropper';
 import Cropper from 'react-cropper';
 import NotesManager from './NotesManager';
+import TagsManager from './TagsManager';
 
 const StyledContainer = styled.div`
   display: grid;
@@ -28,7 +31,7 @@ const StyledContainer = styled.div`
 `;
 
 export const validate = (values: { [key: string]: string }) => {
-  let errors: { [key: string]: string } = {};
+  const errors: { [key: string]: string } = {};
   if (!values.name || validator.isEmpty(values.name)) {
     errors.name = 'Please enter a recipe name';
   }
@@ -99,11 +102,16 @@ type OwnProps = {
 
 const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
   addNote,
+  addTag,
+  allTags,
+  createTag,
   cropperRef,
   imageData,
   recipeNotes,
   removeNote,
+  removeTag,
   swapNotes,
+  tags,
 }) => {
   const cropperProps = imageData ? { originalImage: imageData } : {};
   return (
@@ -122,18 +130,30 @@ const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
         swap={swapNotes}
       />
       <Typography component="h2" variant="h3">Tags</Typography>
+      <TagsManager
+        addTag={addTag}
+        allTags={allTags}
+        createTag={createTag}
+        removeTag={removeTag}
+        tags={tags}
+      />
     </>
   )
 }
 
 const mapState = (state: RootState) => ({
+  allTags: state.recipeEditor.tags,
   imageData: state.recipeEditor.recipe.imageData,
   recipeNotes: state.recipeEditor.recipe.notes,
+  tags: state.recipeEditor.recipe.tags.toArray(),
 });
 
 const mapDispatch = {
   addNote,
+  addTag: addTagAction,
+  createTag: createTagAsync.request,
   removeNote,
+  removeTag,
   swapNotes,
 };
 

@@ -144,12 +144,11 @@ model recipe_step {
 }
 
 model recipe_tag {
-  create_date DateTime @default(now())
-  last_update DateTime @default(now())
-  recipe_id   Int
-  tag_id      Int
-
-  @@id([recipe_id, tag_id])
+  id                Int            @default(autoincrement()) @id
+  recipe_version_id Int
+  tag_id            Int
+  recipe_version    recipe_version @relation(fields: [recipe_version_id], references: [id])
+  tag               tag            @relation(fields: [tag_id], references: [id])
 }
 
 model recipe_version {
@@ -173,13 +172,15 @@ model recipe_version {
   recipe_release_recipe_release_latest_versionTorecipe_version   recipe_release[]      @relation("recipe_release_latest_versionTorecipe_version")
   recipe_release_recipe_release_released_versionTorecipe_version recipe_release[]      @relation("recipe_release_released_versionTorecipe_version")
   recipe_step                                                    recipe_step[]
+  recipe_tag                                                     recipe_tag[]
 }
 
 model tag {
-  create_date DateTime @default(now())
-  id          Int      @default(autoincrement()) @id
-  last_update DateTime @default(now())
+  create_date DateTime     @default(now())
+  id          Int          @default(autoincrement()) @id
+  last_update DateTime     @default(now())
   text        String
+  recipe_tag  recipe_tag[]
 }
 
 model unit {

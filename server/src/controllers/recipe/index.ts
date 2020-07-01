@@ -1,9 +1,5 @@
-import client from "db";
 import prisma from "db/prisma";
 import { Request, Response } from "express";
-import Recipe from "models/cookbook/Recipe";
-import RecipeFetcher from "models/cookbook/RecipeFetcher";
-import RecipeVersionFetcher from "models/cookbook/RecipeVersionFetcher";
 import { CreateRecipeBody } from "types/requests";
 
 export const getRecent = async (req: Request, res: Response): Promise<void> => {
@@ -56,6 +52,7 @@ export const getVersionDetails = async (
         orderBy: { position: "asc" },
       },
       recipe_note: { select: { text: true }, orderBy: { position: "asc" } },
+      recipe_tag: { select: { tag: { select: { id: true, text: true } } } },
     },
     where: { id: recipeVersionId },
   });
@@ -77,7 +74,6 @@ export const getDetails = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  let response: any = {};
   let input: string = req.params.id;
   let where: { slug: string } | { recipe_id: number } = { slug: input };
 
@@ -222,7 +218,18 @@ export const postIndex = async (req: Request, res: Response): Promise<void> => {
       version,
       introduction: recipe.introduction,
       image_file: recipe.imageFile,
-      recipe: { connect: { id: recipeId } },
+      recipe: {connect: {id: recipeId}},
+      recipe_step: {
+        create: recipe.steps.map((description, position) => ({
+          position,
+          description,
+        }))
+      },
+      recipe_tag: {
+        create: recipe.tags.map(tag => ({
+          tag: { connect: { id: tag } }
+        })),
+      }
     },
   });
   const { ingredients, steps, notes } = recipe;
@@ -242,15 +249,6 @@ export const postIndex = async (req: Request, res: Response): Promise<void> => {
             unit: { connect: { id: a.unit }},
           })),
         },
-      },
-    });
-  }
-  for (let j = 0; j < steps.length; j++) {
-    await prisma.recipe_step.create({
-      data: {
-        recipe_version: { connect: { id: recipeVersion.id } },
-        position: j,
-        description: steps[j],
       },
     });
   }

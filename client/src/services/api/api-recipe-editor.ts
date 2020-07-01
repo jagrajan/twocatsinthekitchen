@@ -1,6 +1,7 @@
 import {
   ingredient,
   recipe_version,
+  tag,
   unit,
 } from '@twocats/server/node_modules/.prisma/client';
 import { CreateRecipeBody } from '@twocats/server/src/types/requests';
@@ -17,6 +18,11 @@ export type DashboardRecipe = {
 
 export async function loadRecentRecipes(): Promise<DashboardRecipe[]> {
   const res = await axios.get<DashboardRecipe[]>('/recipe/dashboard');
+  return res.data;
+}
+
+export async function loadAllTags(): Promise<tag[]> {
+  const res = await axios.get<tag[]>('/tag');
   return res.data;
 }
 
@@ -80,6 +86,11 @@ export async function createIngredient(data: {
   plural: string;
 }): Promise<ingredient> {
   const res = await axios.post<ingredient>('/ingredient', data);
+  return res.data;
+}
+
+export async function createTag(text: string): Promise<tag> {
+  const res = await axios.post<tag>('/tag', { text });
   return res.data;
 }
 
