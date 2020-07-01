@@ -10,6 +10,7 @@ import {
   removeIngredient,
   removeStep,
   setIngredients,
+  setSteps,
   swapIngredients,
   swapSteps
 } from 'store/recipeEditor/actions';
@@ -29,6 +30,7 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
   removeIngredient,
   removeStep,
   setIngredients,
+  setSteps,
   swapIngredients,
   swapSteps,
   units,
@@ -56,6 +58,7 @@ const IngredientsSteps: FC<PropsFromRedux> = ({
         addStep={addStep}
         steps={recipeSteps.toArray()}
         removeStep={removeStep}
+        setSteps={setSteps}
         swapSteps={swapSteps}
       />
     </>
@@ -79,6 +82,7 @@ const mapDispatch = {
   removeIngredient,
   removeStep,
   setIngredients,
+  setSteps,
   swapIngredients,
   swapSteps
 };
