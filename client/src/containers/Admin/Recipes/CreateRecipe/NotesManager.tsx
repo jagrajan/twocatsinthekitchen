@@ -1,4 +1,5 @@
-import React, { FC, KeyboardEventHandler, useRef } from 'react';
+import { List } from 'immutable';
+import React, { FC, KeyboardEventHandler, useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +9,7 @@ interface Props {
   add: (note: string) => void;
   remove: (position: number) => void;
   notes: string[];
+  setNotes: (steps: string[]) => void;
   swap: (indices: [number, number]) => void;
 }
 
@@ -15,9 +17,12 @@ const NotesManager: FC<Props> = ({
   add,
   remove,
   notes,
+  setNotes,
   swap
 }) => {
   const noteInput = useRef<HTMLInputElement>();
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [editPosition, setEditPosition] = useState<number>(0);
 
   const onAddNote = () => {
     if (noteInput.current) {
@@ -29,7 +34,12 @@ const NotesManager: FC<Props> = ({
         //   message: 'A note cannot be blank',
         // });
       } else {
-        add(text);
+        if (editMode) {
+          setNotes(List(notes).set(editPosition, text).toArray());
+        } else {
+          add(text);
+        }
+        setEditMode(false);
         noteInput.current.value = '';
       }
     }
@@ -64,50 +74,63 @@ const NotesManager: FC<Props> = ({
             fullWidth
             onClick={onAddNote}
           >
-            Add Note
+            {editMode ? 'Update' : 'Add'} Note
           </Button>
         </Grid>
       </Grid>
       <MaterialTable
          columns={[
-          { title: "Position", field: "position", type: 'numeric' },
-          { title: "Text", field: "text"  },
+          { title: 'Position', field: 'position', type: 'numeric' },
+          { title: 'Text', field: 'text'  },
         ]}
         data={notes.map((text, position) => ({ position, text }))}
         actions={[
           {
             icon: 'delete',
-            tooltip: 'Delete note',
             onClick: (event, rowData) => {
               if (Array.isArray(rowData)) {
                 remove(rowData[0].position);
               } else {
                 remove(rowData.position);
               }
-            }
+            },
+            tooltip: 'Delete note',
           },
           {
             icon: 'arrow_upward',
-            tooltip: 'Move up',
             onClick: (event, rowData) => {
               if (Array.isArray(rowData)) {
                 swap([rowData[0].position - 1, rowData[0].position]);
               } else {
                 swap([rowData.position - 1, rowData.position]);
               }
-            }
+            },
+            tooltip: 'Move up',
           },
           {
             icon: 'arrow_downward',
-            tooltip: 'Move down',
             onClick: (event, rowData) => {
               if (Array.isArray(rowData)) {
                 swap([rowData[0].position, rowData[0].position + 1]);
               } else {
                 swap([rowData.position, rowData.position + 1]);
               }
-            }
-          }
+            },
+            tooltip: 'Move down',
+          },
+          {
+            icon: 'edit',
+            onClick: (event, rowData) => {
+              const note = Array.isArray(rowData) ? rowData[0] : rowData;
+              setEditMode(true);
+              setEditPosition(note.position);
+              if (noteInput.current) {
+                noteInput.current.value = note.text;
+                noteInput.current.focus();
+              }
+            },
+            tooltip: 'Edit',
+          },
         ]}
         title="Notes"
       />

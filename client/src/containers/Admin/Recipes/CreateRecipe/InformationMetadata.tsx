@@ -7,6 +7,7 @@ import {
   createTagAsync,
   removeNote,
   removeTag,
+  setNotes,
   swapNotes,
 } from 'store/recipeEditor/actions';
 import { Field } from 'redux-form';
@@ -110,6 +111,7 @@ const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
   recipeNotes,
   removeNote,
   removeTag,
+  setNotes,
   swapNotes,
   tags,
 }) => {
@@ -127,6 +129,7 @@ const InformationMetadata: FC<PropsFromRedux & OwnProps> = ({
         add={addNote}
         notes={recipeNotes.toArray()}
         remove={removeNote}
+        setNotes={setNotes}
         swap={swapNotes}
       />
       <Typography component="h2" variant="h3">Tags</Typography>
@@ -154,6 +157,7 @@ const mapDispatch = {
   createTag: createTagAsync.request,
   removeNote,
   removeTag,
+  setNotes,
   swapNotes,
 };
 
