@@ -205,7 +205,7 @@ export const postIndex = async (req: Request, res: Response): Promise<void> => {
     });
     version =
       (latest?.recipe_version_recipe_release_latest_versionTorecipe_version
-        ?.id || 0) + 1;
+        ?.version || 0) + 1;
   }
   const recipeVersion = await prisma.recipe_version.create({
     data: {
