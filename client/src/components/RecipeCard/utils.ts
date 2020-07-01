@@ -49,7 +49,11 @@ export const transformIngredient = (
     text += ') ';
   }
   if (name !== '') {
-    text += ` ${ingredient.ingredient.plural}`;
+    if (text === '') {
+      text = `${name} ${ingredient.ingredient.name}`;
+    } else {
+      text += ` ${ingredient.ingredient.plural}`;
+    }
   } else {
     if (text === '') {
       text += `${ingredient.ingredient.plural}`;

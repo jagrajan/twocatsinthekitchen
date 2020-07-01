@@ -112,7 +112,7 @@ const IngredientManager: FC<Props> = ({
         color: 'error',
         message: 'Please specify an ingredient and unit',
       });
-    } else if ((amount as string) === '' && (amount && re.test(amount))) {
+    } else if (amount === '' || (amount && re.test(amount))) {
       let minAmount = amount;
       let maxAmount = amount;
       if (amount.toString().includes('-')) {
