@@ -62,9 +62,11 @@ const RecipeRenderer: FC<Props> = ({
   steps,
 }) => (
   <StyledContainer>
-    <Typography variant="h3" component="h1">
-      {name}
-    </Typography>
+    <Box textAlign='center'>
+      <Typography variant="h3" component="h1">
+        {name}
+      </Typography>
+    </Box>
     <Markdown source={introduction} renderers={{ image }} />
     <Container maxWidth="md">
       <Box my={2}>
