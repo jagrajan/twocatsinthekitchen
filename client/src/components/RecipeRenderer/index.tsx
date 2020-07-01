@@ -67,7 +67,9 @@ const RecipeRenderer: FC<Props> = ({
         {name}
       </Typography>
     </Box>
-    <Markdown source={introduction} renderers={{ image }} />
+    <Container maxWidth='md'>
+      <Markdown source={introduction} renderers={{ image }} />
+    </Container>
     <Container maxWidth="md">
       <Box my={2}>
         <Divider />
