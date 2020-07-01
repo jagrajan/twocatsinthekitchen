@@ -58,7 +58,7 @@ const Recipe: FC<PropsFromRedux> = ({
           notes={notes}
           prepTime={recipe.prep_time || ''}
           scale={scale}
-          servings={recipe.serves?.toString() || ''}
+          servings={(recipe.serves && (recipe.serves * scale).toString()) || ''}
           steps={steps}
         />
       </Container>
