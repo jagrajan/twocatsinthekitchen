@@ -58,7 +58,7 @@ const SliderRenderer: FC<{scale: number}> = ({ scale }) => {
       </Box>
       <Slider
         min={0.5}
-        step={0.25}
+        step={0.5}
         max={4}
         value={scale}
         marks={true}
