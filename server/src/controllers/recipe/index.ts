@@ -44,6 +44,7 @@ export const getVersionDetails = async (
           max_amount: true,
           unit: true,
           ingredient: true,
+          instructions: true,
         },
         orderBy: { position: "asc" },
       },
@@ -92,6 +93,7 @@ export const getDetails = async (
           max_amount: true,
           unit: true,
           ingredient: true,
+          instructions: true,
         },
         orderBy: { position: "asc" },
       },
@@ -242,6 +244,7 @@ export const postIndex = async (req: Request, res: Response): Promise<void> => {
         position: j,
         min_amount: ingredients[j].minAmount,
         max_amount: ingredients[j].maxAmount,
+        instructions: ingredients[j].instructions || '',
         alternative_measurement: {
           create: ingredients[j].alternativeMeasurement.map(a => ({
             max_amount: a.maxAmount,

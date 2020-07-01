@@ -64,5 +64,8 @@ export const transformIngredient = (
   if (text.startsWith('0 ')) {
     text = text.substring(2);
   }
+  if (ingredient.instructions) {
+    text += ` (${ingredient.instructions})`
+  }
   return text;
 };

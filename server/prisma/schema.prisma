@@ -75,6 +75,7 @@ model measured_ingredient {
   create_date             DateTime                  @default(now())
   id                      Int                       @default(autoincrement()) @id
   ingredient_id           Int
+  instructions            String?
   last_update             DateTime                  @default(now())
   max_amount              String
   min_amount              String

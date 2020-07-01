@@ -103,6 +103,7 @@ export const createRecipeEpic: RootEpic = (action$, state$, { api }) =>
                   unit: x.unit.id,
                 })),
                 ingredient: ing.ingredient.id,
+                instructions: ing.instructions,
                 maxAmount: ing.maxAmount,
                 minAmount: ing.minAmount,
                 unit: ing.unit.id,
@@ -262,6 +263,7 @@ export const setRecipeEditorEpic: RootEpic = (action$) =>
             const {
               unit,
               ingredient,
+              instructions,
               min_amount,
               max_amount,
               alternative_measurement,
@@ -273,6 +275,7 @@ export const setRecipeEditorEpic: RootEpic = (action$) =>
                 unit: a.unit,
               })),
               ingredient,
+              instructions,
               maxAmount: max_amount,
               minAmount: min_amount,
               unit,

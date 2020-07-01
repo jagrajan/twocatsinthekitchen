@@ -43,6 +43,7 @@ const IngredientManager: FC<Props> = ({
   units,
 }) => {
   const amountRef = useRef<HTMLInputElement>(null);
+  const instructionsRef = useRef<HTMLInputElement>(null);
   const alternativeAmountRef = useRef<HTMLInputElement>(null);
   const [unit, setUnit] = useState<unit | null>(null);
   const [alternativeUnit, setAlternativeUnit] = useState<unit | null>(null);
@@ -115,6 +116,7 @@ const IngredientManager: FC<Props> = ({
     } else if (amount === '' || (amount && re.test(amount))) {
       let minAmount = amount;
       let maxAmount = amount;
+      const instructions = instructionsRef.current?.value;
       if (amount.toString().includes('-')) {
         const splits = amount.split('-');
         minAmount = splits[0];
@@ -123,6 +125,7 @@ const IngredientManager: FC<Props> = ({
       const newIng = {
         alternativeMeasurement: alternativeMeasurement.toArray(),
         ingredient,
+        instructions,
         maxAmount,
         minAmount,
         unit,
@@ -138,6 +141,9 @@ const IngredientManager: FC<Props> = ({
       setAlternativeMeasurement(List());
       if (amountRef.current) {
         amountRef.current.value = '';
+      }
+      if (instructionsRef.current) {
+        instructionsRef.current.value = '';
       }
     }
   };
@@ -205,11 +211,20 @@ const IngredientManager: FC<Props> = ({
             Create
           </Button>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6}>
           <TextField
             fullWidth
             inputRef={amountRef}
             label="Amount"
+            type="text"
+            variant="outlined"
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField
+            fullWidth
+            inputRef={instructionsRef}
+            label="Prep"
             type="text"
             variant="outlined"
           />
@@ -342,6 +357,9 @@ const IngredientManager: FC<Props> = ({
               setIngredient(ing.ingredient);
               if (amountRef.current) {
                 amountRef.current.value = ing.minAmount + '-' + ing.maxAmount;
+              }
+              if (instructionsRef.current) {
+                instructionsRef.current.value = ing.instructions || '';
               }
               setAlternativeMeasurement(List(ing.alternativeMeasurement));
             },

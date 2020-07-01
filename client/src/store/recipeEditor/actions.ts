@@ -26,6 +26,7 @@ export type MeasuredIngredient = {
   maxAmount: string;
   minAmount: string;
   unit: unit;
+  instructions?: string;
 };
 
 export const loadDashboardRecipesAsync = createAsyncAction(
