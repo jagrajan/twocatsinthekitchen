@@ -10,6 +10,7 @@ import RecipeRenderer from '../../components/RecipeRenderer';
 import { IMAGE_SERVER} from 'config';
 
 const Recipe: FC<PropsFromRedux> = ({
+  loading,
   loadRecipeDetails,
   match,
   recipe,
@@ -21,7 +22,7 @@ const Recipe: FC<PropsFromRedux> = ({
       loadRecipeDetails(id);
     }
   }, [loadRecipeDetails, id])
-  if (!recipe) {
+  if (!recipe || loading) {
     return <LoadingStatus />;
   } else {
     const ingredients = recipe.measured_ingredient
@@ -68,6 +69,7 @@ const Recipe: FC<PropsFromRedux> = ({
 };
 
 const mapState = (state: RootState) => ({
+  loading: state.recipe.isLoadingRecipePage,
   match: createMatchSelector<RootState, {id: string | undefined }>('/recipe/:id')(state),
   recipe: state.recipe.recipe,
   scale: state.recipe.scale,
