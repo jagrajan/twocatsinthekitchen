@@ -25,14 +25,15 @@ const AdminRecipes: FC<PropsFromRedux> = ({ authKey, loadDashboardRecipes, recip
       </Box>
       {recipes &&
         <MaterialTable
-           columns={[
-            { title: "Recipe ID", field: "recipe_id", hidden: true },
-            { title: "Name", field: "name"  },
-            { title: "Released Version", field: "released_version", type: "numeric"  },
-            { title: "Latest Version", field: "latest_version", type: "numeric"  },
-            { title: "Hidden", field: "hidden", type: "boolean"  },
-            { title: "Last Updated", field: "last_updated", type: "datetime"  },
-            { title: "Date Created", field: "create_date", type: "datetime"  },
+          style={{ fontFamily: '"Roboto Slab", serif' }}
+          columns={[
+            { title: 'Recipe ID', field: 'recipe_id', hidden: true },
+            { title: 'Name', field: 'name'  },
+            { title: 'Released Version', field: 'released_version', type: 'numeric'  },
+            { title: 'Latest Version', field: 'latest_version', type: 'numeric'  },
+            { title: 'Hidden', field: 'hidden', type: 'boolean'  },
+            { title: 'Last Updated', field: 'last_updated', type: 'datetime'  },
+            { title: 'Date Created', field: 'create_date', type: 'datetime'  },
           ]}
           data={recipes}
           actions={[

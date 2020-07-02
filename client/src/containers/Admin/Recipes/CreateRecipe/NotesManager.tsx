@@ -79,7 +79,8 @@ const NotesManager: FC<Props> = ({
         </Grid>
       </Grid>
       <MaterialTable
-         columns={[
+        style={{ fontFamily: '"Roboto Slab", serif' }}
+        columns={[
           { title: 'Position', field: 'position', type: 'numeric' },
           { title: 'Text', field: 'text'  },
         ]}

@@ -65,6 +65,7 @@ const StepsManager: FC<Props> = ({
         </Grid>
       </Grid>
       <MaterialTable
+        style={{ fontFamily: '"Roboto Slab", serif' }}
          columns={[
           { title: 'Position', field: 'position', type: 'numeric' },
           { title: 'Description', field: 'description'  },
