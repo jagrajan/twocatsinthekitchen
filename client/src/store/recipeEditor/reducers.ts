@@ -93,7 +93,8 @@ const reducer = combineReducers({
       .handleAction(clearRecipe, () => null),
     imageFile: createReducer<string | null, RootAction>(null)
       .handleAction(uploadRecipeImageAsync.success, (_, action) => action.payload)
-      .handleAction(setImageFile, (_, action) => action.payload),
+      .handleAction(setImageFile, (_, action) => action.payload)
+      .handleAction(clearRecipe, () => null),
     ingredients: createReducer<List<MeasuredIngredient>, RootAction>(List())
       .handleAction(addIngredient, (state, action) => state.push(action.payload))
       .handleAction(removeIngredient, (state, action) => state.remove(action.payload))
@@ -105,7 +106,8 @@ const reducer = combineReducers({
     introduction: createReducer<string, RootAction>('').handleAction(
       setIntroduction,
       (_, action) => action.payload,
-    ),
+    )
+      .handleAction(clearRecipe, () => ''),
     notes: createReducer<List<string>, RootAction>(List())
       .handleAction(addNote, (state, action) => state.push(action.payload))
       .handleAction(removeNote, (state, action) => state.remove(action.payload))
