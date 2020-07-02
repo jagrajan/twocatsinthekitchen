@@ -32,6 +32,7 @@ const Recipe: FC<PropsFromRedux> = ({
           unit: x.unit,
           maxAmount: x.max_amount,
           minAmount: x.min_amount,
+          instructions: x.instructions,
           alternativeMeasurement: x.alternative_measurement.map(a => ({
             maxAmount: a.max_amount,
             minAmount: a.min_amount,

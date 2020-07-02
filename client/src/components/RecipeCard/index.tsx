@@ -121,7 +121,7 @@ const RecipeCard: FC<Props> = ({
     <StrikeableListItem key={ing.position} text={`${ing.text}`} />
   ));
   const notesRender = notes.map((note) => (
-    <ListItem>
+    <ListItem key={note.position}>
       <ListItemText primary={note.text} />
     </ListItem>
   ));
