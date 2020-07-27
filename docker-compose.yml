@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+  twocats-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: twocats
+      POSTGRES_PASSWORD: docker
+    ports:
+      - "5433:5432"
+    networks:
+      - twocats-net
+    volumes:
+      - type: volume
+        source: twocats-db-volume
+        target: /var/lib/postgresql/data
+
+  twocats-api:
+    build:
+      dockerfile: packages/api/Dockerfile
+      context: .
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: twocats
+      POSTGRES_USER: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: twocats-db
+      DATABASE_URL: postgresql://postgres:docker@twocats-db:5432/twocats?schema=cookbook
+    ports:
+      - "4000:4000"
+    depends_on:
+      - twocats-db
+    links:
+      - twocats-db
+    networks:
+      - twocats-net
+    volumes:
+      - ${HOME}/projects/twocats/twocats/packages/api/.migrate:/project/packages/api/.migrate
+
+  twocats-webapp:
+    build:
+      dockerfile: packages/webapp/Dockerfile
+      context: .
+    ports:
+      - "3000:80"
+
+networks:
+  twocats-net:
+
+volumes:
+  twocats-db-volume:
+  twocats-migration:

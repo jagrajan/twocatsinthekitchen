@@ -1,7 +1,6 @@
 import { Pool } from 'pg';
-import config from 'config';
 
-const pool: Pool = new Pool(config.database);
+const pool: Pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export default pool;
 
