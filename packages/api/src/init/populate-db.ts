@@ -169,4 +169,4 @@ const populate = async () => {
 
 };
 
-export default populate;
+populate().then(() => 'database populated').catch(err => console.error(err)).finally(() => 'done nonetheless');

@@ -7,6 +7,7 @@
     "prisma:generate": "prisma generate",
     "prisma:introspect": "prisma introspect",
     "build": "tsc -b",
+    "start": "NODE_PATH=./dist node dist/index.js",
     "start-integration": "NODE_ENV=integration NODE_PATH=./dist node dist/index.js",
     "introspect": "prisma introspect --schema=prisma/schema.prisma",
     "migrate": "NODE_PATH=./dist migrate",
