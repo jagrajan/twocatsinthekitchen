@@ -164,12 +164,14 @@ const RecipeCard: FC<Props> = ({
             <List>{stepsRender}</List>
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5" className={classes.heading}>Notes</Typography>
-          <div>
-            <List>{notesRender}</List>
-          </div>
-        </Grid>
+        {notes.length && (
+          <Grid item xs={12}>
+            <Typography variant="h5" className={classes.heading}>Notes</Typography>
+            <div>
+              <List>{notesRender}</List>
+            </div>
+          </Grid>
+        )}
       </Grid>
     </div>
   );
