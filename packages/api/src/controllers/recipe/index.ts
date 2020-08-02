@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { Request as TCRequest } from "@twocats/types";
 
 export const getRecent = async (req: Request, res: Response): Promise<void> => {
-  let limit = 10;
+  let limit = 20;
   if (req.query.limit) {
     limit = parseInt(req.query.limit.toString());
   }
@@ -12,7 +12,7 @@ export const getRecent = async (req: Request, res: Response): Promise<void> => {
       recipe_version_recipe_release_released_versionTorecipe_version: true,
     },
     orderBy: {
-      released_version: "desc",
+      recipe_id: "desc",
     },
     take: limit,
     where: {
