@@ -45,6 +45,9 @@ export const validate = (values: { [key: string]: string }) => {
   if (!values.description || validator.isEmpty(values.description)) {
     errors.description = 'Please enter a recipe description';
   }
+  if (!values.servings || validator.isEmpty(values.servings) || !validator.isNumeric(values.servings)) {
+    errors.servings = 'Please enter a number for servings';
+  }
   return errors;
 };
 
