@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   twocats-db:
-    image: postgres:13
+    image: postgres:12
     environment:
       POSTGRES_DB: twocats
       POSTGRES_PASSWORD: docker

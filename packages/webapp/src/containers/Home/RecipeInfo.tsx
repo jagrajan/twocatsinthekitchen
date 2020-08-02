@@ -23,7 +23,7 @@ const RecipeInfo: FC<Props> = ({ imageFile, name, slug, updateDate }) => {
   const classes = useStyles();
   return <UndecoratedLink to={`/recipe/${slug}`}>
     <Card>
-      <CardHeader style={{ minHeight: '64px' }}
+      <CardHeader style={{ alignItems: 'flex-start', height: '5rem' }}
         title={name}
         subheader={updateDate}
       />
