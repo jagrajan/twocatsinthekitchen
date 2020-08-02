@@ -122,6 +122,9 @@ export const getDashboard = async (
       recipe_version_recipe_release_latest_versionTorecipe_version: true,
       recipe_version_recipe_release_released_versionTorecipe_version: true,
     },
+    orderBy: {
+      create_date: 'desc'
+    },
   });
 
   res.json(
