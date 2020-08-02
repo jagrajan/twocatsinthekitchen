@@ -29,6 +29,10 @@ const StyledContainer = styled.div`
     font-size: 2rem;
     font-weight: 400;
   }
+  
+  p {
+    line-height: 1.8; 
+  }
 
   font-family: "Roboto Slab", serif;
 `;
