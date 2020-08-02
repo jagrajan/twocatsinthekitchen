@@ -77,7 +77,7 @@ export const getInfo = async (req: Request, res: Response): Promise<void> => {
     res.json({ error: 'Missing token '});
   } else {
     try {
-      const auth = parseJWT(token.toString());
+      const auth = await parseJWT(token.toString());
       res.json(auth);
     } catch (e) {
       res.json({ error: 'Invalid token '});

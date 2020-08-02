@@ -7,9 +7,15 @@ const create = async () => {
 
   const client = new Client(config.database);
 
+  console.log('connecting client');
   client.connect();
 
-  return client.query(sql);
+  console.log('create database schema');
+  await client.query(sql);
 };
 
 export default create;
+
+create()
+  .then(() => 'Database populated!')
+  .catch((err) => console.error(err));
