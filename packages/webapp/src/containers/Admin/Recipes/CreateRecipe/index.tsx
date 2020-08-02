@@ -62,7 +62,6 @@ const CreateRecipe: FC<PropsFromRedux> = ({
   loadRecipeDetails,
   loading,
   match,
-  setPreviewImage,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modal, setModal] = useState(false);
