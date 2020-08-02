@@ -20,7 +20,7 @@ export async function logout(): Promise<boolean> {
   return res.data.logout;
 }
 
-export async function loadKeyData(): Promise<auth_key> {
-  const res = await axios.get<auth_key>('/auth/info');
+export async function loadKeyData(token: string): Promise<auth_key | { error: string }> {
+  const res = await axios.get<auth_key | { error: string}>('/auth/info', { params: { token }});
   return res.data;
 }

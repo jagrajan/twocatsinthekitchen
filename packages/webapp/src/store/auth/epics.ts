@@ -1,6 +1,6 @@
 import { RootEpic } from '@twocats/store';
 import { from, of } from 'rxjs';
-import { filter, switchMap, catchError, mergeMap, map } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { isActionOf } from 'typesafe-actions';
 import {
   deleteJWTAsync,
@@ -10,6 +10,7 @@ import {
   saveJWTAsync,
   verifyJWTAsync
 } from './actions';
+import { auth_key } from '@prisma/client';
 
 export const deleteJWTEpic: RootEpic = (action$) =>
   action$.pipe(
@@ -20,13 +21,12 @@ export const deleteJWTEpic: RootEpic = (action$) =>
     })
   );
 
-export const loadJWTEpic: RootEpic = (action$, _, { axios }) =>
+export const loadJWTEpic: RootEpic = (action$) =>
   action$.pipe(
     filter(isActionOf(loadJWTAsync.request)),
     switchMap(() => {
       const token = localStorage.getItem('JWT');
       if (token != null) {
-        axios.defaults.headers['Authorization'] = `Bearer ${token}`;
         return of(loadJWTAsync.success(token), verifyJWTAsync.request(token));
       }
       return of(loadJWTAsync.failure());
@@ -70,12 +70,19 @@ export const saveJWTEpic: RootEpic = (action$, _, { axios }) =>
     })
   );
 
-export const verifyJWTEpic: RootEpic = (action$, _, { api }) =>
+export const verifyJWTEpic: RootEpic = (action$, _, { api, axios }) =>
   action$.pipe(
     filter(isActionOf(verifyJWTAsync.request)),
-    switchMap(() =>
-      from(api.auth.loadKeyData()).pipe(
-        map(authKey => verifyJWTAsync.success(authKey)),
+    switchMap((action) =>
+      from(api.auth.loadKeyData(action.payload)).pipe(
+        map(authKey => {
+          if ('error' in authKey) {
+            return deleteJWTAsync.request();
+          } else {
+            axios.defaults.headers['Authorization'] = `Bearer ${action.payload}`;
+            return verifyJWTAsync.success(authKey)
+          }
+        }),
         catchError(() => of(verifyJWTAsync.failure()))
       )
     )
