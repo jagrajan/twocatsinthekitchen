@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import validator from 'validator';
 import { comparePassword, isAdmin } from 'models/users/User';
-import { createJWT } from 'models/auth/AuthKey';
+import { createJWT, parseJWT } from 'models/auth/AuthKey';
 
 import prisma from 'db/prisma';
 
@@ -72,9 +72,15 @@ export const getLogout = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const getInfo = async (req: Request, res: Response): Promise<void> => {
-  if (!req.auth) {
-    res.json({ error: 'You are not logged in.' });
-    return;
+  const token = req.query.token;
+  if (!token) {
+    res.json({ error: 'Missing token '});
+  } else {
+    try {
+      const auth = parseJWT(token.toString());
+      res.json(auth);
+    } catch (e) {
+      res.json({ error: 'Invalid token '});
+    }
   }
-  res.json(req.auth);
 };
