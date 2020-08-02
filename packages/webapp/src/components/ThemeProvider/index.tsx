@@ -9,6 +9,9 @@ const theme = createMuiTheme({
     secondary: {
       main: '#6b82a8',
     },
+    text: {
+      primary: '#39324B',
+    },
   },
   typography: {
     fontFamily: '"Roboto Slab", serif',

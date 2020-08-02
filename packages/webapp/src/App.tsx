@@ -2,8 +2,8 @@ import React, { FC, useEffect } from 'react';
 import ThemeProvider from 'components/ThemeProvider';
 import Router from 'components/Router';
 import { loadJWTAsync } from 'store/auth/actions';
-import { RootState } from '@twocats/store';
 import { connect, ConnectedProps } from 'react-redux';
+import './App.css';
 
 const App: FC<PropsFromRedux> = ({ loadJWT }) => {
   useEffect(() => {
@@ -17,14 +17,11 @@ const App: FC<PropsFromRedux> = ({ loadJWT }) => {
   );
 }
 
-const mapState = (state: RootState) => ({
-});
-
 const mapDispatch = {
   loadJWT: loadJWTAsync.request,
 };
 
-const connector = connect(mapState, mapDispatch);
+const connector = connect(null, mapDispatch);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
