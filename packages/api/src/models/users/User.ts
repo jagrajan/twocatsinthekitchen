@@ -58,6 +58,7 @@ class User<D extends UserDefinition = UserDefinition> extends DataObject<D> {
 export async function isAdmin(id: string) {
   const admins = await prisma.admin.findMany({
     where: {
+      user_id: id,
       expire_on: {
         gte: new Date(),
       },
