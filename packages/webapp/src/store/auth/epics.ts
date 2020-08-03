@@ -10,7 +10,7 @@ import {
   saveJWTAsync,
   verifyJWTAsync
 } from './actions';
-import { auth_key } from '@prisma/client';
+import { updateSyncErrors } from 'redux-form';
 
 export const deleteJWTEpic: RootEpic = (action$) =>
   action$.pipe(
@@ -38,7 +38,13 @@ export const loginEpic: RootEpic = (action$, _, { api }) =>
     filter(isActionOf(loginAsync.request)),
     switchMap(action =>
       from(api.auth.login(action.payload)).pipe(
-        mergeMap(x => of(loginAsync.success(x.key), saveJWTAsync.request(x.jwt))),
+        mergeMap(x => {
+          if ((x as any).errors) {
+            return of(loginAsync.failure(), updateSyncErrors('login', (x as any).errors, 'Login failed.'));
+          } else {
+            return of(loginAsync.success(x.key), saveJWTAsync.request(x.jwt));
+          }
+        }),
         catchError(() => of(loginAsync.failure()))
       )
     )

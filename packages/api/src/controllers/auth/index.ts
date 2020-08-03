@@ -29,7 +29,7 @@ export const postLogin = async (req: Request, res: Response): Promise<void> => {
 
   const user = await prisma.profile.findOne({ where: { email: req.body.email } });
   if (user) {
-    if (comparePassword(req.body.password, user.password)) {
+    if (await comparePassword(req.body.password, user.password)) {
       const date = new Date();
       date.setDate(date.getDate() + 30);
       const key = await prisma.auth_key.create({
