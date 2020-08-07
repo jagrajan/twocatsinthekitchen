@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { Request as TCRequest } from "@twocats/types";
 
 export const getRecent = async (req: Request, res: Response): Promise<void> => {
-  let limit = 20;
+  let limit = 6;
   if (req.query.limit) {
     limit = parseInt(req.query.limit.toString());
   }
@@ -71,7 +71,31 @@ export const getVersions = async (
   res.json(versions);
 };
 
-export const getDetails = async (
+export const search = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const recipes = await prisma.recipe_release.findMany({
+    include: {
+      recipe_version_recipe_release_released_versionTorecipe_version: true,
+    },
+    orderBy: {
+      recipe_id: "desc",
+    },
+    where: {
+      NOT: {
+        released_version: null,
+      },
+    },
+  });
+  res.json(
+    recipes.map(
+      (x) => x.recipe_version_recipe_release_released_versionTorecipe_version
+    )
+  );
+};
+
+export const getById = async (
   req: Request,
   res: Response
 ): Promise<void> => {

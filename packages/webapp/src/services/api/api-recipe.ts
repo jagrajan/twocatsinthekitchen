@@ -12,6 +12,11 @@ export async function loadRecipeDetails(id: string | number): Promise<Response.R
   return res.data;
 }
 
+export async function loadRecipes(): Promise<recipe_version[]> {
+  const res = await axios.get<recipe_version[]>('/recipe');
+  return res.data;
+}
+
 export async function loadNotes(id: string | number): Promise<recipe_note[]> {
   const res = await axios.get<recipe_note[]>(`/note/${id}`);
   return res.data;

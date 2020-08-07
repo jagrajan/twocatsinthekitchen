@@ -1,29 +1,17 @@
-import React, { FC } from 'react';
-import moment from 'moment';
-import { makeStyles } from '@material-ui/core/styles';
-import RecipeInfo from './RecipeInfo';
 import { recipe_version } from '@prisma/client';
 import { IMAGE_SERVER } from 'config';
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gridGap: '1.5rem',
-    [theme.breakpoints.up('md')]: {
-      gridTemplateColumns: '1fr 1fr 1fr',
-    },
-  },
-}));
+import moment from 'moment';
+import React, { FC } from 'react';
+import RecipeGrid from '../../components/layout/RecipeGrid';
+import RecipeInfo from './RecipeInfo';
 
 type Props = {
   recentRecipes: recipe_version[];
 }
 
 const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
-  const classes = useStyles();
   return (
-    <div className={classes.container}>
+    <RecipeGrid>
       {recentRecipes.map(recipe =>
         <RecipeInfo
           key={recipe.id}
@@ -34,7 +22,7 @@ const RecentRecipes: FC<Props> = ({ recentRecipes }) => {
             .format('MMMM Do YYYY, h:mm:ss a')}
         />
       )}
-    </div>
+    </RecipeGrid>
   );
 };
 
